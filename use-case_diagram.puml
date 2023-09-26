@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/use-case-diagram
 
-:Kunde: as Admin
+:Administratrator: as Admin
 :Bruker:  as Bruker
 
 (Start) --> (Admin)
@@ -17,6 +17,7 @@
 (Se på tilgjenngelige turer) --> (Påmelding)
 (Påmelding) --> (Oversikt over innmelding)
 (Påmelding) --> (Oversikt over bestillinger)
+
 
 @enduml
 
