@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/use-case-diagram
 
-:Admin: as Admin
+:Administratrator: as Admin
 :Bruker:  as Bruker
 
 (Start) --> (Admin)
