@@ -1,23 +1,20 @@
 @startuml
-'https://plantuml.com/use-case-diagram
-
-:Administratrator: as Admin
-:Bruker:  as Bruker
-
-(Start) --> (Admin)
-(Start) --> (Bruker)
-
-(Admin) --> (Opprette guide)
-(Opprette guide) --> (Redigere)
+left to right direction
+:User: as User
+User --> (Få kvittering)
+User --> (Logg inn)
+(Logg inn) --> (Redigere brukerinformasjon)
+User --> (Verifisert konto)
+(Verifisert konto) --> (Oprette guide)
+(Oprette guide) --> (Redigere)
 (Redigere) --> (Legge ut)
-(Legge ut) --> (Lagre)
-(Lagre) --> (Oversikt over innmelding)
-
-(Bruker) --> (Se på tilgjenngelige turer)
-(Se på tilgjenngelige turer) --> (Påmelding)
-(Påmelding) --> (Oversikt over innmelding)
-(Påmelding) --> (Oversikt over bestillinger)
-
+(Legge ut) --> (Oversikt over påmelding)
+User --> (Se på tilgjengelige turer)
+(Se på tilgjengelige turer) --> (Påmelding)
+(Påmelding) --> (Oversikt over bestiling)
+(Oversikt over bestiling) --> (Betaling)
+(Betaling) --> (Card, Paypal, bankterminal)
+(Betaling) --> (Mobilapplikasjon)
 
 @enduml
 
