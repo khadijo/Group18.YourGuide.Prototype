@@ -1,10 +1,27 @@
 @startuml
 left to right direction
 :User: as User
-User --> (Få kvittering)
+:Administrator: as Admin
+Admin --> (Logg inn)
 User --> (Logg inn)
-(Logg inn) --> (Redigere brukerinformasjon)
+Admin --> (Administrere guider)
+(Administrere guider) --> (Verifisere brukerkonto)
+Admin --> (Håndtere brutt på rettningslinjer)
+Admin --> (Administrere  innhold)
+(Administrere  innhold) --> (Oppdatere status)
+
+
+
+Admin --> (Statestikk)
+(Statestikk) --> (Oversikt over brukeraktivitet)
+
+Admin --> (Håndtere henvendelser)
 User --> (Verifisert konto)
+
+Admin --> (Administrere brukerkontoer)
+User --> (Lage en User brukerkonto)
+User --> (Få kvittering)
+(Logg inn) --> (Redigere brukerinformasjon)
 (Verifisert konto) --> (Oprette guide)
 (Oprette guide) --> (Redigere)
 (Redigere) --> (Legge ut)
