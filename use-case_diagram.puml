@@ -1,37 +1,36 @@
 @startuml
 left to right direction
+
 :User: as User
 :Administrator: as Admin
-Admin --> (Logg inn)
-User --> (Logg inn)
-Admin --> (Administrere guider)
-(Administrere guider) --> (Verifisere brukerkonto)
-Admin --> (Håndtere brutt på rettningslinjer)
-Admin --> (Administrere  innhold)
-(Administrere  innhold) --> (Oppdatere status)
 
+Admin --> (Log in)
+User --> (Log in)
 
-
-Admin --> (Statestikk)
-(Statestikk) --> (Oversikt over brukeraktivitet)
-
-Admin --> (Håndtere henvendelser)
-User --> (Verifisert konto)
-
-Admin --> (Administrere brukerkontoer)
-User --> (Lage en User brukerkonto)
-User --> (Få kvittering)
-(Logg inn) --> (Redigere brukerinformasjon)
-(Verifisert konto) --> (Oprette guide)
-(Oprette guide) --> (Redigere)
-(Redigere) --> (Legge ut)
-(Legge ut) --> (Oversikt over påmelding)
-User --> (Se på tilgjengelige turer)
-(Se på tilgjengelige turer) --> (Påmelding)
-(Påmelding) --> (Oversikt over bestiling)
-(Oversikt over bestiling) --> (Betaling)
-(Betaling) --> (Card, Paypal, bankterminal)
-(Betaling) --> (Mobilapplikasjon)
+Admin --> (Manage Guides)
+(Manage Guides) --> (Verify User Accounts)
+Admin --> (Handle Policy Violations)
+Admin --> (Manage Content)
+(Manage Content) --> (Update Status)
+Admin --> (Statistics)
+(Statistics) --> (User Activity Overview)
+Admin --> (Handle Inquiries)
+User --> (Verified Account)
+Admin --> (Manage User Accounts)
+User --> (Create a User Account)
+User --> (Receive Receipt)
+(Log in) --> (Edit User Information)
+(Verified Account) --> (Create Guide)
+(Create Guide) --> (Edit)
+(Edit) --> (Post)
+(Post) --> (Registration Overview)
+User --> (View Available Tours)
+(View Available Tours) --> (Registration)
+(Registration) --> (Booking Overview)
+(Booking Overview) --> (Payment)
+(Payment) --> (Card, Paypal, Bank Terminal)
+(Payment) --> (Mobile Application)
 
 @enduml
+
 
