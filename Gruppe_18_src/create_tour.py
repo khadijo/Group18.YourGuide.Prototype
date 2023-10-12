@@ -1,6 +1,6 @@
-class Create_tour:
-    pass
+class Tour:
+    def __init__(self, destination):
+        self.destination = destination
 
 
-def test_create_tour():
-    tour = Create_tour()
+
