@@ -26,7 +26,7 @@ class Tour:
             return False
 
     def get_tour_description(self):
-        return f"This tour will take you to {self.destination} for {self.duration}, and is " \
+        return f"This tour will take you to {self.destination} for {self.duration} hours, and is " \
                f"offered in {self.language}"
 
     def to_dict(self):
@@ -58,6 +58,7 @@ class Tour:
             with open(filename, "w") as json_file:
                 json.dump(filedata, json_file, indent=4)
 
+    # er det riktig måte å overføre klasser på til JSON-format?
     def check_if_tour_is_saved(self, tour_id):
         try:
             with open("tour.json", "r") as json_file:
