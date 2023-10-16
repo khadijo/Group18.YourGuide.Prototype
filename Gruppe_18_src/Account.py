@@ -9,24 +9,30 @@ class Account:
         self.phoneNumber = phoneNumber
         self.emailAddress = emailAddress
 
-    def successful_registration(self):
-        self.save_to_json()
-        return True
+    def delete_account(self):
+        try:
+            with open("account.json", "r") as json_file:
+                filedata = json.load(json_file)
+        except FileNotFoundError:
+            filedata = []
 
-    def delete_account(self, username):
-        with open("account.json", "r") as json_file:
-            data = json.load(json_file)
-            if username in data:
-                del data[username]
+        index_to_delete = None
+        for i, item in enumerate(filedata):
+            if item["username"] == self.username:
+                index_to_delete = i
+                break
 
-                with open("account.json_2", "w") as json_file:
-                    json.dump(data, json_file, indent=4)
+        if index_to_delete is not None:
+            del filedata[index_to_delete]
+
+            with open("account.json", "w") as json_file:
+                json.dump(filedata, json_file, indent=4)
                 return True
-            else:
-                return False
 
-    def save_to_json(self):
-        account_data = {
+        return False
+
+    def to_dict(self):
+        return {
             "username": self.username,
             "password": self.password,
             "phoneNumber": self.phoneNumber,
@@ -34,5 +40,24 @@ class Account:
 
         }
 
+    def save_to_json(self):
+        try:
+            with open("account.json", "r") as json_file:
+                filedata = json.load(json_file)
+        except FileNotFoundError:
+            filedata = []
+
+        for item in filedata:
+            if item["username"] == self.username:
+                return
+
+        data = self.to_dict()
+        filedata.append(data)
+
         with open("account.json", "w") as json_file:
-            json.dump(account_data, json_file, indent=4)
+            json.dump(filedata, json_file, indent=4)
+
+    def successful_registration(self):
+        self.save_to_json()
+        return True
+
