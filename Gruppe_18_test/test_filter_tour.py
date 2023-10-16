@@ -12,8 +12,9 @@ def test_all_tours_from_file_append_to_list():
     assert data1 == tours
 
 def test_filter_tours_by_location_to_new_list():
-    assert True
-
+    filter = filter_tour_by_location(read_tours_from_file_add_to_list("tour.json"), "Paris")
+    assert filter == [{'destination': 'Paris', 'duration': 3, 'cost': 150, 'pictureURL': 'https://example.com/paris.jpg', 'language': 'French', 'max_travelers': 20, 'booked': 5}]
 
 def test_filter_tours_by_price_to_new_lis():
-    assert True
+    filer = filter_tour_by_price(read_tours_from_file_add_to_list("tour.json"), 100, 0)
+    assert filer == [{'destination': 'Rome', 'duration': 2, 'cost': 100, 'pictureURL': 'https://example.com/rome.jpg', 'language': 'Italian', 'max_travelers': 15, 'booked': 3}]
