@@ -1,7 +1,7 @@
 import pytest
-from Gruppe_18_src.Filter_tour import *
+from stream_for_testing import *
 from approvaltests import verify
-from Gruppe_18_src.main import *
+from Gruppe_18_src.Filter_tour import *
 
 
 def test_all_tours_from_file_append_to_list():

@@ -60,7 +60,7 @@ class Tour:
 
     def check_if_tour_is_saved(self, tour_id):
         try:
-            with open("filter_test.json", "r") as json_file:
+            with open("tour.json", "r") as json_file:
                 filedata = json.load(json_file)
         except FileNotFoundError:
             filedata = []
