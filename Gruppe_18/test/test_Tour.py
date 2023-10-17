@@ -1,9 +1,5 @@
-import json
-import os
-import tempfile
-
 import pytest
-from Gruppe_18_src.Tour import Tour
+from Gruppe_18.src.Model.Tour import Tour
 
 
 @pytest.fixture
@@ -17,7 +13,7 @@ def tour():
         20,
     )
 
-
+# kan man forenkle assertene her med noen pytest-funksjoner?
 def test_if_tour_is_created(tour):
     assert tour.destination == "Italy"
     assert tour.duration == 4
@@ -50,18 +46,21 @@ def test_book_more_tours_than_available_space(tour):
     tour.booked = 2
     assert tour.book_tour() == False
 
+#approvaltest
+
 
 def test_tour_description_generation_is_as_expected(tour):
     given_description = tour.get_tour_description()
-    expected_description = tour.get_tour_description()
+    expected_description = "This tour will take you to Italy for 4 hours, and is " \
+               "offered in English"
     assert given_description == expected_description
 
 
 def test_tour_description_generation_is_not_as_expected(tour):
-    tour.destination = "Turkey"
     given_description = tour.get_tour_description()
     tour.destination = "Montenegro"
-    expected_description = tour.get_tour_description()
+    expected_description = "This tour will take you to Montenegro for 4 hours, and is " \
+               "offered in English"
     assert given_description != expected_description
 
 

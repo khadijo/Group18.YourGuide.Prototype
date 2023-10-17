@@ -26,7 +26,7 @@ class Tour:
             return False
 
     def get_tour_description(self):
-        return f"This tour will take you to {self.destination} for {self.duration}, and is " \
+        return f"This tour will take you to {self.destination} for {self.duration} hours, and is " \
                f"offered in {self.language}"
 
     def to_dict(self):
@@ -38,11 +38,10 @@ class Tour:
                 "language": self.language,
                 "max_travelers": self.max_travelers}
 
-    def save_to_json(self, filename):
+    def save_to_stream(self, io_stream):
         try:
-            with open(filename, "r") as json_file:
-                filedata = json.load(json_file)
-        except FileNotFoundError:
+            filedata = json.load(io_stream)
+        except json.JSONDecodeError:
             filedata = []
 
         duplicate_found = False
@@ -55,12 +54,14 @@ class Tour:
             data = self.to_dict()
             filedata.append(data)
 
-            with open(filename, "w") as json_file:
-                json.dump(filedata, json_file, indent=4)
+        io_stream.truncate(0)
+        io_stream.seek(0)
+        json.dump(filedata, io_stream, indent=4)
 
-    def check_if_tour_is_saved(self, tour_id):
+    # er det riktig måte å overføre klasser på til JSON-format?
+    def check_if_tour_is_saved(self):
         try:
-            with open("tour.json", "r") as json_file:
+            with open("../tour.json", "r") as json_file:
                 filedata = json.load(json_file)
         except FileNotFoundError:
             filedata = []
@@ -76,3 +77,25 @@ class Tour:
 
         else:
             return False
+
+    '''
+        def save_to_json(self, filename):
+            try:
+                with open(filename, "r") as json_file:
+                    filedata = json.load(json_file)
+            except FileNotFoundError:
+                filedata = []
+    
+            duplicate_found = False
+            for item in filedata:
+                if item == self.to_dict():
+                    duplicate_found = True
+                    break
+    
+            if not duplicate_found:
+                data = self.to_dict()
+                filedata.append(data)
+    
+                with open(filename, "w") as json_file:
+                    json.dump(filedata, json_file, indent=4)
+        '''
