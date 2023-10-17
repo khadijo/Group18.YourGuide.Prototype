@@ -1,13 +1,11 @@
 import json
 from Gruppe_18_src.Tour import Tour
-
+import io
 # shows all avilable tours
 
 
-def read_tours_from_file_add_to_list(file_name):
-    tour_list = []
-    with open(file_name, "r") as file:
-        items = json.load(file)
+def read_tours_from_file_add_to_list(stream):
+    items = json.load(stream)
     return items
 
 
