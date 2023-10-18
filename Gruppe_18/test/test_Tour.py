@@ -1,6 +1,12 @@
+from io import StringIO
+
 import pytest
 from Gruppe_18.src.main.modell.Tour import Tour
+from approvaltests import verify, Options
+from approvaltests.scrubbers import scrub_all_guids
 
+
+approval_options = Options().with_scrubber(scrub_all_guids)
 
 @pytest.fixture
 def tour():
@@ -14,15 +20,12 @@ def tour():
     )
 
 # kan man forenkle assertene her med noen pytest-funksjoner?
-def test_if_tour_is_created(tour):
-    assert tour.destination == "Italy"
-    assert tour.duration == 4
-    assert tour.cost == 255
-    assert tour.pictureURL == "https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg"
-    assert tour.language == "English"
-    assert tour.max_travelers == 20
-    assert not tour.booked
-
+def test_if_tour_is_created_and_saved(tour):
+    io_stream = StringIO()
+    tour.save_to_stream(io_stream)
+    saved_data = io_stream.getvalue()
+    io_stream.seek(0)
+    verify(saved_data, options=approval_options)
 
 def test_book_tour_with_available_space(tour):
     assert tour.book_tour() == True
@@ -66,4 +69,4 @@ def test_tour_description_generation_is_not_as_expected(tour):
 
 def test_tour_information_is_saved_to_json(tour):
     tour.save_to_json("tour.json")
-    assert tour.check_if_tour_is_saved(tour.tour_Id) == True
+    assert tour.check_if_tour_is_saved() == True
