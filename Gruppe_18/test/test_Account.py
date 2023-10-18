@@ -1,6 +1,6 @@
 import pytest
 from approvaltests import verify
-from Gruppe_18.src.Model.Account import Account
+from Gruppe_18.src.main.modell.Account import Account
 from io import StringIO
 
 
