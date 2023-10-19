@@ -1,5 +1,5 @@
 import pytest
-from Gruppe_18.src.Model.Tour import Tour
+from Gruppe_18.src.main.modell.Tour import Tour
 
 
 @pytest.fixture

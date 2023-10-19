@@ -1,36 +1,36 @@
 @startuml
 left to right direction
-
 :User: as User
 :Administrator: as Admin
+Admin --> (Logg inn)
+User --> (Logg inn)
+Admin --> (Administrere guider)
+(Administrere guider) --> (Verifisere brukerkonto)
+Admin --> (Håndtere brutt på rettningslinjer)
+Admin --> (Administrere  innhold)
+(Administrere  innhold) --> (Oppdatere status)
 
-Admin --> (Log in)
-User --> (Log in)
 
-Admin --> (Manage Guides)
-(Manage Guides) --> (Verify User Accounts)
-Admin --> (Handle Policy Violations)
-Admin --> (Manage Content)
-(Manage Content) --> (Update Status)
-Admin --> (Statistics)
-(Statistics) --> (User Activity Overview)
-Admin --> (Handle Inquiries)
-User --> (Verified Account for being a guide)
-Admin --> (Manage User Accounts)
-User --> (Create a User Account)
-User --> (Receive Receipt)
-(Log in) --> (Edit User Information)
-(Verified Account for being a guide) --> (Create Guide tour for sale)
-(Create Guide tour for sale) --> (Edit the tour information)
-(Edit the tour information) --> (Publish the Guide tour)
-(Publish the Guide tour) --> (Registration Overview)
-User --> (View Available Tours)
-(View Available Tours) --> (Registration for guide tour)
-(Registration for guide tour) --> (Booking Overview)
-(Booking Overview) --> (Payment for booking the guide)
-(Payment for booking the guide) --> (Bank)
-(Payment for booking the guide) --> (Mobile Application)
+
+Admin --> (Statestikk)
+(Statestikk) --> (Oversikt over brukeraktivitet)
+
+Admin --> (Håndtere henvendelser)
+User --> (Verifisert konto)
+
+Admin --> (Administrere brukerkontoer)
+User --> (Lage en User brukerkonto)
+User --> (Få kvittering)
+(Logg inn) --> (Redigere brukerinformasjon)
+(Verifisert konto) --> (Oprette guide)
+(Oprette guide) --> (Redigere)
+(Redigere) --> (Legge ut)
+(Legge ut) --> (Oversikt over påmelding)
+User --> (Se på tilgjengelige turer)
+(Se på tilgjengelige turer) --> (Påmelding)
+(Påmelding) --> (Oversikt over bestiling)
+(Oversikt over bestiling) --> (Betaling)
+(Betaling) --> (Card, Paypal, bankterminal)
+(Betaling) --> (Mobilapplikasjon)
 
 @enduml
-
-
