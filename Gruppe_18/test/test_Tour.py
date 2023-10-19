@@ -19,6 +19,7 @@ def tour():
         20,
     )
 
+
 # kan man forenkle assertene her med noen pytest-funksjoner?
 def test_if_tour_is_created_and_saved(tour):
     io_stream = StringIO()
@@ -26,6 +27,7 @@ def test_if_tour_is_created_and_saved(tour):
     saved_data = io_stream.getvalue()
     io_stream.seek(0)
     verify(saved_data, options=approval_options)
+
 
 def test_book_tour_with_available_space(tour):
     assert tour.book_tour() == True
