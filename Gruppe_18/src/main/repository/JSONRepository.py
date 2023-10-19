@@ -48,4 +48,10 @@ class JSONRepository:
             entity_dict[key] = value
         return entity_dict
 
+    def read_from_stream(self, stream):
+        items = json.load(stream)
+        stream.seek(0)
+        return items
+
+
     # def from_json(self, entity, ):
