@@ -2,9 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
+    <title>Home</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .header {
+            background-color: #6892ab;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Styling for midterste seksjon (hovedinnhold) */
+        main {
+            display: flex;
+            flex: 1;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        /* Styling for nederste seksjon (fot) */
+        footer {
+            background-color: #6892ab;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        p {
+            white-space: pre-line;
+
+        }
+
+        .image {
+            flex: 1;
+        }
+
+        .text {
+            flex: 2;
+        }
+
+
+
+    </style>
 </head>
 <body>
+    <header class="header">
+        <nav>
+            <!-- Your navigation links can go here -->
+        </nav>
+        <h1>Welcome, choose your adventure</h1>
+        <input type="text" placeholder="Search">
+    </header>
+    <main>
 
+            <h2>Grand Canyon</h2>
+            <div class="image">
+            <img src=" https://grandcanyonwest.com/wp-content/uploads/SkwalkHero_B.jpg" style="max-height: 20vh;" alt="Grand Cantyon">
+            </div>
+            <div class="text">
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                It has survived not only five centuries, but also the leap into electronic typesetting,
+                remaining essentially unchanged.
+                It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </p>
+                </div>
+
+
+    </main>
+    <footer>
+        <p>&copy; Copyright</p>
+    </footer>
 </body>
 </html>
