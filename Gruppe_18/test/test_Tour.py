@@ -11,6 +11,7 @@ approval_options = Options().with_scrubber(scrub_all_guids)
 @pytest.fixture
 def tour():
     return Tour(
+        "A tour through italy",
         "Italy",
         4,
         255,
