@@ -1,9 +1,8 @@
 import json
 import io
-# shows all avilable tours
 
 
-def read_tours_from_json(stream):
+def read_tours_from_stream(stream):
     items = json.load(stream)
     stream.seek(0)
     return items
