@@ -1,6 +1,6 @@
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 
-list_with_tours =
+# list_with_tours =
 
 class TourRepository (JSONRepository):
 
