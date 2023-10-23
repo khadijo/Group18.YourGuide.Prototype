@@ -1,12 +1,9 @@
 import sqlite3
 
 connection = sqlite3.connect("YourGuide.db")
+connection.row_factory = sqlite3.Row
 cursor = connection.cursor()
 
-cursor.execute("CREATE TABLE tour (title TEXT, destination TEXT, duration REAL, cost REAL, "
-               "pictureURL TEXT, language TEXT, MAX_travelers INTEGER, Booked INTEGER, Tour_ID TEXT)")
-
-cursor.execute("CREATE TABLE Account (username TEXT, password TEXT, phonen TEXT, emailAdress TEXT, account_id Integer)")
 
 cursor.execute("INSERT INTO tour (title, destination, duration, cost, pictureURL, "
                "language, MAX_travelers, Booked, Tour_ID) "
@@ -16,11 +13,10 @@ cursor.execute("INSERT INTO tour (title, destination, duration, cost, pictureURL
 
 connection.commit()
 
-# Now, let's retrieve the inserted row as a dictionary
 cursor.execute("SELECT * FROM tour WHERE Tour_ID = ?", ("12345",))
 row = cursor.fetchone()
 
-print(row)
+print(row['title'], row['destination'])
 
 # Close the cursor and the connection
 cursor.close()
