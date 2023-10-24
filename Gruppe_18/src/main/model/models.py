@@ -1,6 +1,13 @@
-from sqlalchemy import Column, String, Integer, DATETIME
+from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
+from sqlalchemy.orm import relationship
 import uuid
 from Gruppe_18.src.main.database.sql_alchemy import Base
+
+tour_account_association = Table(
+    'tour_account_association', Base.metadata,
+    Column('tour_id', String, ForeignKey('Tour.id')),
+    Column('account_id', String, ForeignKey('User.id'))
+)
 
 
 class Account(Base):
@@ -10,6 +17,7 @@ class Account(Base):
     password = Column("password", String)
     phoneNumber = Column("phoneNumber", String)
     emailAddress = Column("emailAddress", String)
+    tours = relationship("Tour", secondary=tour_account_association, back_populates="participants")
 
     def __init__(self, username, password, phoneNumber, emailAddress):
         self.account_id = str(uuid.uuid4())
@@ -20,8 +28,6 @@ class Account(Base):
 
     def __repr__(self):
         return f"({self.account_id}) {self.username} {self.password} {self.phoneNumber} {self.emailAddress}"
-
-
 
 
 class Tour(Base):
@@ -38,6 +44,7 @@ class Tour(Base):
     language = Column("language", String)
     pictureURL = Column("pictureURL", String)
     booked = Column("booked", Integer, default=0)
+    participants = relationship("Account", secondary=tour_account_association, back_populates="tours")
 
     def __init__(self, title, date, destination, duration, cost, max_travelers, language, pictureURL):
         self.tour_id = str(uuid.uuid4())
@@ -52,4 +59,3 @@ class Tour(Base):
 
     def __repr__(self):
         return f"({self.tour_id}) {self.title} {self.destination} {self.duration} {self.cost} {self.language} {self.max_travelers} {self.pictureURL} {self.booked}"
-

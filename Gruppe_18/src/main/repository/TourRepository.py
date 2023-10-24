@@ -17,9 +17,14 @@ class TourRepository(JSONRepository):
                 return True
             return False
 
-        def get_tour_description(self, entity):
-            return f"This tour will take you to {entity.destination} for {entity.duration} hours, and is " \
-                   f"offered in {entity.language}"
+    def get_tour_description(self, tour_id):
+        tour = self.session.query(Tour).filter_by(tour_id=tour_id).first()
+
+        if tour:
+            description = f"This tour will take you to {tour.destination} for {tour.duration} hours, and is offered in {tour.language}"
+            return description
+        else:
+            return "Tour not found"
 
     def filter_tour_by_location(self, tour_list, destination):
         filtered_tours = []
