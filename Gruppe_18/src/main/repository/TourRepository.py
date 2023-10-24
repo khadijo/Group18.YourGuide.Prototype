@@ -29,6 +29,9 @@ class TourRepository(JSONRepository):
     def get_all_tours(self):
         return self.session.query(Tour).all()
 
+    def get_spesific_tour(self, tour_id):
+        return self.session.query(Tour).filter_by(tour_id=tour_id).first()
+
     def filter_tour_by_location(self, destination):
         return self.session.query(Tour).filter_by(destination=destination).all()
 
