@@ -22,7 +22,7 @@ class JSONRepository:
         with open(filename, "w") as json_file:
             json.dump(filedata, json_file, indent=4)
 
-    def save_to_stream(self, io_stream):
+    def save_to_stream(self, entity, io_stream):
         try:
             filedata = json.load(io_stream)
         except json.JSONDecodeError:
@@ -30,12 +30,12 @@ class JSONRepository:
 
         duplicate_found = False
         for item in filedata:
-            if item == self.to_dict():
+            if item['id'] == entity.get_id():
                 duplicate_found = True
                 break
 
         if not duplicate_found:
-            data = self.to_dict()
+            data = self.to_dict(entity)
             filedata.append(data)
 
         io_stream.truncate(0)
