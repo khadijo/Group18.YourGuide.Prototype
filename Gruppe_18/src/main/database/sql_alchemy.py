@@ -3,13 +3,15 @@ import os
 import sqlalchemy.orm
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from Gruppe_18.src.main.modell import models
+
 
 Base = sqlalchemy.orm.declarative_base()
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "../YourGuide.db")
 engine = create_engine(f"sqlite:///{database_name}", echo=True)
+
+
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 

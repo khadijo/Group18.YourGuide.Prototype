@@ -1,8 +1,5 @@
 import datetime
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
 from Gruppe_18.src.main.modell.models import Tour, Account
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.repository.TourRepository import TourRepository

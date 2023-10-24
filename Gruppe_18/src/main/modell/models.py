@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, String, Integer, DATETIME
+from sqlalchemy import Column, String, Integer, DATETIME
 import uuid
 from Gruppe_18.src.main.database.sql_alchemy import Base
 
@@ -53,5 +53,4 @@ class Tour(Base):
 
     def __repr__(self):
         return f"({self.tour_id}) {self.title} {self.destination} {self.duration} {self.cost} {self.language} {self.max_travelers} {self.pictureURL} {self.booked}"
-
 

@@ -1,11 +1,7 @@
-import json
-
-from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.modell.models import Tour
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 
 
-# list_with_tours =
 
 class TourRepository(JSONRepository):
     def __init__(self, session):
