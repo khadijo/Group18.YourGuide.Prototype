@@ -1,11 +1,13 @@
 [
     {
-        "tour_Id": "<guid_0>",
-        "destination": "Italy",
-        "cost": 255,
-        "duration": 4,
         "pictureURL": "https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg",
         "language": "English",
-        "max_travelers": 20
+        "destination": "Italy",
+        "title": "A tour through italy",
+        "duration": 4,
+        "cost": 255,
+        "max_travelers": 20,
+        "booked": 0,
+        "tour_Id": "<guid_0>"
     }
 ]

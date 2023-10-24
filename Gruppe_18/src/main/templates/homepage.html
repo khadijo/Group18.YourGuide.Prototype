@@ -2,9 +2,115 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
-</head>
-<body>
+    <title>Home</title>
 
+</head>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #ff7f00;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .header input[type="text"] {
+            padding: 10px;
+            width: 60%;
+            border: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        .BoderGrandCanyon,
+        .BorderDisney,
+        .louvreMuseum {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .image img,
+        .BorderDisney img,
+        .louvreMuseum img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        button {
+            background-color: #ff7f00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #ff7f00;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+<body>
+    <header class="header">
+        <h1>Welcome, choose your adventure</h1>
+        <input type="text" placeholder="Search">
+    </header>
+    <main>
+
+  <main>
+        <!-- For hver tur i listen av turer, generer HTML-innhold -->
+        {% for tour in tours %}
+            <div class="{{ tour.id }}">
+                <h2>{{ tour.title }}</h2>
+                <div class="image">
+                    <img src="{{ tour.pictureURL }}" style="max-height: 50vh;" alt="{{ tour.title }}">
+                </div>
+                <div class="text">
+                    <p> Date: {{ tour.date }}</p>
+                    <p> Destination: {{ tour.destination }}</p>
+                    <p> Duration: {{ tour.duration }}</p>
+                    <p> Cost: {{ tour.cost }}</p>
+                    <p> Max travelers: {{ tour.max_travelers}}</p>
+                    <p> Language: {{ tour.language}}</p>
+                </div>
+                <button>Join the tour</button>
+            </div>
+        {% endfor %}
+    </main>
+
+
+    </main>
+    <footer>
+        <p>&copy; Copyright Gruppe 18</p>
+    </footer>
 </body>
 </html>
