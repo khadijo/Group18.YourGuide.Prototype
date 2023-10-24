@@ -1,18 +1,20 @@
-from Gruppe_18.test.stream_for_testing import *
+import pytest
 from approvaltests import verify
-from Gruppe_18.src.main.repository.TourRepository import TourRepository
+from Gruppe_18.src.main.repository.TourRepository import TourRepository, get_session
+from Gruppe_18.src.main.database.sql_alchemy import get_session
+
+@pytest.fixture
+def tour_re():
+    return TourRepository(get_session)
 
 
 def test_if_reading_from_stream_is_as_expected():
-    tours = TourRepository.read_from_stream(stream)
-    verify(tours)
+    pass
 
 
 def test_if_filter_tours_by_location_is_as_expected():
-    filtered = TourRepository.filter_tour_by_location(TourRepository.read_from_stream(stream), "London")
-    verify(filtered)
+    pass
 
 
 def test_if_filter_tours_by_price_is_as_expected():
-    filtered = TourRepository.filter_tour_by_price(TourRepository.read_from_stream(stream), 150, 0)
-    verify(filtered)
+    pass

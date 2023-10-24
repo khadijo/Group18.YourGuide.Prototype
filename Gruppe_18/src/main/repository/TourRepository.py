@@ -26,19 +26,14 @@ class TourRepository(JSONRepository):
         else:
             return "Tour not found"
 
-    def filter_tour_by_location(self, tour_list, destination):
-        filtered_tours = []
-        for tour in tour_list:
-            if tour['destination'] == destination:
-                filtered_tours.append(tour)
-        return filtered_tours
+    def get_all_tours(self):
+        return self.session.query(Tour).all()
 
-    def filter_tour_by_price(self, tour_list, max_price, min_price):
-        filtered_tours = []
-        for tour in tour_list:
-            if min_price <= tour['cost'] <= max_price:
-                filtered_tours.append(tour)
-        return filtered_tours
+    def filter_tour_by_location(self, destination):
+        return self.session.query(Tour).filter_by(destination=destination).all()
+
+    def filter_tour_by_price(self, max_price, min_price):
+        return self.session.query(Tour).filter(Tour.cost.between(min_price, max_price)).all()
 
     def create_tour(self, entity):
         tour = Tour(title=entity.title,
