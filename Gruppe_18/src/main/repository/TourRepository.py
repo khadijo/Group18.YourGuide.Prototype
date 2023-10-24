@@ -2,7 +2,6 @@ from Gruppe_18.src.main.model.models import Tour
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 
 
-
 class TourRepository(JSONRepository):
     def __init__(self, session):
         self.session = session
@@ -49,3 +48,14 @@ class TourRepository(JSONRepository):
         self.session.add(tour)
         self.session.commit()
         return tour
+
+    def delete_tour(self, tour_id):
+        tour = self.session.query(Tour).filter_by(tour_id=tour_id).first()
+
+        if tour is not None:
+            self.session.delete(tour)
+            self.session.commit()
+            return True
+        else:
+            return False
+
