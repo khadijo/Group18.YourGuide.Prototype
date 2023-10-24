@@ -21,8 +21,7 @@ class Account(Base):
     def __repr__(self):
         return f"({self.account_id}) {self.username} {self.password} {self.phoneNumber} {self.emailAddress}"
 
-    def get_id(self):
-        return self.id
+
 
 
 class Tour(Base):

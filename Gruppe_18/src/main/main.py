@@ -1,6 +1,6 @@
 import datetime
 
-from Gruppe_18.src.main.modell.models import Tour, Account
+from Gruppe_18.src.main.model.models import Tour, Account
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
@@ -18,15 +18,15 @@ tour = Tour("noe",
         "test",
         4,
         255,
-        15,
-        "https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg",
-        "English")
+        15,"English",
+        "https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg")
 
 
 new_tour = tour_repository.create_tour(tour)
 
 
 result = tour_repository.book_tour(new_tour)
+result1 = tour_repository.book_tour(new_tour)
 
 
 session.commit()

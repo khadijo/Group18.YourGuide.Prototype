@@ -1,5 +1,5 @@
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
-from Gruppe_18.src.main.modell.models import Account
+from Gruppe_18.src.main.model.models import Account
 
 
 class AccountRepository (JSONRepository):
