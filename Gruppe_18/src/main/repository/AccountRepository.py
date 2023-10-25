@@ -1,8 +1,48 @@
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
+from Gruppe_18.src.main.model.models import Account
 
 
 class AccountRepository (JSONRepository):
-    def save_to_json(self, account):
-        filename = "account.json"
-        super().save_to_json(account, filename)
+    def delete_account(self, session, entity):
+        # Søk etter kontoen som skal slettes
+        account_to_delete = session.query(Account).filter_by(username=entity.username).first()
+
+        if account_to_delete:
+            # Hvis kontoen ble funnet, slett den fra databasen
+            session.delete(account_to_delete)
+            session.commit()
+            return True
+
+        return False
+
+    '''
+
+    def delete_account(self, entity, io_stream):
+        try:
+                io_stream.seek(0)
+                filedata = json.load(io_stream)
+        except json.JSONDecodeError:
+            filedata = []
+
+        index_to_delete = None
+        for i, item in enumerate(filedata):
+            if item["username"] == entity.username:
+                index_to_delete = i
+                break
+
+        if index_to_delete is not None:
+            del filedata[index_to_delete]
+
+            io_stream.seek(0)
+            io_stream.truncate()
+            json.dump(filedata, io_stream, indent=4)
+            return True
+
+        return False
+'''
+    # needs to be updated after database is implemented
+
+    def successful_registration(self, entity, io_stream):
+        self.save_to_stream(entity, io_stream)
+        return True
 

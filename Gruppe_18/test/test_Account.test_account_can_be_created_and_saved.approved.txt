@@ -1,6 +1,6 @@
 [
     {
-        "user_id": "<guid_0>",
+        "id": "<guid_0>",
         "username": "username",
         "password": "password",
         "phoneNumber": 12345678,
