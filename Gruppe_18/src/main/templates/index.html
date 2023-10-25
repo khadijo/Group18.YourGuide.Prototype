@@ -42,7 +42,6 @@
         }
 
         input[type="submit"] {
-            padding: 10px;
             width: 100%;
             background-color:#ff7f00;
             color: #fff;
@@ -70,6 +69,9 @@
                          {% endfor %}
                 {% endif %}
             {% endwith %}
+        </form>
+         <form action="/Account_reg" method="post">
+            <input type = "submit" value="Register">
         </form>
     </div>
 </body>

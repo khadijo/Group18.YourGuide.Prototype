@@ -15,6 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_name}'
 
 db = SQLAlchemy(app)
 
+
 class Tour(db.Model):
     id = db.Column(db.String, primary_key=True)
     title = db.Column(db.String)
@@ -27,6 +28,7 @@ class Tour(db.Model):
     pictureURL = db.Column(db.String)
     booked = db.Column(db.Integer)
 
+
 class User(db.Model):
     id = db.Column(db.String, primary_key=True)
     username = db.Column(db.String)
@@ -38,6 +40,8 @@ class User(db.Model):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
 @app.route('/home', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -57,6 +61,9 @@ def login():
 
         return render_template('index.html')
 
+@app.route('/Account_reg', methods=['GET', 'POST'])
+def account_reg():
+    return render_template('User_register.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
