@@ -3,18 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask Template Demo</title>
+    <title>Login Page</title>
+    <style>
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.pexels.com/photos/326119/pexels-photo-326119.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 50px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            font-family: sans-serif;
+            color: #ff7f00;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 4px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color:#ff7f00;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to YourGuide</h1>
-    </header>
-    <main>
-        <p>Hello, dear user!</p>
-        <p>Logg inn to start your adventure!</p>
-        <input> Username <input>
-        <input> password <input>
-        <button> logg inn </button>
-    </main>
+    <div class="container">
+        <h2>Yourguide</h2>
+        <form action="/home" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+             {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                        {% for message in messages %}
+                        <p style="color: red;">{{ message }}</p>
+                         {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+    </div>
 </body>
 </html>
