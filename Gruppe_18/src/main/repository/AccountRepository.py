@@ -2,7 +2,10 @@ from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 from Gruppe_18.src.main.model.models import Account
 
 
-class AccountRepository (JSONRepository):
+class AccountRepository(JSONRepository):
+    def __init__(self, session):
+        self.session = session
+
     def delete_account(self, session, entity):
         # Søk etter kontoen som skal slettes
         account_to_delete = session.query(Account).filter_by(username=entity.username).first()
@@ -40,9 +43,19 @@ class AccountRepository (JSONRepository):
 
         return False
 '''
+
     # needs to be updated after database is implemented
 
     def successful_registration(self, entity, io_stream):
         self.save_to_stream(entity, io_stream)
         return True
 
+    def create_account(self, entity):
+        account = Account(username=entity.username,
+                          password=entity.password,
+                          phoneNumber=entity.phoneNumber,
+                          emailAddress=entity.emailAddress)
+
+        self.session.add(account)
+        self.session.commit()
+        return account
