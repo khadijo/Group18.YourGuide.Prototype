@@ -1,8 +1,15 @@
+import os
+
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from Gruppe_18.src.main.templates import *
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/khad1/OneDrive - Østfold University College/B3/host/S/Gruppe_18/Gruppe_18/src/main/YourGuide.db'
+app = Flask(__name__, template_folder='templates')
+module_path = os.path.dirname(os.path.abspath(__file__))
+database_name = os.path.join(module_path, "YourGuide.db")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_name}'
+
 db = SQLAlchemy(app)
 
 class Tour(db.Model):
