@@ -18,8 +18,8 @@
         }
 
         .container {
-            width: 300px;
-            padding: 20px;
+            width: 400px;
+            padding: 30px;
             margin: 0 auto;
             background-color: #fff;
             border-radius: 5px;
@@ -42,8 +42,9 @@
         }
 
         input[type="submit"] {
+            font-size: 15px;
             width: 100%;
-            padding: 10px;
+            margin: 3px;
             background-color:#ff7f00;
             color: #fff;
             border: none;
@@ -59,10 +60,20 @@
 <body>
     <div class="container">
         <h2>Yourguide</h2>
-        <form action="homepage.html" method="post">
+        <form action="/home" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Login">
+             {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                        {% for message in messages %}
+                        <p style="color: red;">{{ message }}</p>
+                         {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+         <form action="/Account_reg" method="post">
+            <input type = "submit" value="Register">
         </form>
     </div>
 </body>
