@@ -3,6 +3,7 @@ from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
 from sqlalchemy.orm import relationship
 import uuid
 
+
 Base = sqlalchemy.orm.declarative_base()
 
 tour_account_association = Table(

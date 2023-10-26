@@ -3,15 +3,14 @@ from Gruppe_18.src.main.model.models import Account
 
 
 class AccountRepository(JSONRepository):
+
     def __init__(self, session):
         self.session = session
 
     def delete_account(self, session, entity):
-        # Søk etter kontoen som skal slettes
         account_to_delete = session.query(Account).filter_by(username=entity.username).first()
 
         if account_to_delete:
-            # Hvis kontoen ble funnet, slett den fra databasen
             session.delete(account_to_delete)
             session.commit()
             return True
