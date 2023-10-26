@@ -1,6 +1,5 @@
-from pytest import *
 import datetime
-from Gruppe_18.src.main.modell.cancel_tour import TourAdmin
+from Gruppe_18.src.main.model.cancel_tour import TourAdmin
 
 
 def test_cancel_tour_function():
