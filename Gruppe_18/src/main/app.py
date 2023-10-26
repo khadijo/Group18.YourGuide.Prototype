@@ -2,9 +2,11 @@ import os
 
 from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
+
 from sqlalchemy.exc import IntegrityError
 
 from Gruppe_18.src.main.templates import *
+
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'gruppe18'
@@ -35,6 +37,7 @@ class User(db.Model):
     emailAddress = db.Column(db.String)
 
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -56,6 +59,7 @@ def login():
             flash('Det oppstod en feil ved innlogging', 'danger')
 
         return render_template('index.html')
+
 
 
 if __name__ == '__main__':

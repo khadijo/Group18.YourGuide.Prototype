@@ -1,7 +1,5 @@
 import os
-from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
 from sqlalchemy.orm import relationship
-import uuid
 import sqlalchemy.orm
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
