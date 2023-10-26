@@ -2,7 +2,6 @@ import os
 
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from Gruppe_18.src.main.templates import *
 
 app = Flask(__name__, template_folder='templates')
 module_path = os.path.dirname(os.path.abspath(__file__))
@@ -21,13 +20,15 @@ class Tour(db.Model):
     cost = db.Column(db.Integer)
     max_travelers = db.Column(db.Integer)
     language = db.Column(db.String)
-    pictureURL = db.Column(db.String)  # Endret fra picture til pictureURL
+    pictureURL = db.Column(db.String)
     booked = db.Column(db.Integer)
+
 
 @app.route('/')
 def index():
     tours = Tour.query.all()
     return render_template('homepage.html', tours=tours)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
