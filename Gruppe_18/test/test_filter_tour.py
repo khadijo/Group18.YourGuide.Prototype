@@ -10,7 +10,7 @@ def tour_re():
 
 
 def test_if_reading_all_tours_from_database_is_as_expected(tour_re):
-    all_tours = tour_re.get_all_tours()
+    all_tours = tour_re.
     verify(all_tours)
 
 
