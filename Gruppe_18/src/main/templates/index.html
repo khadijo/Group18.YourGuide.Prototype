@@ -18,8 +18,8 @@
         }
 
         .container {
-            width: 300px;
-            padding: 20px;
+            width: 400px;
+            padding: 30px;
             margin: 0 auto;
             background-color: #fff;
             border-radius: 5px;
@@ -42,8 +42,9 @@
         }
 
         input[type="submit"] {
+            font-size: 15px;
             width: 100%;
-            padding: 10px;
+            margin: 3px;
             background-color:#ff7f00;
             color: #fff;
             border: none;
@@ -70,6 +71,9 @@
                          {% endfor %}
                 {% endif %}
             {% endwith %}
+        </form>
+         <form action="/Account_reg" method="post">
+            <input type = "submit" value="Register">
         </form>
     </div>
 </body>
