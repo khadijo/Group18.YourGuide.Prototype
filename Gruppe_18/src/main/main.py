@@ -11,7 +11,7 @@ session = get_session()
 tour_repository = TourRepository(session)
 account_rep = AccountRepository(session)
 a = Account(
-        "username",
+        "kari",
         "password",
         12345678,
         "user_@gmail.com"
@@ -32,7 +32,7 @@ tour = Tour("Welcome to Lofoten",
 #result = tour_repository.book_tour(new_tour)
 #result1 = tour_repository.book_tour(new_tour)
 account_rep.create_account(a)
-
+account_rep.create_account(a)
 
 tour_repository.delete_tour("25129e5f-3599-40be-be6a-07b87ba7762e")
 tour_repository.delete_tour("009ea0dc-5fae-4538-8c6c-e439fa876e7c")

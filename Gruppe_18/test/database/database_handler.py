@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
+
 Base = sqlalchemy.orm.declarative_base()
 
 module_path = os.path.dirname(os.path.abspath(__file__))
