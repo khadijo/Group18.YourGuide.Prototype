@@ -60,9 +60,12 @@
 <body>
     <div class="container">
         <h2>Yourguide</h2>
+
         <form action="/home" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
+
+
             <input type="submit" value="Login">
              {% with messages = get_flashed_messages() %}
                 {% if messages %}

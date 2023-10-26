@@ -3,7 +3,8 @@ from sqlite3 import IntegrityError
 
 from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
-
+from Gruppe_18.src.main.database.sql_alchemy import get_session
+from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.model.models import Account
 
 app = Flask(__name__, template_folder='templates')
@@ -13,6 +14,8 @@ database_name = os.path.join(module_path, "YourGuide.db")
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_name}'
 
 db = SQLAlchemy(app)
+session = get_session()
+account_rep = AccountRepository(session)
 
 
 class Tour(db.Model):
@@ -59,7 +62,7 @@ def login():
         return render_template('index.html')
 
 @app.route('/Account_reg', methods=['GET', 'POST'])
-def account_reg(account_rep=None):
+def account_reg():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')

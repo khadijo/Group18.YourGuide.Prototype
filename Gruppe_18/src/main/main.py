@@ -36,7 +36,7 @@ tour_repository.delete_tour("0c784c92-9e5b-42d3-91d2-21c21eafb6f6")
 tour_repository.delete_tour("42018dd6-5b95-4852-9016-7f63e9856136")
 
 # Create new tours
-# new_tour = tour_repository.create_tour(tour)
+#new_tour = tour_repository.create_tour(tour)
 
 
 session.commit()
