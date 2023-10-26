@@ -1,5 +1,4 @@
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
-from Gruppe_18.src.main.modell.Account import Account
 import json
 
 

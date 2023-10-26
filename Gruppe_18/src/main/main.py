@@ -1,4 +1,4 @@
-from Gruppe_18.src.main.modell.Account import Account
+from Gruppe_18.src.main.model.Account import Account
 from Gruppe_18.src.main.modell.Tour import Tour
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
