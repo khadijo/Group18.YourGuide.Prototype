@@ -86,52 +86,26 @@
     </header>
     <main>
 
-
-        <div class="BoderGrandCanyon">
-            <h2>Grand Canyon</h2>
-            <div class="image">
-            <img src=" https://grandcanyonwest.com/wp-content/uploads/SkwalkHero_B.jpg" style="max-height: 50vh;" alt="Grand Cantyon">
-            </div>
-            <div class="text">
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                It has survived not only five centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged.
-                It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </p>
+  <main>
+        <!-- For hver tur i listen av turer, generer HTML-innhold -->
+        {% for tour in tours %}
+            <div class="{{ tour.id }}">
+                <h2>{{ tour.title }}</h2>
+                <div class="image">
+                    <img src="{{ tour.pictureURL }}" style="max-height: 50vh;" alt="{{ tour.title }}">
                 </div>
-            <button>Join the tour</button>
-        </div>
-        
-        <div class="BorderDisney">
-            <h2>Disney Tour</h2>
-            <img src="https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,h_1200,q_75,w_1200/v1/clients/orlandofl/8731_castle_landing_page_image_nu_2a8f8e6a-a1f9-45fd-8eca-596c92d04a7c.jpg " alt="Disney" style="max-height: 50vh;">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                It has survived not only five centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged.
-                It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </p>
-            <button>Join the tour</button>
-        </div>
-
-        <div class="louvreMuseum">
-            <h2>Louvre Museum</h2>
-            <img src="https://res.cloudinary.com/hello-tickets/image/upload/c_limit,f_auto,q_auto,w_1300/v1645846296/rg73rgkb4xsiigqzd3ab.jpg" alt="Louvre Museum" style="max-height: 50vh;">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                It has survived not only five centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged.
-                It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </p>
-            <button>Join the tour</button>
-        </div>
+                <div class="text">
+                    <p> Date: {{ tour.date }}</p>
+                    <p> Destination: {{ tour.destination }}</p>
+                    <p> Duration: {{ tour.duration }}</p>
+                    <p> Cost: {{ tour.cost }}</p>
+                    <p> Max travelers: {{ tour.max_travelers}}</p>
+                    <p> Language: {{ tour.language}}</p>
+                </div>
+                <button>Join the tour</button>
+            </div>
+        {% endfor %}
+    </main>
 
 
     </main>

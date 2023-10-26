@@ -1,7 +1,7 @@
 import pytest
 from approvaltests import verify, Options
 from approvaltests.scrubbers import scrub_all_guids
-from Gruppe_18.src.main.model.Account import Account
+from Gruppe_18.src.main.modell.models import Account
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from io import StringIO
 
