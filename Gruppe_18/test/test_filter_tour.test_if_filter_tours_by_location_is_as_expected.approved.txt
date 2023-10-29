@@ -1,1 +1,0 @@
-[{'destination': 'London', 'duration': 3, 'cost': 180, 'pictureURL': 'https://example.com/london.jpg', 'language': 'English', 'max_travelers': 18, 'booked': 6, 'tour_Id': 4}, {'destination': 'London', 'duration': 3, 'cost': 130, 'pictureURL': 'https://example.com/london.jpg', 'language': 'English', 'max_travelers': 19, 'booked': 4, 'tour_Id': 5}]

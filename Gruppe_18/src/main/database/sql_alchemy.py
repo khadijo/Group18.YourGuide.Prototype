@@ -1,13 +1,9 @@
 import os
-from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
-from sqlalchemy.orm import relationship
-import uuid
-import sqlalchemy.orm
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from Gruppe_18.src.main.model.models import Base
 
 
-Base = sqlalchemy.orm.declarative_base()
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "../YourGuide.db")

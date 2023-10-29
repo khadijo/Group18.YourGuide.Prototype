@@ -1,7 +1,10 @@
+import sqlalchemy
 from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
 from sqlalchemy.orm import relationship
 import uuid
-from Gruppe_18.src.main.database.sql_alchemy import Base
+
+
+Base = sqlalchemy.orm.declarative_base()
 
 tour_account_association = Table(
     'tour_account_association', Base.metadata,
