@@ -62,5 +62,4 @@ class AccountRepository(JSONRepository):
         else:
             print("Tur eller bruker ble ikke funnet.")
 
-    def get_current_user_id(self):
-        return self.session.get('user_id')
+
