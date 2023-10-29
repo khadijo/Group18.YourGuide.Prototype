@@ -69,12 +69,20 @@ def login():
 def filter():
     if request.method == 'POST':
         destination = request.form['destination']
+        min_price = request.form['max_price']
+        max_price = request.form['min_price']
         try:
-            filter_tours = tour_rep.filter_tour_by_location(destination)
+            if destination and max_price and min_price:
+                filter_tours = tour_rep.filter_tour_by_price_and_location(destination, max_price, min_price)
+            elif destination:
+                filter_tours = tour_rep.filter_tour_by_location(destination)
+            elif max_price and min_price:
+                filter_tours = tour_rep.filter_tour_by_price(max_price, min_price)
             return render_template("homepage.html", tours=filter_tours)
         except IntegrityError:
             flash('there was a mistake', 'danger')
         return render_template("homepage.html")
+
 
 @app.route('/Account_reg', methods=['GET', 'POST'])
 def account_reg():
