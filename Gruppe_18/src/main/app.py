@@ -12,6 +12,7 @@ module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "YourGuide.db")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_name}'
+app.secret_key = 'gruppe18'
 
 db = SQLAlchemy(app)
 session = get_session()
