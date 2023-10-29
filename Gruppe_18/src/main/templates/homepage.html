@@ -95,13 +95,15 @@
         <button class="filter-button">filter menu</button>
     </header>
     <main>
-        <div class="filter-menu">
-            <ul>
-                <li>Destination: <input type="text" id="destination-input"></li>
-                <li>Price Range: <input type="number" id="min-price-input" placeholder="Min"> - <input type="number" id="max-price-input" placeholder="Max"></li>
-            </ul>
-            <button>Filter</button>
-        </div>
+        <form action="/home/filter" method="post">
+            <div class="filter-menu">
+                <ul>
+                    <li>Destination: <input type="text" id="destination-input" name="destination"></li>
+                    <li>Price Range: <input type="number" id="min-price-input" name="min_price" placeholder="Min"> - <input type="number" id="max-price-input" name="max_price" placeholder="Max"></li>
+                </ul>
+                <input type="submit" value="filter">
+            </div>
+        </form>
   <main>
         <!-- For hver tur i listen av turer, generer HTML-innhold -->
         {% for tour in tours %}

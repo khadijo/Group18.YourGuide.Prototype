@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.model.models import Account
 
 app = Flask(__name__, template_folder='templates')
@@ -17,6 +18,7 @@ app.secret_key = 'gruppe18'
 db = SQLAlchemy(app)
 session = get_session()
 account_rep = AccountRepository(session)
+tour_rep = TourRepository(session)
 
 
 class Tour(db.Model):
@@ -61,6 +63,18 @@ def login():
             flash('Det oppestod en feil ved innlogging', 'danger')
 
         return render_template('index.html')
+
+
+@app.route('/home/filter', methods=['GET','POST'])
+def filter():
+    if request.method == 'POST':
+        destination = request.form['destination']
+        try:
+            filter_tours = tour_rep.filter_tour_by_location(destination)
+            return render_template("homepage.html", tours=filter_tours)
+        except IntegrityError:
+            flash('there was a mistake', 'danger')
+        return render_template("homepage.html")
 
 @app.route('/Account_reg', methods=['GET', 'POST'])
 def account_reg():
