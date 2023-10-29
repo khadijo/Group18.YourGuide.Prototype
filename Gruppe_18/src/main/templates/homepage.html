@@ -82,6 +82,7 @@
 <body>
     <header class="header">
         <h1>Welcome, choose your adventure</h1>
+        <a href="/user_tours" class="your-tours-button">Go to Your Tours</a>
         <input type="text" placeholder="Search">
     </header>
     <main>
@@ -102,7 +103,10 @@
                     <p> Max travelers: {{ tour.max_travelers}}</p>
                     <p> Language: {{ tour.language}}</p>
                 </div>
-                <button>Join the tour</button>
+                   <form action="/register_for_tour" method="post">
+                        <input type="hidden" name="tour_id" value="{{ tour.id }}">
+                    <button type="submit">Join tour</button>
+                   </form>
             </div>
         {% endfor %}
     </main>
