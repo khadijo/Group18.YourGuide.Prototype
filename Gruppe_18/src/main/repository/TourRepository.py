@@ -38,6 +38,10 @@ class TourRepository(JSONRepository):
     def filter_tour_by_price(self, min_price, max_price):
         return self.session.query(Tour).filter(Tour.cost.between(min_price, max_price)).all()
 
+    def filter_tour_by_price_and_location(self, destination, min_price, max_price):
+        return self.session.query(Tour).filter(Tour.cost.between(min_price, max_price))\
+            .filter_by(destination=destination).all()
+
     def create_tour(self, entity):
         tour = Tour(title=entity.title,
                     date=entity.date,

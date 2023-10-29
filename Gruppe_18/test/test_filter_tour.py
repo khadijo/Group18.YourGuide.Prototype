@@ -73,11 +73,15 @@ def test_if_a_spesific_tour_can_be_returned_from_database(tour_re, tour):
     assert tour == tour
 
 
-def test_if_filter_tours_by_location_is_as_expected(tour_re):
+def test_if_filter_tours_by_destination_is_as_expected(tour_re):
     filtered_tours = tour_re.filter_tour_by_location("Lofoten, Norway")
     verify(filtered_tours)
 
 
 def test_if_filter_tours_by_price_is_as_expected(tour_re):
     filtered_tours = tour_re.filter_tour_by_price(4000, 6000)
+    verify(filtered_tours)
+
+def test_if_filter_tours_by_price_and_destination_is_as_expected(tour_re):
+    filtered_tours = tour_re.filter_tour_by_price_and_location("Lofoten, Norway", 0, 4000)
     verify(filtered_tours)
