@@ -1,9 +1,10 @@
 import pytest
-from approvaltests import verify
+from approvaltests import *
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.test.database.database_handler import get_session
 import datetime
 from Gruppe_18.src.main.model.models import Tour
+
 
 
 
@@ -59,16 +60,25 @@ def tour_4():
     "https://www.example.com/tromso-arctic.jpg"
 )
 
-def test_if_reading_all_tours_from_database_is_as_expected(tour_re, tour, tour_2, tour_3, tour_4):
-    tour_re.create_tour(tour)
-    tour_re.create_tour(tour_2)
-    tour_re.create_tour(tour_3)
-    tour_re.create_tour(tour_4)
+@pytest.fixture
+def tour_5():
+    return Tour("Welcome to Lofoten",
+        datetime.date(2024, 6, 25),
+        "Lofoten, Norway",
+        3,
+        200,
+        20,"English",
+        "https://www.thonhotels.no/siteassets/artikler/lofoten/nordlys-lofoten-1.jpg")
+
+
+
+
+def test_if_reading_all_tours_from_database_is_as_expected(tour_re):
     all_tours = tour_re.get_all_tours()
     verify(all_tours)
 
 
-def test_if_a_spesific_tour_can_be_returned_from_database(tour_re, tour):
+def test_if_a_spesific_tour_can_be_returned_from_database(tour_re):
     tour = tour_re.get_spesific_tour("cfde15f7-5516-4581-b4e0-38f74e89481b")
     assert tour == tour
 
@@ -82,6 +92,7 @@ def test_if_filter_tours_by_price_is_as_expected(tour_re):
     filtered_tours = tour_re.filter_tour_by_price(4000, 6000)
     verify(filtered_tours)
 
+
 def test_if_filter_tours_by_price_and_destination_is_as_expected(tour_re):
-    filtered_tours = tour_re.filter_tour_by_price_and_location("Lofoten, Norway", 0, 4000)
+    filtered_tours = tour_re.filter_tour_by_price_and_location("Lofoten, Norway", 500, 4000)
     verify(filtered_tours)
