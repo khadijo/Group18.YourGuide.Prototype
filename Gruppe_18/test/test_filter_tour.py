@@ -6,11 +6,10 @@ import datetime
 from Gruppe_18.src.main.model.models import Tour
 
 
-
-
 @pytest.fixture
 def tour_re():
     return TourRepository(get_session())
+
 
 @pytest.fixture
 def tour():
@@ -21,6 +20,7 @@ def tour():
         3674,
         20,"English",
         "https://www.thonhotels.no/siteassets/artikler/lofoten/nordlys-lofoten-1.jpg")
+
 
 @pytest.fixture
 def tour_2():
@@ -34,6 +34,8 @@ def tour_2():
     "English",
     "https://www.example.com/bergen-fjords.jpg"
 )
+
+
 @pytest.fixture
 def tour_3():
     return Tour(
@@ -46,6 +48,7 @@ def tour_3():
     "English",
     "https://www.example.com/oslo-city.jpg"
 )
+
 
 @pytest.fixture
 def tour_4():
@@ -60,6 +63,7 @@ def tour_4():
     "https://www.example.com/tromso-arctic.jpg"
 )
 
+
 @pytest.fixture
 def tour_5():
     return Tour("Welcome to Lofoten",
@@ -71,16 +75,15 @@ def tour_5():
         "https://www.thonhotels.no/siteassets/artikler/lofoten/nordlys-lofoten-1.jpg")
 
 
-
-
 def test_if_reading_all_tours_from_database_is_as_expected(tour_re):
     all_tours = tour_re.get_all_tours()
     verify(all_tours)
 
 
 def test_if_a_spesific_tour_can_be_returned_from_database(tour_re):
-    tour = tour_re.get_spesific_tour("cfde15f7-5516-4581-b4e0-38f74e89481b")
-    assert tour == tour
+    spesific_tour = f"{tour_re.get_spesific_tour('5194d52d-3a5e-46d1-82fa-a56cf1360866')}"
+    assert spesific_tour == ('(5194d52d-3a5e-46d1-82fa-a56cf1360866) Welcome to Lofoten Lofoten, Norway 3 3674 English 20'
+                             ' https://www.thonhotels.no/siteassets/artikler/lofoten/nordlys-lofoten-1.jpg 0')
 
 
 def test_if_filter_tours_by_destination_is_as_expected(tour_re):
