@@ -1,1 +1,0 @@
-[(662d4c11-0ff5-4d63-b8ab-400ef3896466) Bergen Fjord Exploration Bergen, Norway 4 4199 English 15 https://www.example.com/bergen-fjords.jpg 0, (79d2f540-0f1c-4e55-a622-320b613eae14) Arctic Wonders in Tromsø Tromsø, Norway 5 4899 English 12 https://www.example.com/tromso-arctic.jpg 0]

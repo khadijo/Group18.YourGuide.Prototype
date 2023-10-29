@@ -1,5 +1,5 @@
 import pytest
-from approvaltests import *
+from approvaltests import verify
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.test.database.database_handler import get_session
 import datetime
