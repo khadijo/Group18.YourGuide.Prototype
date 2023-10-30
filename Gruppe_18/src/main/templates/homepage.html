@@ -82,13 +82,17 @@
 <body>
     <header class="header">
         <h1>Welcome, choose your adventure</h1>
-        <input type="text" placeholder="Search">
+         <!--Add functionality to the search bar -->
+        <form action="/search" method="get">
+            <input type="text" name ="q" placeholder="Search">
+            <button type="submit">Search</button>
+        </form>
     </header>
     <main>
 
   <main>
-        <!-- For hver tur i listen av turer, generer HTML-innhold -->
-        {% for tour in tours %}
+      <!-- For hver tur i listen av turer, generer HTML-innhold -->
+      {% for tour in tours %}
             <div class="{{ tour.id }}">
                 <h2>{{ tour.title }}</h2>
                 <div class="image">
@@ -101,10 +105,37 @@
                     <p> Cost: {{ tour.cost }}</p>
                     <p> Max travelers: {{ tour.max_travelers}}</p>
                     <p> Language: {{ tour.language}}</p>
+
+
                 </div>
+                 <!--Add functionality to the "join the tour"  -->
                 <button>Join the tour</button>
             </div>
         {% endfor %}
+
+      <!-- The code below is the same as above, the only difference is search funcation, we can put it in different file  -->
+        {% for tour in results %}
+            <div class="{{ tour.id }}">
+                <h2>{{ tour.title }}</h2>
+                <div class="image">
+                    <img src="{{ tour.pictureURL }}" style="max-height: 50vh;" alt="{{ tour.title }}">
+                </div>
+                <div class="text">
+                    <p> Date: {{ tour.date }}</p>
+                    <p> Destination: {{ tour.destination }}</p>
+                    <p> Duration: {{ tour.duration }}</p>
+                    <p> Cost: {{ tour.cost }}</p>
+                    <p> Max travelers: {{ tour.max_travelers}}</p>
+                    <p> Language: {{ tour.language}}</p>
+
+
+                </div>
+                 <!--Add functionality to the "join the tour"  -->
+                <button>Join the tour</button>
+            </div>
+        {% endfor %}
+
+
     </main>
 
 
