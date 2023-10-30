@@ -42,15 +42,15 @@ class TourRepository(JSONRepository):
         return self.session.query(Tour).filter(Tour.cost.between(min_price, max_price))\
             .filter_by(destination=destination).all()
 
-    def create_tour(self, entity):
-        tour = Tour(title=entity.title,
-                    date=entity.date,
-                    destination=entity.destination,
-                    duration=entity.duration,
-                    cost=entity.cost,
-                    max_travelers=entity.max_travelers,
-                    language=entity.language,
-                    pictureURL=entity.pictureURL)
+    def create_tour(self, tour):
+        tour = Tour(title=tour.title,
+                    date=tour.date,
+                    destination=tour.destination,
+                    duration=tour.duration,
+                    cost=tour.cost,
+                    max_travelers=tour.max_travelers,
+                    language=tour.language,
+                    pictureURL=tour.pictureURL)
 
         self.session.add(tour)
         self.session.commit()

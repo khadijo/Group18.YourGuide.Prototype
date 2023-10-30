@@ -78,6 +78,21 @@
             text-align: center;
             padding: 10px 0;
         }
+        .your-tours-button {
+            margin: 10px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #444497;
+            color: white;
+            text-decoration: none;
+            border: solid #444497;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .your-tours-button:hover {
+            background-color: #ff7f00;
+        }
         .filter-menu {
             display: none;
             background-color: #ffcc99;
@@ -91,6 +106,7 @@
 <body>
     <header class="header">
         <h1>Welcome, choose your adventure</h1>
+        <a href="/user_tours" class="your-tours-button">My tours</a>
         <input type="text" placeholder="Search">
         <button class="filter-button">filter menu</button>
     </header>
@@ -120,7 +136,10 @@
                     <p> Max travelers: {{ tour.max_travelers}}</p>
                     <p> Language: {{ tour.language}}</p>
                 </div>
-                <button>Join the tour</button>
+                   <form action="/register_for_tour" method="post">
+                        <input type="hidden" name="tour_id" value="{{ tour.id }}">
+                    <button type="submit">Join tour</button>
+                   </form>
             </div>
         {% endfor %}
     </main>
