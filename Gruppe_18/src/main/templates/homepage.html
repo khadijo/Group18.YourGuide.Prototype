@@ -96,11 +96,33 @@
         .filter-menu {
             display: none;
             background-color: #ffcc99;
-            padding: 10px;
-            margin-top: -20px;
+            padding: 6px;
         }
         .filter-menu ul{
             list-style-type: none;
+        }
+        .filter-menu ul li{
+            padding: 2px;
+        }
+        form[action="/home/filter"] input[type="submit"] {
+            background-color: #ff7f00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        form[action="/home/filter"] input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .filter-menu ul li input {
+            width: 100px;
+        }
+        .filter-menu ul li input#destination-input {
+             margin-left: 8px;
+        }
+        .filter-menu ul li input#language-input {
+            margin-left: 15px;
         }
     </style>
 <body>
@@ -110,8 +132,7 @@
         <input type="text" placeholder="Search">
         <button class="filter-button">filter menu</button>
     </header>
-    <main>
-        <form action="/home/filter" method="post">
+    <form action="/home/filter" method="post">
             <div class="filter-menu">
                 <ul>
                     <li>Destination: <input type="text" id="destination-input" name="destination"></li>
@@ -121,7 +142,7 @@
                 <input type="submit" value="filter">
             </div>
         </form>
-  <main>
+    <main>
         <!-- For hver tur i listen av turer, generer HTML-innhold -->
         {% for tour in tours %}
             <div class="{{ tour.id }}">
@@ -143,9 +164,6 @@
                    </form>
             </div>
         {% endfor %}
-    </main>
-
-
     </main>
     <footer>
         <p>&copy; Copyright Gruppe 18</p>
