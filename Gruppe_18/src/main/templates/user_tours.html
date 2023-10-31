@@ -21,10 +21,10 @@
                     <p> Max travelers: {{ tour.max_travelers}}</p>
                     <p> Language: {{ tour.language}}</p>
                 </div>
-                    <form action="/cancel_tour" method="post">
-                        <input type="hidden" name="tour_id" value="{{ tour.id }}">
-                    <button type="submit">Cancel tour</button>
-                </form>
+                   <form action="/cancel_tour" method="post">
+                     <input type="hidden" name="tour_id" value="{{ tour.id }}">
+                       <button type="submit">Cancel tour</button>
+                   </form>
             </div>
         {% endfor %}
     </main>

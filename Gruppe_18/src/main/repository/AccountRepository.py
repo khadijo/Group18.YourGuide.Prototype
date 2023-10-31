@@ -35,8 +35,8 @@ class AccountRepository(JSONRepository):
         if existing_registration:
             print("Brukeren er allerede registrert for denne turen.")
         else:
-            tour = self.session.query(Tour).filter_by(tour_id=tour_id).first()
-            user = self.session.query(Account).filter_by(account_id=user_id).first()
+            tour = self.session.query(Tour).filter_by(id=tour_id).first()
+            user = self.session.query(Account).filter_by(id=user_id).first()
 
             if tour is not None and user is not None:
                 tour_account_assoc_obj = tour_account_association.insert().values(
@@ -49,8 +49,8 @@ class AccountRepository(JSONRepository):
                 print("Tur eller bruker ble ikke funnet.")
 
     def account_cancel_tour(self, tour_id, user_id):
-        tour = self.session.query(Tour).filter_by(tour_id=tour_id).first()
-        user = self.session.query(Account).filter_by(account_id=user_id).first()
+        tour = self.session.query(Tour).filter_by(id=tour_id).first()
+        user = self.session.query(Account).filter_by(id=user_id).first()
 
         if tour is not None and user is not None:
             stmt = tour_account_association.delete().where(
@@ -62,4 +62,6 @@ class AccountRepository(JSONRepository):
         else:
             print("Tur eller bruker ble ikke funnet.")
 
-
+    def account_logged_in(self, status=False):
+        logged_in = status
+        return logged_in
