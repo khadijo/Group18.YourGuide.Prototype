@@ -87,7 +87,7 @@ def test_if_a_spesific_tour_can_be_returned_from_database(tour_re):
 
 
 def test_if_filter_tours_by_destination_is_as_expected(tour_re):
-    filtered_tours = tour_re.filter_tour_by_location("Lofoten, Norway")
+    filtered_tours = tour_re.filter_tour_by_destination("Lofoten, Norway")
     verify(filtered_tours)
 
 
@@ -97,5 +97,5 @@ def test_if_filter_tours_by_price_is_as_expected(tour_re):
 
 
 def test_if_filter_tours_by_price_and_destination_is_as_expected(tour_re):
-    filtered_tours = tour_re.filter_tour_by_price_and_location("Lofoten, Norway", 500, 4000)
+    filtered_tours = tour_re.filter_tour_by_price_and_destination("Lofoten, Norway", 500, 4000)
     verify(filtered_tours)

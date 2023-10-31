@@ -78,13 +78,10 @@ def filter_tour():
         destination = request.form['destination']
         max_price = request.form['max_price']
         min_price = request.form['min_price']
+        language = request.form['language']
         try:
-            if destination and max_price and min_price:
-                filter_tours = tour_rep.filter_tour_by_price_and_location(destination, min_price, max_price)
-            elif destination:
-                filter_tours = tour_rep.filter_tour_by_location(destination)
-            elif max_price and min_price:
-                filter_tours = tour_rep.filter_tour_by_price(min_price, max_price)
+            if destination or max_price or min_price or language:
+                filter_tours = tour_rep.filter_app(destination, min_price, max_price, language)
             else:
                 filter_tours = tour_rep.get_all_tours()
             return render_template("homepage.html", tours=filter_tours)
