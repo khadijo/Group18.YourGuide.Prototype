@@ -62,7 +62,7 @@ class TourRepository(JSONRepository):
         elif destination and language:
             return self.filter_tour_by_destination_and_language(destination, language)
         elif destination and min_price and max_price:
-            return self.filter_tour_by_price_and_destination(min_price, max_price, destination)
+            return self.filter_tour_by_price_and_destination(destination, min_price, max_price)
         elif min_price and max_price and language:
             return self.filter_tour_by_price_and_language(min_price, max_price, language)
         elif destination:
