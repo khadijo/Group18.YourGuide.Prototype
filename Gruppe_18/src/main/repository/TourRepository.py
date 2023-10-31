@@ -56,7 +56,7 @@ class TourRepository(JSONRepository):
         return self.session.query(Tour).filter_by(destination=destination).filter_by(language=language)\
             .filter(Tour.cost.between(min_price, max_price)).all()
 
-    def filter_app(self, destination, min_price, max_price, language):
+    def filter_combinations(self, destination, min_price, max_price, language):
         if destination and min_price and max_price and language:
             return self.filter_tour_by_destination_price_language(destination, min_price, max_price, language)
         elif destination and language:

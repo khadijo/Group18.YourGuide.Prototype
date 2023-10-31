@@ -7,6 +7,7 @@ from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.model.models import Account
+from Gruppe_18.src.main.controller.tourController import tourController
 
 from Gruppe_18.src.main.model.models import Account, tour_account_association
 app = Flask(__name__, template_folder='templates')
@@ -20,6 +21,7 @@ db = SQLAlchemy(app)
 session = get_session()
 account_rep = AccountRepository(session)
 tour_rep = TourRepository(session)
+tourC = tourController(tour_rep)
 
 
 class Tour(db.Model):
@@ -74,20 +76,7 @@ def login():
 
 @app.route('/home/filter', methods=['GET','POST'])
 def filter_tour():
-    if request.method == 'POST':
-        destination = request.form['destination']
-        max_price = request.form['max_price']
-        min_price = request.form['min_price']
-        language = request.form['language']
-        try:
-            if destination or max_price or min_price or language:
-                filter_tours = tour_rep.filter_app(destination, min_price, max_price, language)
-            else:
-                filter_tours = tour_rep.get_all_tours()
-            return render_template("homepage.html", tours=filter_tours)
-        except IntegrityError:
-            flash('there was a mistake', 'danger')
-        return render_template("homepage.html")
+    return tourC.filter_app()
 
 
 @app.route('/Account_reg', methods=['GET', 'POST'])
