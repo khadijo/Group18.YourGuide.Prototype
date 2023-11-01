@@ -37,7 +37,11 @@ class TourRepository(JSONRepository):
         query = session.query(Tour)
         if destination:
             query = query.filter_by(destination=destination)
-        if min_price and max_price:
+        if min_price or max_price:
+            if not max_price:
+                max_price = 90000
+            if not min_price:
+                min_price = 0
             query = query.filter(Tour.cost.between(min_price, max_price))
         if language:
             query = query.filter_by(language=language)
