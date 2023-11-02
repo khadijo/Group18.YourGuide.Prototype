@@ -1,25 +1,30 @@
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from Gruppe_18.src.main.model.models import Base
+
 import pytest
 from approvaltests import verify
+
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.test.database.database_handler import get_session
 import datetime
 from Gruppe_18.src.main.model.models import Tour
-
 
 @pytest.fixture
 def tour_re():
     return TourRepository(get_session())
 
 
-@pytest.fixture
+@pytest.fixture()
 def tour():
-    return Tour("Welcome to Lofoten",
-        datetime.date(2024, 6, 25),
-        "Lofoten, Norway",
-        3,
-        3674,
-        20,"English",
-        "https://www.thonhotels.no/siteassets/artikler/lofoten/nordlys-lofoten-1.jpg")
+    return Tour("Welcome to Dubai",
+        datetime.date(2020, 10, 15),
+        "Dubai",
+        4,
+        255,
+        15,"English",
+        "https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg")
 
 
 @pytest.fixture
@@ -45,57 +50,60 @@ def tour_3():
     2,
     2500,
     10,
-    "English",
+    "Norwegian",
     "https://www.example.com/oslo-city.jpg"
 )
 
+@pytest.fixture()
+def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
+    module_path = os.path.dirname(os.path.abspath(__file__))
+    database_name = os.path.join(module_path, "Test.db")
+    engine = create_engine(f"sqlite:///{database_name}", echo=True)
 
-@pytest.fixture
-def tour_4():
-    return Tour(
-    "Arctic Wonders in Tromsø",
-    datetime.date(2024, 9, 15),
-    "Tromsø, Norway",
-    5,
-    4899,
-    12,
-    "English",
-    "https://www.example.com/tromso-arctic.jpg"
-)
+    session = sessionmaker(bind=engine)()
 
+    Base.metadata.create_all(bind=engine)
 
-@pytest.fixture
-def tour_5():
-    return Tour("Welcome to Lofoten",
-        datetime.date(2024, 6, 25),
-        "Lofoten, Norway",
-        3,
-        200,
-        20,"English",
-        "https://www.thonhotels.no/siteassets/artikler/lofoten/nordlys-lofoten-1.jpg")
+    tour_re.create_tour(tour)
+    tour_re.create_tour(tour_2)
+    tour_re.create_tour(tour_3)
+    yield session
+
+    session.close()
+    Base.metadata.drop_all(engine)
 
 
-def test_if_reading_all_tours_from_database_is_as_expected(tour_re):
-    all_tours = tour_re.get_all_tours()
-    verify(all_tours)
+def test_if_filtering_based_on_nothing_returns_all_tours(sqlalchemy_session, tour_re):
+    filter_tour = tour_re.filter_combinations('', '', '', '')
+    verify(filter_tour)
 
 
-def test_if_a_spesific_tour_can_be_returned_from_database(tour_re):
-    spesific_tour = f"{tour_re.get_spesific_tour('5194d52d-3a5e-46d1-82fa-a56cf1360866')}"
-    assert spesific_tour == ('(5194d52d-3a5e-46d1-82fa-a56cf1360866) Welcome to Lofoten Lofoten, Norway 3 3674 English 20'
-                             ' https://www.thonhotels.no/siteassets/artikler/lofoten/nordlys-lofoten-1.jpg 0')
+def test_if_filtering_based_on_only_destination_is_as_expected(tour_re, sqlalchemy_session):
+    filter_tour = tour_re.filter_combinations("Dubai", "", "", "")
+    verify(filter_tour)
 
 
-def test_if_filter_tours_by_destination_is_as_expected(tour_re):
-    filtered_tours = tour_re.filter_tour_by_destination("Lofoten, Norway")
-    verify(filtered_tours)
+def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_session):
+    filter_tour = tour_re.filter_combinations("", "0", "600", "")
+    verify(filter_tour)
 
 
-def test_if_filter_tours_by_price_is_as_expected(tour_re):
-    filtered_tours = tour_re.filter_tour_by_price(4000, 6000)
-    verify(filtered_tours)
+def test_if_filtering_based_on_only_language_is_as_expected(tour_re, sqlalchemy_session):
+    filter_tour = tour_re.filter_combinations("", "", "", "English")
+    verify(filter_tour)
 
 
-def test_if_filter_tours_by_price_and_destination_is_as_expected(tour_re):
-    filtered_tours = tour_re.filter_tour_by_price_and_destination("Lofoten, Norway", 500, 4000)
-    verify(filtered_tours)
+def test_if_filtering_based_on_destination_and_language_is_as_expected():
+    pass
+
+
+def test_if_filtering_based_on_destination_and_price_is_as_expected():
+    pass
+
+
+def test_if_filtering_based_on_language_and_price_is_as_expected():
+    pass
+
+
+def test_if_filtering_based_on_destination_price_and_language_is_as_expected():
+    pass

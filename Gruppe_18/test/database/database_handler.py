@@ -7,8 +7,6 @@ from Gruppe_18.src.main.model.models import Base
 from sqlalchemy.ext.declarative import declarative_base
 
 
-
-
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "../Test.db")
 engine = create_engine(f"sqlite:///{database_name}", echo=True)
