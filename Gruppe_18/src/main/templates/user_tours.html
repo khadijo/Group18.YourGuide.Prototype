@@ -1,3 +1,55 @@
+   <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100vh;
+    }
+
+    header input[type="text"] {
+        padding: 10px;
+        width: 40%;
+        border: none;
+    }
+    footer {
+        background-color: #ff7f00;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+        background-color: #ff7f00;
+        color: #fff;
+        padding: 10px 20px;
+        width: -webkit-fill-available;
+        flex-direction: column;
+    }
+
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff7f00;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        border: solid;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +57,16 @@
     <title>Your Tours</title>
 </head>
 <body>
-    <h1>Your Registered Tours</h1>
+    <header>
+        <h1>Your Registered Tours</h1>
+        <a href="/home" class="your-tours-button btn">Go back to Home</a>
+    </header>
     <main>
         {% for tour in user_tours %}
             <div class="{{ tour.id }}">
                 <h2>{{tour.title }}</h2>
                 <div class="image">
-                    <img src="{{ tour.pictureURL }}" style="max-height: 50vh;" alt="{{ tour.title }}">
+                    <img src="{{ tour.pictureURL }}" style="width: 100vh; max-height: 50vh;" alt="{{ tour.title }}">
                 </div>
                 <div class="text">
                     <p> Date: {{ tour.date }}</p>
@@ -23,7 +78,7 @@
                 </div>
                    <form action="/cancel_tour" method="post">
                      <input type="hidden" name="tour_id" value="{{ tour.id }}">
-                       <button type="submit">Cancel tour</button>
+                       <button type="submit" class="btn">Cancel tour</button>
                    </form>
             </div>
         {% endfor %}

@@ -1,34 +1,17 @@
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-
 from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
-from Gruppe_18.src.main.database.sql_alchemy import app, get_session
-import os
-from sqlite3 import IntegrityError
-import secrets
-from flask import Flask, render_template, request, flash
-from flask_sqlalchemy import SQLAlchemy
-
-# import class from our code
-from Gruppe_18.src.main.database.sql_alchemy import get_session
+from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from flask import render_template, request, flash, redirect, url_for
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
+from Gruppe_18.src.main.database.sql_alchemy import get_session
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-# Define directory this file is in
-app = Flask(__name__, template_folder='templates')
-module_path = os.path.dirname(os.path.abspath(__file__))
-database_name = os.path.join(module_path, "YourGuide.db")
-#
-secret_key = secrets.token_hex(16)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_name}'
-app.config['SECRET_KEY'] = secret_key
-
-db = SQLAlchemy(app)
 session = get_session()
 account_rep = AccountRepository(session)
 tour_rep = TourRepository(session)
@@ -36,7 +19,7 @@ tourC = tourController(tour_rep)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Account.query.get(user_id)
+    return session.query(Account).get(user_id)
 
 
 @app.route('/')
@@ -97,13 +80,13 @@ def search():
     print(str(q))
     qs = str(q)
     if q:
-        results = Tour.query.filter(Tour.title.ilike(f"%%{qs}%%")).order_by(Tour.title)
+        results = session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
         # on the above code, please order the result
         print(str(q))
         print(results)
     else:
         results = []
-    return render_template("homepage.html", results=results)
+    return render_template("homepage.html", tours=results)
 
 # Run this code to open the application
 

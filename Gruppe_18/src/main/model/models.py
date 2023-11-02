@@ -35,7 +35,7 @@ class Account(db.Model, UserMixin):
         self.emailAddress = emailAddress
 
     def __repr__(self):
-        return f"({self.account_id}) {self.username} {self.password} {self.phoneNumber} {self.emailAddress}"
+        return f"({self.id}) {self.username} {self.password} {self.phoneNumber} {self.emailAddress}"
 
 
 class Tour(db.Model):
@@ -66,7 +66,7 @@ class Tour(db.Model):
         self.pictureURL = pictureURL
 
     def __repr__(self):
-        return f"({self.tour_id}) {self.title} {self.destination} {self.duration} {self.cost} {self.language} {self.max_travelers} {self.pictureURL} {self.booked}"
+        return f"({self.id}) {self.title} {self.destination} {self.duration} {self.cost} {self.language} {self.max_travelers} {self.pictureURL} {self.booked}"
 
     def get_id(self):
         return str(self.id)
