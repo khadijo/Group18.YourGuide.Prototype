@@ -13,21 +13,9 @@
             padding: 0;
         }
 
-        .header {
-            background-color: #ff7f00;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .header input[type="text"] {
+        header input[type="text"] {
             padding: 10px;
-            width: 60%;
+            width: 40%;
             border: none;
         }
 
@@ -39,20 +27,7 @@
             font-size: 24px;
         }
 
-        .BoderGrandCanyon,
-        .BorderDisney,
-        .louvreMuseum {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
 
-        .image img,
-        .BorderDisney img,
-        .louvreMuseum img {
-            max-width: 100%;
-            height: auto;
-        }
 
         p {
             font-size: 16px;
@@ -78,19 +53,103 @@
             text-align: center;
             padding: 10px 0;
         }
+
+        header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #ff7f00;
+          color: #fff;
+          padding: 10px 20px;
+        }
+
+        /* Left Section with H2 and Search Bar */
+        .left-section {
+          display: flex;
+          flex-direction: column; /* Stack items vertically */
+          width: 100vh
+        }
+
+        .left-section h2 {
+          margin-bottom: 10px; /* Adjust margin as needed */
+        }
+
+        /* Right Section with Profile Icon */
+        .right-section {
+          display: flex;
+          align-items: center;
+          width: 20vh;
+          height: 15vh;
+          justify-content: center;
+        }
+
+        .dropdown-menu {
+            position: relative;
+          }
+
+        .dropdown-menu:hover .hidden-menu {
+            display: flex;
+            flex-direction: column
+
+          }
+
+        .hidden-menu {
+            display: none;
+            width: 20vh;
+            margin-left: -8vh;
+            align-items: center;
+        }
+
+        .dropdown-menu .hidden-menu{
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            border: 1px solid #ccc; /* Add a border to the menu */
+            background-color: #fff; /* Set the background color for the menu */
+            border-radius: 5px; /* Add rounded corners to the menu */
+          }
+
+        a {
+        color: #000000;
+        text-decoration: none;
+        padding: 8px 20px;
+        }
+
+
+
+
+
+
     </style>
 <body>
     <header class="header">
-        <h1>Welcome, choose your adventure</h1>
+        <div class="left-section">
+        <h1 class="yourtour">Your Guide</h1>
          <!--Add functionality to the search bar -->
-        <form action="/search" method="get">
+        <form action="/search" method="get" class="search-bar">
             <input type="text" name ="q" placeholder="Search">
             <button type="submit">Search</button>
         </form>
+        </div>
+        <div class="right-section">
+            <!-- Navbar -->
+            <nav class="dropdown-menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+                </svg>
+                <div class="hidden-menu">
+                <a href="#">Profile</a>
+                <a href="#">My tours</a>
+                </div>
+
+            </nav>
+            </div>
     </header>
     <main>
 
   <main>
+      <h1>Welcome, choose your adventure</h1>
       <!-- For hver tur i listen av turer, generer HTML-innhold -->
       {% for tour in tours %}
             <div class="{{ tour.id }}">
