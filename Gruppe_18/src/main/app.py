@@ -1,7 +1,11 @@
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+
+from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app, get_session
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
+from flask import render_template, request, flash, redirect, url_for
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -9,7 +13,8 @@ login_manager.login_view = 'login'
 
 session = get_session()
 account_rep = AccountRepository(session)
-
+tour_rep = TourRepository(session)
+tourC = tourController(tour_rep)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -65,10 +70,6 @@ def account_reg():
     return render_template('User_register.html')
 
 
-from flask import Flask, render_template, request, flash, redirect, url_for
-
-
-# ... (importer andre nødvendige ting)
 
 @app.route('/register_for_tour', methods=['POST'])
 def register_for_tour():
@@ -110,6 +111,9 @@ def cancel_tour():
         flash('You must be logged in to cancel a tour.', 'danger')
         return redirect(url_for('login'))
 
+@app.route('/home/filter', methods=['GET','POST'])
+def filter_tour():
+    return tourC.filter_app()
 
 
 if __name__ == '__main__':
