@@ -125,15 +125,10 @@ def cancel_tour():
         tour_id = request.form.get('tour_id')
         user_id = current_user.id
         tour = session.query(Tour).filter_by(id=tour_id).first()
-        if not tour:
-            flash('Tour not found.', 'danger')
-        elif tour.booked <= 0:
-            flash('Tour cannot be canceled because it has no bookings.', 'danger')
-        else:
+        if tour:
             account_rep.account_cancel_tour(tour_id, user_id)
             tour.booked -= 1
             session.commit()
-            flash(f'Tour "{tour.title}" has been successfully canceled.', 'success')
         return render_template('canceled_tour.html', tour=tour)
     else:
         flash('You must be logged in to cancel a tour.', 'danger')
