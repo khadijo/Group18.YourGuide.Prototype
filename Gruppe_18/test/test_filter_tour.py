@@ -1,10 +1,12 @@
 import os
+
+from approvaltests.scrubbers import scrub_all_guids
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import Base
 
 import pytest
-from approvaltests import verify
+from approvaltests import verify, Options
 
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.test.database.database_handler import get_session
@@ -73,37 +75,30 @@ def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
     Base.metadata.drop_all(engine)
 
 
+approval_options = Options().with_scrubber(scrub_all_guids)
+
+
 def test_if_filtering_based_on_nothing_returns_all_tours(sqlalchemy_session, tour_re):
     filter_tour = tour_re.filter_combinations('', '', '', '')
-    verify(filter_tour)
+
+    verify(filter_tour, options=approval_options)
 
 
 def test_if_filtering_based_on_only_destination_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("Dubai", "", "", "")
-    verify(filter_tour)
+    verify(filter_tour, options=approval_options)
 
 
 def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_session):
-    filter_tour = tour_re.filter_combinations("", "0", "600", "")
-    verify(filter_tour)
+    filter_tour = tour_re.filter_combinations("", "500", "3000", "")
+    verify(filter_tour, options=approval_options)
 
 
 def test_if_filtering_based_on_only_language_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "", "", "English")
-    verify(filter_tour)
+    verify(filter_tour, options=approval_options)
 
 
-def test_if_filtering_based_on_destination_and_language_is_as_expected():
-    pass
-
-
-def test_if_filtering_based_on_destination_and_price_is_as_expected():
-    pass
-
-
-def test_if_filtering_based_on_language_and_price_is_as_expected():
-    pass
-
-
-def test_if_filtering_based_on_destination_price_and_language_is_as_expected():
-    pass
+def test_if_filtering_based_on_destination_price_and_language_is_as_expected(tour_re, sqlalchemy_session):
+    filter_tour = tour_re.filter_combinations("Dubai", "0", "600", "English")
+    verify(filter_tour, options=approval_options)
