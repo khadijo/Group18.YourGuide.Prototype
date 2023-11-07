@@ -3,7 +3,7 @@ import os
 from approvaltests.scrubbers import scrub_all_guids
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from Gruppe_18.src.main.model.models import Base
+from Gruppe_18.src.main.model.models import db
 
 import pytest
 from approvaltests import verify, Options
@@ -64,7 +64,7 @@ def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
 
     session = sessionmaker(bind=engine)()
 
-    Base.metadata.create_all(bind=engine)
+    db.metadata.create_all(bind=engine)
 
     tour_re.create_tour(tour)
     tour_re.create_tour(tour_2)
@@ -72,7 +72,7 @@ def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
     yield session
 
     session.close()
-    Base.metadata.drop_all(engine)
+    db.metadata.drop_all(engine)
 
 
 approval_options = Options().with_scrubber(scrub_all_guids)
