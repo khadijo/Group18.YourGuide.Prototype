@@ -1,7 +1,6 @@
 from flask import request, redirect, render_template, flash, url_for
 from flask_login import login_user
 
-from Gruppe_18.src.main.main import session
 from Gruppe_18.src.main.model.models import Account
 
 

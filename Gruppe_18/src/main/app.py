@@ -40,6 +40,14 @@ def login():
 
     return render_template('index.html')
 
+
+@app.route('/profile')
+@login_required
+def profile():
+    user_data = load_user(current_user.get_id())
+    return render_template('profile.html', user_data=user_data)
+
+
 @app.route('/home')
 def home():
     tours = session.query(Tour).all()

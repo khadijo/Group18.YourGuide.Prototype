@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile </title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        }
+
+        header {
+            background-color:  #ff7f00;
+            color: #fff;
+            padding: 10px 20px;
+        }
+
+        main {
+        display: flex;
+        flex-flow: column;
+        }
+
+        footer {
+            background-color: #ff7f00;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+         }
+
+        .data-user {
+
+        }
+        .style-for-label{
+        display: block;
+         }
+      .btn {
+        background-color: #ff7f00;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 10px;
+        }
+
+      .btn:hover {
+        background-color: #ff5a00;
+        }
+
+</style>
+<body>
+<header>
+    <h1>Profile</h1>
+</header>
+<main>
+    <!-- Din eksisterende HTML-kode -->
+    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+        <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+        <span>{{ user_data.username }}</span>
+        <span>{{ user_data.emailAddress }}</span>
+    </div>
+    <h1>Info </h1>
+    <div class="data-user">
+        <label class="style-for-label">Name</label><p>{{ user_data.username }}</p>
+        <label class="style-for-label">Mobile Number</label><p>{{ user_data.phoneNumber }}</p>
+        <label class="style-for-label">Email ID</label><p>{{ user_data.emailAddress }}</p>
+        <button type="submit" class="btn">Delete account</button>
+    </div>
+</main>
+<footer>
+    <p>Gruppe 18</p>
+</footer>
+
+</body>
+</html>
