@@ -1,73 +1,59 @@
-import os
-from sqlite3 import IntegrityError
-import secrets
-from flask import Flask, render_template, request, flash
-from flask_sqlalchemy import SQLAlchemy
-
-# import class from our code
-from Gruppe_18.src.main.database.sql_alchemy import get_session
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
+from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from Gruppe_18.src.main.model.models import Account
+from flask import render_template, request, flash, redirect, url_for
+from Gruppe_18.src.main.database.sql_alchemy import get_session
+from Gruppe_18.src.main.controller.AccountController import AccountController
 
-# Define directory this file is in
-app = Flask(__name__, template_folder='templates')
-module_path = os.path.dirname(os.path.abspath(__file__))
-database_name = os.path.join(module_path, "YourGuide.db")
-#
-secret_key = secrets.token_hex(16)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_name}'
-app.config['SECRET_KEY'] = secret_key
-
-db = SQLAlchemy(app)
 session = get_session()
 account_rep = AccountRepository(session)
+account_controller = AccountController(account_rep)
 
-# Maybe this class is the same as the on  modls
-class Tour(db.Model):
-    id = db.Column(db.String, primary_key=True)
-    title = db.Column(db.String)
-    date = db.Column(db.String)
-    destination = db.Column(db.String)
-    duration = db.Column(db.Integer)
-    cost = db.Column(db.Integer)
-    max_travelers = db.Column(db.Integer)
-    language = db.Column(db.String)
-    pictureURL = db.Column(db.String)
-    booked = db.Column(db.Integer)
+@login_manager.user_loader
+def load_user(user_id):
+    return session.query(Account).get(user_id)
 
 
-class User(db.Model):
-    id = db.Column(db.String, primary_key=True)
-    username = db.Column(db.String)
-    password = db.Column(db.String)
-    phoneNumber = db.Column(db.String)
-    emailAddress = db.Column(db.String)
 @app.route('/')
 def index():
-    tours = Tour.query.all()
     return render_template('index.html')
 
-@app.route('/home', methods=['GET', 'POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        try:
-            user = User.query.filter_by(username=username).first()
 
-            if user and user.password == password:
-                tours = Tour.query.all()
-                return render_template('homepage.html', tours=tours)
-            else:
-                flash('Feil brukernavn eller passord', 'danger')
+        user = session.query(Account).filter_by(username=username).first()
 
-        except IntegrityError:
-            flash('Det oppestod en feil ved innlogging', 'danger')
+        if user and user.password == password:
+            login_user(user, remember=True)
+            return redirect(url_for('home'))
 
-        return render_template('index.html')
+        flash('Wrong username or password', 'danger')
 
-@app.route('/Account_reg', methods=['GET', 'POST'])
+    return render_template('index.html')
+
+@app.route('/home')
+def home():
+    tours = session.query(Tour).all()
+    return render_template('homepage.html', tours=tours)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()  # Logs the user out
+    return redirect(url_for('index'))
+
+
+@app.route('/account_reg', methods=['GET', 'POST'])
 def account_reg():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -91,14 +77,60 @@ def search():
     print(str(q))
     qs = str(q)
     if q:
-        results = Tour.query.filter(Tour.title.ilike(f"%%{qs}%%")).order_by(Tour.title)
+        results = session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
         # on the above code, please order the result
         print(str(q))
         print(results)
     else:
         results = []
-    return render_template("homepage.html", results=results)
+    return render_template("homepage.html", tours=results)
 
 # Run this code to open the application
+
+@app.route('/register_for_tour', methods=['POST'])
+def register_for_tour():
+    if current_user.is_authenticated:
+        tour_id = request.form.get('tour_id')
+        user_id = current_user.id
+
+        account_rep.account_register_to_tour(tour_id, user_id)
+        return redirect(url_for('user_tours'))
+    else:
+        flash('You must be logged in to register for a tour', 'danger')
+        return redirect(url_for('home'))
+
+
+
+@app.route('/user_tours')
+def user_tours():
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        user_tours = session.query(Tour).join(
+            tour_account_association, Tour.id == tour_account_association.c.tour_id
+        ).filter(tour_account_association.c.account_id == user_id).all()
+
+        user = session.query(Account).filter_by(id=user_id).first()
+
+        return render_template('user_tours.html', user_tours=user_tours, user=user)
+    else:
+        flash('You must be logged in to see your registered tours.', 'danger')
+        return redirect(url_for('login'))
+
+
+@app.route('/cancel_tour', methods=['POST'])
+def cancel_tour():
+    if current_user.is_authenticated:
+        tour_id = request.form.get('tour_id')
+        user_id = current_user.id
+        tour = session.query(Tour).filter_by(id=tour_id).first()
+        if tour:
+            account_rep.account_cancel_tour(tour_id, user_id)
+            session.commit()
+        return render_template('canceled_tour.html', tour=tour)
+    else:
+        flash('You must be logged in to cancel a tour.', 'danger')
+        return redirect(url_for('login'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
