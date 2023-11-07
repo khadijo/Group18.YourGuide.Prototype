@@ -1,12 +1,10 @@
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from flask import render_template, request, flash, redirect, url_for
-from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.database.sql_alchemy import get_session
-
+from Gruppe_18.src.main.controller.AccountController import AccountController
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -14,8 +12,7 @@ login_manager.login_view = 'login'
 
 session = get_session()
 account_rep = AccountRepository(session)
-tour_rep = TourRepository(session)
-tourC = tourController(tour_rep)
+account_controller = AccountController(account_rep)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -95,6 +92,7 @@ def register_for_tour():
     if current_user.is_authenticated:
         tour_id = request.form.get('tour_id')
         user_id = current_user.id
+
         account_rep.account_register_to_tour(tour_id, user_id)
         return redirect(url_for('user_tours'))
     else:
@@ -127,16 +125,11 @@ def cancel_tour():
         tour = session.query(Tour).filter_by(id=tour_id).first()
         if tour:
             account_rep.account_cancel_tour(tour_id, user_id)
-            tour.booked -= 1
             session.commit()
         return render_template('canceled_tour.html', tour=tour)
     else:
         flash('You must be logged in to cancel a tour.', 'danger')
         return redirect(url_for('login'))
-
-@app.route('/home/filter', methods=['GET','POST'])
-def filter_tour():
-    return tourC.filter_app()
 
 
 if __name__ == '__main__':
