@@ -93,6 +93,13 @@ def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_ses
     filter_tour = tour_re.filter_combinations("", "500", "3000", "")
     verify(filter_tour, options=approval_options)
 
+def test_if_filtering_only_on_max_price_is_as_expected(tour_re, sqlalchemy_session):
+    filter_tour = tour_re.filter_combinations("", "", "3000", "")
+    verify(filter_tour, options=approval_options)
+
+def test_if_filtering_only_on_min_price_is_as_expected(tour_re, sqlalchemy_session):
+    filter_tour = tour_re.filter_combinations("", "500", "", "")
+    verify(filter_tour, options=approval_options)
 
 def test_if_filtering_based_on_only_language_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "", "", "English")

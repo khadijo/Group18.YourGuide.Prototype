@@ -1,0 +1,1 @@
+[(<guid_0>) Bergen Fjord Exploration Bergen, Norway 4 4199 English 15 https://www.example.com/bergen-fjords.jpg 0, (<guid_1>) Discover Oslo's Charm Oslo, Norway 2 2500 Norwegian 10 https://www.example.com/oslo-city.jpg 0]
