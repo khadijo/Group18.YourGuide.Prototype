@@ -1,8 +1,10 @@
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
+from sqlalchemy.testing.pickleable import User
+
+from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association, db
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 
@@ -75,17 +77,17 @@ def account_reg():
 
     return render_template('User_register.html')
 
+
 # Search bar
-
-
 @app.route('/search', methods=['GET'])
 def search():
+    # Add functionality when empty string
     q = request.args.get("q")
     # q is short for query
     print(str(q))
     qs = str(q)
     if q:
-        results = session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
+        results = session.query(Tour).filter(Tour.title.ilike(f"%{q}%") | Tour.destination.ilike(f"%{q}%")).order_by(Tour.title)
         # on the above code, please order the result
         print(str(q))
         print(results)
@@ -93,7 +95,8 @@ def search():
         results = []
     return render_template("homepage.html", tours=results)
 
-# Run this code to open the application
+
+
 
 @app.route('/register_for_tour', methods=['POST'])
 def register_for_tour():
@@ -138,6 +141,34 @@ def cancel_tour():
     else:
         flash('You must be logged in to cancel a tour.', 'danger')
         return redirect(url_for('login'))
+
+
+# Delete user account
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    if current_user.is_authenticated:
+        account_email = current_user.emailAddress
+        account = session.query(Account).filter_by(emailAddress=account_email).first()
+        if account:
+            account_rep.delete_account(account_email)
+            session.commit()
+        return render_template('User_register.html')
+
+
+# Update user info
+@app.route('/update_user_info', methods=['POST'])
+def update_user_info():
+    if current_user.is_authenticated:
+        # Getting input values from user
+        new_username = request.form.get("username")
+        new_telephone_number = request.form.get("phoneNumber")
+        new_email = request.form.get("email")
+
+        current_email = current_user.emailAddress
+        account_rep.update_account(current_email, new_username, new_telephone_number,new_email)
+
+        db.session.commit()
+        return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
