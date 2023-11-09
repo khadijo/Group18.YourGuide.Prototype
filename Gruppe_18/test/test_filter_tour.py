@@ -57,6 +57,17 @@ def tour_3():
 )
 
 @pytest.fixture()
+def another_tour():
+    return Tour("Exploring Parisian Charm",
+                datetime.date(2021, 5, 20),
+                "Paris",
+                3,
+                200,
+                1,
+                "French",
+                "https://www.example.com/paris.jpg")
+
+@pytest.fixture()
 def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
     module_path = os.path.dirname(os.path.abspath(__file__))
     database_name = os.path.join(module_path, "Test.db")
@@ -76,6 +87,47 @@ def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
 
 
 approval_options = Options().with_scrubber(scrub_all_guids)
+
+
+def test_if_tour_is_created_saved_and_retrived(tour_re, sqlalchemy_session):
+    saved_data = tour_re.get_all_tours()
+    verify(saved_data, options=approval_options)
+
+
+def test_book_tour_with_available_space(sqlalchemy_session, tour_re, another_tour):
+    tour = another_tour
+    tour_re.create_tour(tour)
+    assert tour_re.book_tour(tour) == True
+
+
+def test_book_tour_when_fully_booked(sqlalchemy_session, tour, tour_re, another_tour):
+    tour_re.create_tour(another_tour)
+    tour_re.book_tour(another_tour)
+    assert tour_re.book_tour(another_tour) == False
+'''
+def test_book_multiple_tours_with_available_space(tour, tour_rep):
+    tour.max_travelers = 2
+    assert tour_rep.book_tour(tour) == True
+    assert tour_rep.book_tour(tour) == True
+
+def test_book_more_tours_than_available_space(tour, tour_rep):
+    tour.max_travelers = 2
+    tour.booked = 2
+    assert tour_rep.book_tour(tour) == False
+'''
+def test_tour_description_generation_is_as_expected(tour, tour_rep):
+    given_description = tour_rep.get_tour_description(tour)
+    expected_description = "This tour will take you to Italy for 4 hours, and is " \
+               "offered in English"
+    assert given_description == expected_description
+
+
+def test_tour_description_generation_is_not_as_expected(tour, tour_rep):
+    given_description = tour_rep.get_tour_description(tour)
+    tour.destination = "Montenegro"
+    expected_description = "This tour will take you to Montenegro for 4 hours, and is " \
+               "offered in English"
+    assert given_description != expected_description
 
 
 def test_if_filtering_based_on_nothing_returns_all_tours(sqlalchemy_session, tour_re):

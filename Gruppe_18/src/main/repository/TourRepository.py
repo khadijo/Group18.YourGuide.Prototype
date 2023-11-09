@@ -7,7 +7,7 @@ class TourRepository(JSONRepository):
         self.session = session
 
     def book_tour(self, entity):
-        tour = self.session.query(Tour).filter_by(tour_id=entity.tour_id).first()
+        tour = self.session.query(Tour).filter_by(id=entity.id).first()
         if tour is not None:
             booked = int(tour.booked)
             max_travelers = int(tour.max_travelers)
@@ -27,7 +27,7 @@ class TourRepository(JSONRepository):
             return "Tour not found"
 
     def get_spesific_tour(self, id):
-        return self.session.query(Tour).filter_by(tour_id=id).first()
+        return self.session.query(Tour).filter_by(id=id).first()
     
     def get_all_tours(self):
         return self.session.query(Tour).all()

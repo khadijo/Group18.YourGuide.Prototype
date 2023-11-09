@@ -30,6 +30,7 @@ def tour():
 
 
 # kan man forenkle assertene her med noen pytest-funksjoner?
+
 def test_if_tour_is_created_and_saved(tour, tour_rep):
     io_stream = StringIO()
     tour_rep.save_to_stream(tour, io_stream)
