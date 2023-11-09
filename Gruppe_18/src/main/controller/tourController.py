@@ -12,10 +12,7 @@ class tourController():
             min_price = request.form['min_price']
             language = request.form['language']
             try:
-                if destination or max_price or min_price or language:
-                    filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
-                else:
-                    filter_tours = self.tour_repository.get_all_tours()
+                filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
                 return render_template("homepage.html", tours=filter_tours)
             except IntegrityError:
                 flash('there was a mistake', 'danger')
