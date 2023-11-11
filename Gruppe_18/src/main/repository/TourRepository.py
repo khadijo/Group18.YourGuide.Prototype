@@ -18,7 +18,7 @@ class TourRepository(JSONRepository):
             return False
 
     def get_tour_description(self, tour_id):
-        tour = self.session.query(Tour).filter_by(tour_id=tour_id).first()
+        tour = self.session.query(Tour).filter_by(id=tour_id).first()
 
         if tour:
             description = f"This tour will take you to {tour.destination} for {tour.duration} hours, and is offered in {tour.language}"
