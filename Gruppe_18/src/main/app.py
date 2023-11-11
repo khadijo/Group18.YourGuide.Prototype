@@ -1,3 +1,4 @@
+import sqlalchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
@@ -136,7 +137,10 @@ def cancel_tour():
 
 @app.route('/home/filter', methods=['GET','POST'])
 def filter_tour():
-    return tourC.filter_app()
+    try:
+        return tourC.filter_app()
+    except sqlalchemy.exc.InvalidRequestError as e:
+        return redirect(url_for('home'))
 
 
 if __name__ == '__main__':

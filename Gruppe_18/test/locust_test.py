@@ -37,7 +37,7 @@ class MyUser(HttpUser):
 
     @task
     def access_search(self):
-        response = self.client.get("/search?q=noe")
+        response = self.client.get("/search?q=dubai")
 
 
 # app.py må kjøre for at den skal kunne sende brukere
@@ -54,7 +54,8 @@ if __name__ == "__main__":
         # Legg til en kommando for å drepe Locust-prosessen når testen er fullført
         os.system("taskkill /F /IM locust")
 
-#skrive dette i terminalen hvis processene ikke blir terminert på en port
-#Get-Process -Id (Get-NetTCPConnection -LocalPort 8888).OwningProcess | Stop-Process -Force
+# skrive dette i terminalen hvis processene ikke blir terminert på en port fordi den ikke har
+# blitt avsluttet ordentlig:
+# Get-Process -Id (Get-NetTCPConnection -LocalPort 8888).OwningProcess | Stop-Process -Force
 
 
