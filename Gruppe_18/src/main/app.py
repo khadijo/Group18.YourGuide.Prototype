@@ -1,12 +1,14 @@
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from sqlalchemy.testing.pickleable import User
 
+from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association, db
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from flask import render_template, request, flash, redirect, url_for, jsonify
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -15,6 +17,10 @@ login_manager.login_view = 'login'
 session = get_session()
 account_rep = AccountRepository(session)
 account_controller = AccountController(account_rep)
+
+tour_rep = TourRepository(session)
+tourC = tourController(tour_rep)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -96,6 +102,9 @@ def search():
     return render_template("homepage.html", tours=results)
 
 
+@app.route('/home/filter', methods=['GET','POST'])
+def filter_tour():
+    return tourC.filter_app()
 
 
 @app.route('/register_for_tour', methods=['POST'])

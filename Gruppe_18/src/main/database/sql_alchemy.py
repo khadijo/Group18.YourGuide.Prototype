@@ -18,7 +18,6 @@ app.secret_key = 'gruppe18'
 
 
 engine = create_engine(f"sqlite:///{database_name}", echo=True)
-#db.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
 
