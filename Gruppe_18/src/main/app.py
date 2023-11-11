@@ -7,7 +7,7 @@ from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from flask import render_template, request, flash, redirect, url_for
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.database.sql_alchemy import get_session
-
+from Gruppe_18.src.main.controller.AccountController import AccountController
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -128,7 +128,6 @@ def cancel_tour():
         tour = session.query(Tour).filter_by(id=tour_id).first()
         if tour:
             account_rep.account_cancel_tour(tour_id, user_id)
-            tour.booked -= 1
             session.commit()
         return render_template('canceled_tour.html', tour=tour)
     else:

@@ -6,12 +6,12 @@ class AccountRepository(JSONRepository):
     def __init__(self, session):
         self.session = session
 
-    def delete_account(self, session, user):
-        account_to_delete = session.query(Account).filter_by(username=user.username).first()
+    def delete_account(self, user):
+        account_to_delete = self.session.query(Account).filter_by(username=user.username).first()
 
         if account_to_delete:
-            session.delete(account_to_delete)
-            session.commit()
+            self.session.delete(account_to_delete)
+            self.session.commit()
             return True
 
         return False
@@ -43,8 +43,10 @@ class AccountRepository(JSONRepository):
                     tour_id=tour_id,
                     account_id=user_id
                 )
+                tour.booked += 1
                 self.session.execute(tour_account_assoc_obj)
                 self.session.commit()
+                return True
             else:
                 print("Tur eller bruker ble ikke funnet.")
 
@@ -57,6 +59,7 @@ class AccountRepository(JSONRepository):
                 tour_account_association.c.tour_id == tour_id,
                 tour_account_association.c.account_id == user_id
             )
+            tour.booked -= 1
             self.session.execute(stmt)
             self.session.commit()
         else:
