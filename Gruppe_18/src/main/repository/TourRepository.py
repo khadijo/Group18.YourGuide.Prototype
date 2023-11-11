@@ -62,7 +62,7 @@ class TourRepository(JSONRepository):
         return tour
 
     def delete_tour(self, tour_id):
-        tour = self.session.query(Tour).filter_by(tour=tour_id).first()
+        tour = self.session.query(Tour).filter_by(id=tour_id).first()
 
         if tour is not None:
             self.session.delete(tour)
