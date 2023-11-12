@@ -4,10 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
-from sqlalchemy.orm import relationship
-from flask_login import UserMixin
-import uuid
 
 app = Flask(__name__, template_folder='../templates')
 module_path = os.path.dirname(os.path.abspath(__file__))
@@ -20,6 +16,8 @@ Session = sessionmaker(bind=engine)
 
 
 db.metadata.create_all(bind=engine)
+
+
 def get_session():
     engine = create_engine("sqlite:///YourGuide.db", echo=True)
 

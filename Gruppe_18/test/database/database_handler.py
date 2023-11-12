@@ -1,10 +1,7 @@
 import os
-from sqlalchemy.orm import relationship
-import sqlalchemy.orm
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
-from sqlalchemy.ext.declarative import declarative_base
 
 
 module_path = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +19,4 @@ def get_session():
     Session = sessionmaker(bind=engine)
 
     return Session()
-
-
-
 

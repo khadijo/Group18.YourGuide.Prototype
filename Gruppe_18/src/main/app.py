@@ -1,6 +1,4 @@
-import sqlalchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
@@ -9,19 +7,14 @@ from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 
-
-app.secret_key = 'gruppe18'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 session = get_session()
 account_rep = AccountRepository(session)
-tour_rep = TourRepository(session)
-tourC = tourController(tour_rep)
-
-
-
+account_controller = AccountController(account_rep)
+app.secret_key = 'gruppe_18'
 @login_manager.user_loader
 def load_user(user_id):
     return session.query(Account).get(user_id)
@@ -50,8 +43,13 @@ def login():
 
 @app.route('/home')
 def home():
-    tours = session.query(Tour).all()
-    return render_template('homepage.html', tours=tours)
+    if current_user.usertype == "user":
+        tours = session.query(Tour).all()
+        return render_template('homepage.html', tours=tours)
+    elif current_user.usertype == "guide":
+        tours = session.query(Tour).all()
+        return render_template('homepage_guide.html', tours=tours)
+
 
 
 @app.route('/logout')
@@ -85,7 +83,7 @@ def search():
     print(str(q))
     qs = str(q)
     if q:
-        results = tour_rep.search_tour(q)
+        results = session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
         # on the above code, please order the result
         print(str(q))
         print(results)
@@ -100,6 +98,7 @@ def register_for_tour():
     if current_user.is_authenticated:
         tour_id = request.form.get('tour_id')
         user_id = current_user.id
+
         account_rep.account_register_to_tour(tour_id, user_id)
         return redirect(url_for('user_tours'))
     else:
