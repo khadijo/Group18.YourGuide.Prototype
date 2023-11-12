@@ -76,15 +76,11 @@ tour_repository.create_tour(Oslo)
 
 #result = tour_repository.book_tour(new_tour)
 #result1 = tour_repository.book_tour(new_tour)
-
-
 '''
-tour_repository.delete_tour("50856c60-208a-4316-8025-1c8ba5ff47e4")
-tour_repository.delete_tour("3bc8b319-400a-4b72-ba08-f82bdda82a24")
+tour_repository.delete_tour("7e8b7df6-10d6-4063-af25-7cb651d31abb")
+tour_repository.delete_tour("d9353409-898d-4f30-a570-bc1bf12f04c3")
+tour_repository.delete_tour("99c7e9a4-092e-42a8-a6cf-d312dfbedda2")
 
-tour_repository.delete_tour("e7e9a7d6-21d4-4506-bf3c-fb88cedb8456")
-tour_repository.delete_tour("39d9b3a0-18bf-44d0-b203-d66f58877d34")
-tour_repository.delete_tour("be56083c-4c4a-4064-a55a-b9a8f50409da")
 print(tour_repository.get_tour_description("67eed256-fef7-4314-8900-b543cf5a3ecd"))
 account_rep.account_register_to_tour("3bc8b319-400a-4b72-ba08-f82bdda82a24", "2258e3d1-edc2-4740-9757-b5ee64721904")
 account_rep.account_register_to_tour("50856c60-208a-4316-8025-1c8ba5ff47e4", "2258e3d1-edc2-4740-9757-b5ee64721904")

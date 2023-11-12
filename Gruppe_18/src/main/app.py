@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from flask import render_template, request, flash, redirect, url_for
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
@@ -12,6 +15,7 @@ login_manager.login_view = 'login'
 
 session = get_session()
 account_rep = AccountRepository(session)
+tour_rep = TourRepository(session)
 account_controller = AccountController(account_rep)
 app.secret_key = 'gruppe_18'
 @login_manager.user_loader
@@ -48,7 +52,6 @@ def home():
     elif current_user.usertype == "guide":
         tours = session.query(Tour).all()
         return render_template('homepage_guide.html', tours=tours)
-
 
 
 @app.route('/logout')
@@ -137,6 +140,27 @@ def cancel_tour():
         flash('You must be logged in to cancel a tour.', 'danger')
         return redirect(url_for('login'))
 
+
+@app.route('/New_Tour', methods=['POST', 'GET'])
+def New_Tour():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        date = request.form.get('date')
+        date_obj = datetime.strptime(date, '%Y, %m, %d')
+        destination = request.form.get('destination')
+        duration = request.form.get('duration')
+        cost = request.form.get('cost')
+        max_travelers = request.form.get('max_travelers')
+        language = request.form.get('language')
+        pictureURL = request.form.get('pictureURL')
+
+        tour = Tour(title=title, date=date_obj, destination=destination, duration=duration, cost=cost,
+                    max_travelers=max_travelers, language=language, pictureURL=pictureURL)
+        tour_rep.create_tour(tour)
+        tours = session.query(Tour).all()
+        return render_template('homepage.html', tours=tours)
+
+    return render_template('new_tour.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
