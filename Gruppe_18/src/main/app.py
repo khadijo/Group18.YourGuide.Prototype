@@ -13,7 +13,7 @@ login_manager.login_view = 'login'
 session = get_session()
 account_rep = AccountRepository(session)
 account_controller = AccountController(account_rep)
-
+app.secret_key = 'gruppe_18'
 @login_manager.user_loader
 def load_user(user_id):
     return session.query(Account).get(user_id)
@@ -42,8 +42,13 @@ def login():
 
 @app.route('/home')
 def home():
-    tours = session.query(Tour).all()
-    return render_template('homepage.html', tours=tours)
+    if current_user.usertype == "user":
+        tours = session.query(Tour).all()
+        return render_template('homepage.html', tours=tours)
+    elif current_user.usertype == "guide":
+        tours = session.query(Tour).all()
+        return render_template('homepage_guide.html', tours=tours)
+
 
 
 @app.route('/logout')
@@ -86,6 +91,7 @@ def search():
     return render_template("homepage.html", tours=results)
 
 # Run this code to open the application
+
 
 @app.route('/register_for_tour', methods=['POST'])
 def register_for_tour():
