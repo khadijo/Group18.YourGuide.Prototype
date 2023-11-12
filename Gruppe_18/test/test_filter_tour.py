@@ -56,6 +56,19 @@ def tour_3():
     "https://www.example.com/oslo-city.jpg"
 )
 
+@pytest.fixture()
+def tour_4():
+    return Tour(
+    "Discover Oslo's Charm",
+    datetime.date(2024, 8, 5),
+    "Oslo, Norway",
+    2,
+    2500,
+    0,
+    "Norwegian",
+    "https://www.example.com/oslo-city.jpg"
+)
+
 
 @pytest.fixture()
 def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
@@ -84,6 +97,34 @@ def test_if_tour_is_created_saved_and_retrived(tour_re, sqlalchemy_session):
     verify(saved_data, options=approval_options)
 
 
+def test_if_booked_goes_up_by_one_after_registration_to_a_not_fully_booked_tour(tour_re, sqlalchemy_session):
+    data = tour_re.get_all_tours()
+    tour = data[0]
+    tour_re.book_tour(tour)
+    assert tour.booked == 1
+
+
+def test_if_booking_to_fully_booked_tour_is_not_possible(tour_re, sqlalchemy_session, tour_4):
+    tour_re.create_tour(tour_4)
+    data = tour_re.get_all_tours()
+    tour = data[len(data)-1]
+    assert tour_re.book_tour(tour) == False
+
+
+def test_if_booked_goes_down_by_one_after_tour_cancelletion(tour_re, sqlalchemy_session):
+    tours = tour_re.get_all_tours()
+    tour = tours[0]
+    tour_re.cancel_booked_tour(tour)
+    assert tour.booked == -1
+
+
+def test_if_description_for_a_tour_is_correctly_returnet(tour_re, sqlalchemy_session):
+    data = tour_re.get_all_tours()
+    tour = data[0]
+    assert tour_re.get_tour_description(tour.id) == "This tour will take you to Dubai for 4 " \
+                                                    "hours, and is offered in English"
+
+
 def test_if_tour_can_be_deleted_from_database(tour_re, sqlalchemy_session):
     data = tour_re.get_all_tours()
     assert len(data) == 3
@@ -106,6 +147,7 @@ def test_if_filtering_based_on_only_destination_is_as_expected(tour_re, sqlalche
 def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "500", "3000", "")
     verify(filter_tour, options=approval_options)
+
 
 def test_if_filtering_only_on_max_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "", "3000", "")

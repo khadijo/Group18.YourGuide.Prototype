@@ -10,6 +10,7 @@ class MyUser(HttpUser):
     wait_time = between(1, 5)  # Brukerene venter 1-5 sekunder før de sender neste request
     host = "http://127.0.0.1:5000" #applikasjonen vår
     #sender brukere til disse sidene, og utfører requests:
+
     @task
     def access_start(self):
         response = self.client.get("/")
@@ -29,11 +30,13 @@ class MyUser(HttpUser):
     @task
     def access_home(self):
         response = self.client.get("/home")
+
     @task
     def access_filter(self):
         response = self.client.post("/home/filter",
                                     data={'destination': 'some_destination', 'max_price': 'some_max_price',
                                           'min_price': 'some_min_price', 'language': 'some_language'})
+
     @task
     def access_tours_registeret(self):
         response = self.client.get("/user_tours")

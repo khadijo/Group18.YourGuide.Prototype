@@ -9,6 +9,8 @@ from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 
+
+app.secret_key = 'gruppe18'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -17,6 +19,8 @@ session = get_session()
 account_rep = AccountRepository(session)
 tour_rep = TourRepository(session)
 tourC = tourController(tour_rep)
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
