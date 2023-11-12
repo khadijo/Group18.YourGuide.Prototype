@@ -1,12 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 import uuid
-from Gruppe_18.src.main.database.sql_alchemy import app
 
-
-db = SQLAlchemy(app)
+from Gruppe_18.src.main.database.sql_alchemy import db
 
 tour_account_association = Table(
     'tour_account_association', db.metadata,
@@ -18,6 +15,7 @@ tour_account_association = Table(
 class Account(db.Model, UserMixin):
     __tablename__ = "User"
     id = db.Column(db.String, primary_key=True)
+    usertype = Column("usertype", String)
     username = Column("username", String)
     password = Column("password", String)
     phoneNumber = Column("phoneNumber", String)
@@ -27,8 +25,9 @@ class Account(db.Model, UserMixin):
     def get_id(self):
         return str(self.id)
 
-    def __init__(self, username, password, phoneNumber, emailAddress):
+    def __init__(self, usertype, username, password, phoneNumber, emailAddress):
         self.id = str(uuid.uuid4())
+        self.usertype = usertype
         self.username = username
         self.password = password
         self.phoneNumber = phoneNumber

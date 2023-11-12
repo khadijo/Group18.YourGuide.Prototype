@@ -1,10 +1,12 @@
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 
 class AccountRepository(JSONRepository):
     def __init__(self, session):
         self.session = session
+        self.tour_repo = TourRepository(session)
 
     def delete_account(self, user):
         account_to_delete = self.session.query(Account).filter_by(username=user.username).first()
@@ -17,7 +19,8 @@ class AccountRepository(JSONRepository):
         return False
 
     def create_account(self, user):
-        account = Account(username=user.username,
+        account = Account(usertype=user.usertype,
+                          username=user.username,
                           password=user.password,
                           phoneNumber=user.phoneNumber,
                           emailAddress=user.emailAddress)
@@ -33,7 +36,7 @@ class AccountRepository(JSONRepository):
         ).first()
 
         if existing_registration:
-            print("Brukeren er allerede registrert for denne turen.")
+            print("Du er allerede registrert for denne turen.")
         else:
             tour = self.session.query(Tour).filter_by(id=tour_id).first()
             user = self.session.query(Account).filter_by(id=user_id).first()
@@ -43,7 +46,7 @@ class AccountRepository(JSONRepository):
                     tour_id=tour_id,
                     account_id=user_id
                 )
-                tour.booked += 1
+                self.tour_repo.book_tour(tour)
                 self.session.execute(tour_account_assoc_obj)
                 self.session.commit()
                 return True
@@ -59,7 +62,7 @@ class AccountRepository(JSONRepository):
                 tour_account_association.c.tour_id == tour_id,
                 tour_account_association.c.account_id == user_id
             )
-            tour.booked -= 1
+            self.tour_repo.cancel_booked_tour(tour)
             self.session.execute(stmt)
             self.session.commit()
         else:
