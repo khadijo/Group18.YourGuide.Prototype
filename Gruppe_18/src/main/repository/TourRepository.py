@@ -6,13 +6,24 @@ class TourRepository(JSONRepository):
     def __init__(self, session):
         self.session = session
 
-    def book_tour(self, entity):
-        tour = self.session.query(Tour).filter_by(tour_id=entity.tour_id).first()
+    def book_tour(self, tour):
+        tour = self.session.query(Tour).filter_by(id=tour.id).first()
         if tour is not None:
             booked = int(tour.booked)
             max_travelers = int(tour.max_travelers)
             if not booked >= max_travelers:
                 tour.booked = booked + 1
+                self.session.commit()
+                return True
+            return False
+
+    def cancel_booked_tour(self, tour):
+        tour = self.session.query(Tour).filter_by(id=tour.id).first()
+        if tour is not None:
+            booked = int(tour.booked)
+            max_travelers = int(tour.max_travelers)
+            if not booked >= max_travelers:
+                tour.booked = booked - 1
                 self.session.commit()
                 return True
             return False

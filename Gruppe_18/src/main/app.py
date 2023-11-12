@@ -49,25 +49,25 @@ def home():
 @app.route('/logout')
 @login_required
 def logout():
-    logout_user()  # Logs the user out
+    logout_user()
     return redirect(url_for('index'))
 
 
 @app.route('/account_reg', methods=['GET', 'POST'])
 def account_reg():
     if request.method == 'POST':
+        usertype = request.form.get('usertype')
         username = request.form.get('username')
         password = request.form.get('password')
         phoneNumber = request.form.get('phoneNumber')
         emailAddress = request.form.get('emailAddress')
+
         if username and password:
-            user = Account(username=username, password=password, phoneNumber=phoneNumber, emailAddress=emailAddress)
+            user = Account(usertype=usertype, username=username, password=password, phoneNumber=phoneNumber, emailAddress=emailAddress)
             account_rep.create_account(user)
             return render_template('index.html')
 
     return render_template('User_register.html')
-
-# Search bar
 
 
 @app.route('/search', methods=['GET'])
