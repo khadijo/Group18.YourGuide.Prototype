@@ -8,6 +8,7 @@ session = get_session()
 
 account_rep = AccountRepository(session)
 tour_repository = TourRepository(session)
+
 a = Account(
         "username",
         "password",
@@ -38,7 +39,12 @@ print(tour_repository.get_tour_description("67eed256-fef7-4314-8900-b543cf5a3ecd
 account_rep.account_register_to_tour("3bc8b319-400a-4b72-ba08-f82bdda82a24", "2258e3d1-edc2-4740-9757-b5ee64721904")
 account_rep.account_register_to_tour("50856c60-208a-4316-8025-1c8ba5ff47e4", "2258e3d1-edc2-4740-9757-b5ee64721904")
 session.commit()
-
+'''
+account = session.query(Account).all()
+print(account)
+account_rep.delete_account(account[len(account)- 1])
+session.commit()
+'''
 
 
 

@@ -20,10 +20,13 @@ app.secret_key = 'gruppe18'
 engine = create_engine(f"sqlite:///{database_name}", echo=True)
 #db.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
-
+path = "YourGuide.db"
+testing = False
+if testing:
+    path = "Gruppe_18/test/Test2.db"
 
 def get_session():
-    engine = create_engine("sqlite:///YourGuide.db", echo=True)
+    engine = create_engine(f"sqlite:///{path}", echo=True)
 
     Session = sessionmaker(bind=engine)
 

@@ -92,7 +92,6 @@ def test_if_tour_can_be_deleted_from_database(tour_re, sqlalchemy_session):
     assert len(saved_data) == 2
 
 
-
 def test_if_filtering_based_on_nothing_returns_all_tours(sqlalchemy_session, tour_re):
     filter_tour = tour_re.filter_combinations('', '', '', '')
 
@@ -126,3 +125,8 @@ def test_if_filtering_based_on_only_language_is_as_expected(tour_re, sqlalchemy_
 def test_if_filtering_based_on_destination_price_and_language_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("Dubai", "0", "600", "English")
     verify(filter_tour, options=approval_options)
+
+
+def test_if_searching_tours_by_title_gives_is_as_expected(tour_re, sqlalchemy_session):
+    searched_tour = tour_re.search_tour("dubai")
+    verify(searched_tour, options=approval_options)

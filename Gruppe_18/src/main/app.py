@@ -81,7 +81,7 @@ def search():
     print(str(q))
     qs = str(q)
     if q:
-        results = session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
+        results = tour_rep.search_tour(q)
         # on the above code, please order the result
         print(str(q))
         print(results)
