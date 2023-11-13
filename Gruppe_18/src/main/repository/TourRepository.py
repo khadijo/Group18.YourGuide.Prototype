@@ -1,4 +1,4 @@
-from Gruppe_18.src.main.model.models import Tour
+from Gruppe_18.src.main.model.models import Tour, guide_tour_association, Account
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 
 
@@ -84,7 +84,8 @@ class TourRepository(JSONRepository):
             return self.filter_tour_by_price(min_price, max_price)
 
     def create_tour(self, tour):
-        tour = Tour(title=tour.title,
+        tour = Tour(id=tour.id,
+                    title=tour.title,
                     date=tour.date,
                     destination=tour.destination,
                     duration=tour.duration,
@@ -92,10 +93,32 @@ class TourRepository(JSONRepository):
                     max_travelers=tour.max_travelers,
                     language=tour.language,
                     pictureURL=tour.pictureURL)
-
         self.session.add(tour)
         self.session.commit()
         return tour
+
+    def guide_register_to_tour(self, tour_id, user_id):
+        existing_registration = self.session.query(guide_tour_association).filter_by(
+            tour_id=tour_id,
+            guide_id=user_id
+        ).first()
+
+        if existing_registration:
+            print("You have already posted that tour.")
+        else:
+            tour = self.session.query(Tour).filter_by(id=tour_id).first()
+            guide = self.session.query(Account).filter_by(id=user_id).first()
+
+            if tour is not None and guide is not None:
+                tour_guide_assoc_obj = guide_tour_association.insert().values(
+                    tour_id=tour_id,
+                    guide_id=user_id
+                )
+                self.session.execute(tour_guide_assoc_obj)
+                self.session.commit()
+                return True
+            else:
+                print("Tour or guide were not found.")
 
     def delete_tour(self, tour_id):
         tour = self.session.query(Tour).filter_by(id=tour_id).first()

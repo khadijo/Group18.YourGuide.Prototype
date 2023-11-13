@@ -1,3 +1,5 @@
+import uuid
+
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
@@ -19,7 +21,8 @@ class AccountRepository(JSONRepository):
         return False
 
     def create_account(self, user):
-        account = Account(usertype=user.usertype,
+        account = Account(id=str(uuid.uuid4()),
+                          usertype=user.usertype,
                           username=user.username,
                           password=user.password,
                           phoneNumber=user.phoneNumber,
@@ -36,7 +39,7 @@ class AccountRepository(JSONRepository):
         ).first()
 
         if existing_registration:
-            print("Du er allerede registrert for denne turen.")
+            print("You are already registered for that tour.")
         else:
             tour = self.session.query(Tour).filter_by(id=tour_id).first()
             user = self.session.query(Account).filter_by(id=user_id).first()
@@ -51,7 +54,7 @@ class AccountRepository(JSONRepository):
                 self.session.commit()
                 return True
             else:
-                print("Tur eller bruker ble ikke funnet.")
+                print("Tour or user not found")
 
     def account_cancel_tour(self, tour_id, user_id):
         tour = self.session.query(Tour).filter_by(id=tour_id).first()
@@ -66,7 +69,7 @@ class AccountRepository(JSONRepository):
             self.session.execute(stmt)
             self.session.commit()
         else:
-            print("Tur eller bruker ble ikke funnet.")
+            print("Tour or user is not found.")
 
     def account_logged_in(self, status=False):
         logged_in = status

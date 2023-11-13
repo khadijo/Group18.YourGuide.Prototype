@@ -1,7 +1,8 @@
+import uuid
 from datetime import datetime
 
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
+from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association, guide_tour_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
@@ -46,12 +47,15 @@ def login():
 
 @app.route('/home')
 def home():
-    if current_user.usertype == "user":
+    if current_user.usertype == "admin":
         tours = session.query(Tour).all()
-        return render_template('homepage.html', tours=tours)
+        return render_template('homepage_admin.html')
     elif current_user.usertype == "guide":
         tours = session.query(Tour).all()
         return render_template('homepage_guide.html', tours=tours)
+    else:
+        tours = session.query(Tour).all()
+        return render_template('homepage.html', tours=tours)
 
 
 @app.route('/logout')
@@ -154,13 +158,33 @@ def New_Tour():
         language = request.form.get('language')
         pictureURL = request.form.get('pictureURL')
 
-        tour = Tour(title=title, date=date_obj, destination=destination, duration=duration, cost=cost,
+        tour = Tour(id=str(uuid.uuid4()), title=title, date=date_obj, destination=destination, duration=duration, cost=cost,
                     max_travelers=max_travelers, language=language, pictureURL=pictureURL)
         tour_rep.create_tour(tour)
+        guide_id = current_user.id
+        tour_rep.guide_register_to_tour(tour.id, guide_id)
+
         tours = session.query(Tour).all()
-        return render_template('homepage.html', tours=tours)
+        return render_template('homepage_guide.html', tours=tours)
 
     return render_template('new_tour.html')
+
+@app.route('/guide_tours')
+def guide_tours():
+    if current_user.is_authenticated:
+        guide_id = current_user.id
+        guide_tours = session.query(Tour).join(
+            guide_tour_association, Tour.id == guide_tour_association.c.tour_id
+        ).filter(guide_tour_association.c.guide_id == guide_id).all()
+
+        user = session.query(Account).filter_by(id=guide_id).first()
+
+        return render_template('guide_tours.html', guide_tours=guide_tours, user=user)
+    else:
+        flash('You must be logged in to see your registered tours.', 'danger')
+        return redirect(url_for('login'))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
