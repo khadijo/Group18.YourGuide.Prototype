@@ -1,3 +1,5 @@
+import uuid
+
 from Gruppe_18.src.main.model.models import Tour, guide_tour_association, Account
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 
@@ -84,7 +86,7 @@ class TourRepository(JSONRepository):
             return self.filter_tour_by_price(min_price, max_price)
 
     def create_tour(self, tour):
-        tour = Tour(id=tour.id,
+        tour = Tour(id=str(uuid.uuid4()),
                     title=tour.title,
                     date=tour.date,
                     destination=tour.destination,

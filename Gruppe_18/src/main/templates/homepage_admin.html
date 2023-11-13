@@ -1,3 +1,115 @@
+<style>
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header input[type="text"] {
+            padding: 10px;
+            width: 40%;
+            border: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        button {
+            background-color: #ff7f00;
+            color: white;
+            padding: 10px 20px;
+            border: solid;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #ff7f00;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #ff7f00;
+          color: #fff;
+          padding: 10px 20px;
+        }
+
+        /* Left Section with H2 and Search Bar */
+        .left-section {
+          display: flex;
+          flex-direction: column; /* Stack items vertically */
+          width: 100vh
+        }
+
+        .left-section h2 {
+          margin-bottom: 10px; /* Adjust margin as needed */
+        }
+
+        /* Right Section with Profile Icon */
+        .right-section {
+          display: flex;
+          align-items: center;
+          width: 20vh;
+          height: 15vh;
+          justify-content: center;
+        }
+
+        .dropdown-menu {
+            position: relative;
+          }
+
+        .dropdown-menu:hover .hidden-menu {
+            display: flex;
+            flex-direction: column
+
+          }
+
+        .hidden-menu {
+            display: none;
+            width: 20vh;
+            margin-left: -8vh;
+            align-items: center;
+        }
+
+        .dropdown-menu .hidden-menu{
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            border: 1px solid #ccc; /* Add a border to the menu */
+            background-color: #fff; /* Set the background color for the menu */
+            border-radius: 5px; /* Add rounded corners to the menu */
+          }
+
+        a {
+        color: #000000;
+        text-decoration: none;
+        padding: 8px 20px;
+        }
+</style>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +117,68 @@
     <title>Admin</title>
 </head>
 <body>
+    <header class="header">
+        <h1 class="yourtour">Your Guide</h1>
+    </header>
+    <h1>Welcome, to Your Guide administration</h1>
+    <main>
+        <form action="{% if show_tours %}/hide_tours{% else %}/show_tours{% endif %}" method="get">
+            {% if show_tours %}
+                <button type="submit">Hide Tours</button>
+            {% else %}
+                <button type="submit">Show Tours</button>
+            {% endif %}
+        </form>
+        <form action="{% if show_all_users %}/hide_all_users{% else %}/show_all_users{% endif %}" method="get">
+            {% if show_all_users %}
+                <button type="submit">Hide All Users</button>
+            {% else %}
+                <button type="submit">Show All Users</button>
+            {% endif %}
+        </form>
+        {% if show_tours %}
+            <div id="tour-container" >
+                {% for tour in tours %}
+                    <div class="tour">
+                        <h2>{{ tour.title }}</h2>
+                        <div class="image">
+                            <img src="{{ tour.pictureURL }}" style="width: 100vh; max-height: 50vh;" alt="{{ tour.title }}">
+                        </div>
+                        <div class="text">
+                            <p>Date: {{ tour.date }}</p>
+                            <p>Destination: {{ tour.destination }}</p>
+                            <p>Duration: {{ tour.duration }}</p>
+                            <p>Cost: {{ tour.cost }}</p>
+                            <p>Max travelers: {{ tour.max_travelers }}</p>
+                            <p>Language: {{ tour.language }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
+        {% if show_all_users %}
+            <div id="user-container">
+                {% for user in users %}
+                    <div class="user">
+                        <h2>{{ user.username }}</h2>
+                        <div class="image">
+                            <img src="https://webstockreview.net/images/pe-clipart-exercise-physiology-11.png"
+                                 style="width: 100vh; max-height: 50vh;" alt="{{ user.username }}">
+                        </div>
+                        <div class="text">
+                            <p>Usertype: {{ user.usertype }}</p>
+                            <p>Username: {{ user.username}}</p>
+                            <p>Email: {{ user.emailAddress }}</p>
+                            <p>PhoneNumber: {{ user.phoneNumber }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+    <footer>
+        <p>&copy; Copyright Gruppe 18</p>
+    </footer>
 </body>
 </html>

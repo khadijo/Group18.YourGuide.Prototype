@@ -198,5 +198,28 @@ def delete_tour():
         flash('You must be logged in to cancel a tour.', 'danger')
         return redirect(url_for('login'))
 
+
+@app.route('/show_tours', methods=['GET'])
+def show_tours():
+    tours = session.query(Tour).all()
+    return render_template('homepage_admin.html', tours=tours, show_tours=True)
+
+
+@app.route('/hide_tours', methods=['GET'])
+def hide_tours():
+    return render_template('homepage_admin.html', show_tours=False)
+
+
+@app.route('/show_all_users', methods=['GET'])
+def show_all_users():
+    users = session.query(Account).all()
+    return render_template('homepage_admin.html', users=users, show_all_users=True)
+
+
+@app.route('/hide_all_users', methods=['GET'])
+def hide_all_users():
+    return render_template('homepage_admin.html', show_all_users=False)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
