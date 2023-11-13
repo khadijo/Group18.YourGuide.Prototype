@@ -130,3 +130,17 @@ class TourRepository(JSONRepository):
         else:
             return False
 
+    def guide_delete_tour(self, tour_id, user_id):
+        tour = self.session.query(Tour).filter_by(id=tour_id).first()
+        user = self.session.query(Account).filter_by(id=user_id).first()
+
+        if tour is not None and user is not None:
+            stmt = guide_tour_association.delete().where(
+                guide_tour_association.c.tour_id == tour_id,
+                guide_tour_association.c.guide_id == user_id
+            )
+            self.delete_tour(tour.id)
+            self.session.execute(stmt)
+            self.session.commit()
+        else:
+            print("Tour or user is not found.")

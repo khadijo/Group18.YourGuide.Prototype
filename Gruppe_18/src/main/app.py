@@ -184,7 +184,19 @@ def guide_tours():
         flash('You must be logged in to see your registered tours.', 'danger')
         return redirect(url_for('login'))
 
-
+@app.route('/delete_tour', methods=['POST'])
+def delete_tour():
+    if current_user.is_authenticated:
+        tour_id = request.form.get('tour_id')
+        user_id = current_user.id
+        tour = session.query(Tour).filter_by(id=tour_id).first()
+        if tour:
+            tour_rep.guide_delete_tour(tour_id, user_id)
+            session.commit()
+        return render_template('deleted_tour.html', tour=tour)
+    else:
+        flash('You must be logged in to cancel a tour.', 'danger')
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
