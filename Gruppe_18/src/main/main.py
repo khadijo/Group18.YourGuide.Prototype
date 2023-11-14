@@ -5,7 +5,7 @@ from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 
-session = get_session()
+session = get_session("YourGuide.db")
 
 account_rep = AccountRepository(session)
 tour_repository = TourRepository(session)

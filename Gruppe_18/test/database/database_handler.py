@@ -5,7 +5,7 @@ from Gruppe_18.src.main.model.models import db
 
 
 module_path = os.path.dirname(os.path.abspath(__file__))
-database_name = os.path.join(module_path, "../Test.db")
+database_name = os.path.join(module_path, "../Test2.db")
 engine = create_engine(f"sqlite:///{database_name}", echo=True)
 
 db.metadata.create_all(bind=engine)

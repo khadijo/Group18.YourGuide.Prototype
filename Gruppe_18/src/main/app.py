@@ -1,4 +1,9 @@
+import os
+
+import sqlalchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+
+from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
@@ -11,10 +16,18 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-session = get_session()
+is_testing = os.environ.get("locust_test", False)
+test_database = os.path.abspath('../../test/Test2.db')
+
+db_path = test_database if is_testing else "YourGuide.db"
+
+session = get_session(db_path)
 account_rep = AccountRepository(session)
 account_controller = AccountController(account_rep)
+tour_rep = TourRepository(session)
+tourC = tourController(tour_rep)
 app.secret_key = 'gruppe_18'
+
 @login_manager.user_loader
 def load_user(user_id):
     return session.query(Account).get(user_id)
@@ -136,6 +149,7 @@ def cancel_tour():
     else:
         flash('You must be logged in to cancel a tour.', 'danger')
         return redirect(url_for('login'))
+
 
 @app.route('/home/filter', methods=['GET','POST'])
 def filter_tour():

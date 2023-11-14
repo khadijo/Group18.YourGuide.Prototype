@@ -18,8 +18,8 @@ Session = sessionmaker(bind=engine)
 db.metadata.create_all(bind=engine)
 
 
-def get_session():
-    engine = create_engine("sqlite:///YourGuide.db", echo=True)
+def get_session(path):
+    engine = create_engine(f"sqlite:///{path}", echo=True)
 
     Session = sessionmaker(bind=engine)
 
