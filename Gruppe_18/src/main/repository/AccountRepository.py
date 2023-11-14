@@ -21,7 +21,7 @@ class AccountRepository(JSONRepository):
         return False
 
     def create_account(self, user):
-        account = Account(id=str(uuid.uuid4()),
+        account = Account(id=user.id,
                           usertype=user.usertype,
                           username=user.username,
                           password=user.password,

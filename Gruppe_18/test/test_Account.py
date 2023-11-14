@@ -1,5 +1,6 @@
 import os
 import datetime
+import uuid
 
 import pytest
 from approvaltests import verify, Options
@@ -40,6 +41,7 @@ def account():
 @pytest.fixture
 def tour_1():
     return Tour(
+       uuid.uuid4(),
     "Discover Oslo's Charm",
     datetime.date(2024, 8, 5),
     "Oslo, Norway",

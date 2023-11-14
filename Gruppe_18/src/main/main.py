@@ -60,7 +60,7 @@ Hawaii = Tour(str(uuid.uuid4()), "Discover the Maui beach",
               15,
               "English",
               "https://th.bing.com/th/id/OIP.Cr0sJQe1p8z1Kp5MmhyVgQHaFj?pid=ImgDet&rs=1")
-Oslo = Tour( str(uuid.uuid4()),
+Oslo = Tour(str(uuid.uuid4()),
     "Discover Oslo's Charm",
     datetime.date(2024, 8, 5),
     "Oslo, Norway",
@@ -81,10 +81,13 @@ tour_repository.create_tour(Oslo)
 
 account_rep.create_account(a)
 account_rep.create_account(b)
-account_rep.create_account(g)'''
+account_rep.create_account(g)
+''''''
 
 #result = tour_repository.book_tour(new_tour)
 #result1 = tour_repository.book_tour(new_tour)
+'''
+
 '''
 tour_repository.delete_tour("b2ad50e1-ac86-4ecf-bf51-feeda5a910a3")
 tour_repository.delete_tour("c1f09a81-118b-4ca1-8f47-b387125f853f")
