@@ -10,8 +10,8 @@ class AccountRepository(JSONRepository):
         self.session = session
         self.tour_repo = TourRepository(session)
 
-    def delete_account(self, user):
-        account_to_delete = self.session.query(Account).filter_by(username=user.username).first()
+    def delete_account(self, user_id):
+        account_to_delete = self.session.query(Account).filter_by(id=user_id).first()
 
         if account_to_delete:
             self.session.delete(account_to_delete)

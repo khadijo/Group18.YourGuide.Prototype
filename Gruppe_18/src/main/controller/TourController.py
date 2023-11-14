@@ -94,7 +94,7 @@ class TourController():
             flash('You must be logged in to see your registered tours.', 'danger')
             return redirect(url_for('login'))
 
-    def delete_tour(self):
+    def deleting_tour(self):
         if current_user.is_authenticated:
             tour_id = request.form.get('tour_id')
             user_id = current_user.id

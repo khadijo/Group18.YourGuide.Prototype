@@ -88,6 +88,7 @@ account_rep.create_account(g)
 #result1 = tour_repository.book_tour(new_tour)
 '''
 
+account_rep.create_account(a)
 '''
 tour_repository.delete_tour("b2ad50e1-ac86-4ecf-bf51-feeda5a910a3")
 tour_repository.delete_tour("c1f09a81-118b-4ca1-8f47-b387125f853f")

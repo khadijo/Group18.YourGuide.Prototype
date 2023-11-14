@@ -1,12 +1,9 @@
-import uuid
-from datetime import datetime
-
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association, guide_tour_association
+from flask_login import LoginManager, login_required, logout_user
+from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, redirect, url_for
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 from Gruppe_18.src.main.controller.TourController import TourController
@@ -87,18 +84,18 @@ def guide_tours():
 
 @app.route('/delete_tour', methods=['POST'])
 def delete_tour():
-    return tour_controller.delete_tour()
+    return tour_controller.deleting_tour()
 
 
-@app.route('/show_tours', methods=['GET'])
+@app.route('/show_all_tours', methods=['GET'])
 def show_tours():
     tours = session.query(Tour).all()
-    return render_template('homepage_admin.html', tours=tours, show_tours=True)
+    return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
 
 
 @app.route('/hide_tours', methods=['GET'])
 def hide_tours():
-    return render_template('homepage_admin.html', show_tours=False)
+    return render_template('homepage_admin.html', show_all_tours=False)
 
 
 @app.route('/show_all_users', methods=['GET'])
@@ -110,6 +107,12 @@ def show_all_users():
 @app.route('/hide_all_users', methods=['GET'])
 def hide_all_users():
     return render_template('homepage_admin.html', show_all_users=False)
+
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    return account_controller.deleting_account()
+
 
 
 if __name__ == '__main__':

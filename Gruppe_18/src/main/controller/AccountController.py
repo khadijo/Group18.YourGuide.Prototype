@@ -74,3 +74,15 @@ class AccountController:
             return render_template('homepage_guide.html', tours=tours)
         else:
             return render_template('homepage.html', tours=tours)
+
+    def deleting_account(self):
+        if current_user.is_authenticated:
+            user_id = request.form.get('user_id')
+            user = self.session.query(Account).filter_by(id=user_id).first()
+            if user:
+                self.account_repository.delete_account(user_id)
+                self.session.commit()
+            return render_template('deleted_account.html', user=user)
+        else:
+            flash('You must be logged in to delete the account.', 'danger')
+            return redirect(url_for('login'))

@@ -120,7 +120,6 @@
     <header class="header">
         <div class="left-section">
             <h1 class="yourtour">Your Guide</h1>
-            <!-- Legg til funksjonalitet for søkefeltet -->
             <form action="/search" method="get" class="search-bar">
                 <input type="text" name="q" placeholder="Search">
                 <button type="submit">Search</button>
@@ -142,7 +141,7 @@
             </nav>
         </div>
     </header>
-    <h1>Welcome, choose your adventure</h1>
+    <h1>Welcome, choose your adventure or give others many adventures</h1>
     <main>
         {% for tour in tours %}
         <div class="tour">

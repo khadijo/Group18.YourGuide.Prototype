@@ -122,11 +122,11 @@
     </header>
     <h1>Welcome, to Your Guide administration</h1>
     <main>
-        <form action="{% if show_tours %}/hide_tours{% else %}/show_tours{% endif %}" method="get">
-            {% if show_tours %}
+        <form action="{% if show_all_tours %}/hide_tours{% else %}/show_all_tours{% endif %}" method="get">
+            {% if show_all_tours %}
                 <button type="submit">Hide Tours</button>
             {% else %}
-                <button type="submit">Show Tours</button>
+                <button type="submit">Show All Tours</button>
             {% endif %}
         </form>
         <form action="{% if show_all_users %}/hide_all_users{% else %}/show_all_users{% endif %}" method="get">
@@ -136,7 +136,7 @@
                 <button type="submit">Show All Users</button>
             {% endif %}
         </form>
-        {% if show_tours %}
+        {% if show_all_tours %}
             <div id="tour-container" >
                 {% for tour in tours %}
                     <div class="tour">
@@ -151,6 +151,10 @@
                             <p>Cost: {{ tour.cost }}</p>
                             <p>Max travelers: {{ tour.max_travelers }}</p>
                             <p>Language: {{ tour.language }}</p>
+                             <form action="/delete_tour" method="post">
+                                <input type="hidden" name="tour_id" value="{{ tour.id }}">
+                                <button type="submit" class="btn">Delete tour</button>
+                            </form>
                         </div>
                     </div>
                 {% endfor %}
@@ -171,6 +175,10 @@
                             <p>Username: {{ user.username}}</p>
                             <p>Email: {{ user.emailAddress }}</p>
                             <p>PhoneNumber: {{ user.phoneNumber }}</p>
+                            <form action="/delete_account" method="post">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <button type="submit">Delete account</button>
+                            </form>
                         </div>
                     </div>
                 {% endfor %}
