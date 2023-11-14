@@ -6,7 +6,7 @@ from sqlite3 import IntegrityError
 
 from flask_login import current_user
 
-from Gruppe_18.src.main.model.models import Tour, tour_account_association, Account
+from Gruppe_18.src.main.model.models import Tour, tour_account_association, Account, guide_tour_association
 
 
 class TourController():
@@ -58,5 +58,51 @@ class TourController():
             flash('You must be logged in to see your registered tours.', 'danger')
             return redirect(url_for('login'))
 
-    # def make_new_tour(self):
+    def make_new_tour(self):
+        if request.method == 'POST':
+            title = request.form.get('title')
+            date = request.form.get('date')
+            date_obj = datetime.strptime(date, '%Y, %m, %d')
+            destination = request.form.get('destination')
+            duration = request.form.get('duration')
+            cost = request.form.get('cost')
+            max_travelers = request.form.get('max_travelers')
+            language = request.form.get('language')
+            pictureURL = request.form.get('pictureURL')
+            tour = Tour(id=str(uuid.uuid4()), title=title, date=date_obj, destination=destination, duration=duration,
+                        cost=cost,
+                        max_travelers=max_travelers, language=language, pictureURL=pictureURL)
+            self.tour_repository.create_tour(tour)
+            guide_id = current_user.id
+            self.tour_repository.guide_register_to_tour(tour.id, guide_id)
+            tours = self.session.query(Tour).all()
+            return render_template('homepage_guide.html', tours=tours)
 
+        return render_template('new_tour.html')
+
+    def show_guide_tour(self):
+        if current_user.is_authenticated:
+            guide_id = current_user.id
+            guide_tours = self.session.query(Tour).join(
+                guide_tour_association, Tour.id == guide_tour_association.c.tour_id
+            ).filter(guide_tour_association.c.guide_id == guide_id).all()
+
+            user = self.session.query(Account).filter_by(id=guide_id).first()
+
+            return render_template('guide_tours.html', guide_tours=guide_tours, user=user)
+        else:
+            flash('You must be logged in to see your registered tours.', 'danger')
+            return redirect(url_for('login'))
+
+    def delete_tour(self):
+        if current_user.is_authenticated:
+            tour_id = request.form.get('tour_id')
+            user_id = current_user.id
+            tour = self.session.query(Tour).filter_by(id=tour_id).first()
+            if tour:
+                self.tour_repository.guide_delete_tour(tour_id, user_id)
+                self.session.commit()
+            return render_template('deleted_tour.html', tour=tour)
+        else:
+            flash('You must be logged in to delete a tour.', 'danger')
+            return redirect(url_for('login'))

@@ -40,13 +40,7 @@ def login():
 
 @app.route('/home')
 def home():
-    tours = session.query(Tour).all()
-    if current_user.usertype == "admin":
-        return render_template('homepage_admin.html')
-    elif current_user.usertype == "guide":
-        return render_template('homepage_guide.html', tours=tours)
-    else:
-        return render_template('homepage.html', tours=tours)
+    return account_controller.homepage_based_on_usertype()
 
 
 @app.route('/logout')
@@ -83,57 +77,17 @@ def cancel_tour():
 
 @app.route('/new_tour', methods=['POST', 'GET'])
 def new_tour():
-    if request.method == 'POST':
-        title = request.form.get('title')
-        date = request.form.get('date')
-        date_obj = datetime.strptime(date, '%Y, %m, %d')
-        destination = request.form.get('destination')
-        duration = request.form.get('duration')
-        cost = request.form.get('cost')
-        max_travelers = request.form.get('max_travelers')
-        language = request.form.get('language')
-        pictureURL = request.form.get('pictureURL')
-        tour = Tour(id=str(uuid.uuid4()), title=title, date=date_obj, destination=destination, duration=duration,
-                    cost=cost,
-                    max_travelers=max_travelers, language=language, pictureURL=pictureURL)
-        tour_rep.create_tour(tour)
-        guide_id = current_user.id
-        tour_rep.guide_register_to_tour(tour.id, guide_id)
-        tours = session.query(Tour).all()
-        return render_template('homepage_guide.html', tours=tours)
-
-    return render_template('new_tour.html')
+    return tour_controller.make_new_tour()
 
 
 @app.route('/guide_tours')
 def guide_tours():
-    if current_user.is_authenticated:
-        guide_id = current_user.id
-        guide_tours = session.query(Tour).join(
-            guide_tour_association, Tour.id == guide_tour_association.c.tour_id
-        ).filter(guide_tour_association.c.guide_id == guide_id).all()
-
-        user = session.query(Account).filter_by(id=guide_id).first()
-
-        return render_template('guide_tours.html', guide_tours=guide_tours, user=user)
-    else:
-        flash('You must be logged in to see your registered tours.', 'danger')
-        return redirect(url_for('login'))
+    return tour_controller.show_guide_tour()
 
 
 @app.route('/delete_tour', methods=['POST'])
 def delete_tour():
-    if current_user.is_authenticated:
-        tour_id = request.form.get('tour_id')
-        user_id = current_user.id
-        tour = session.query(Tour).filter_by(id=tour_id).first()
-        if tour:
-            tour_rep.guide_delete_tour(tour_id, user_id)
-            session.commit()
-        return render_template('deleted_tour.html', tour=tour)
-    else:
-        flash('You must be logged in to cancel a tour.', 'danger')
-        return redirect(url_for('login'))
+    return tour_controller.delete_tour()
 
 
 @app.route('/show_tours', methods=['GET'])

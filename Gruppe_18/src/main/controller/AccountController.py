@@ -65,3 +65,12 @@ class AccountController:
         else:
             flash('You must be logged in to cancel a tour.', 'danger')
             return redirect(url_for('login'))
+
+    def homepage_based_on_usertype(self):
+        tours = self.session.query(Tour).all()
+        if current_user.usertype == "admin":
+            return render_template('homepage_admin.html')
+        elif current_user.usertype == "guide":
+            return render_template('homepage_guide.html', tours=tours)
+        else:
+            return render_template('homepage.html', tours=tours)
