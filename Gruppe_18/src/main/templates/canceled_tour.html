@@ -1,0 +1,71 @@
+   <style>
+   body {
+       font-family: Arial, sans-serif;
+       background-color: #f0f0f0;
+       margin: 0;
+       padding: 0;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: flex-start;
+       height: 100vh;
+   }
+
+   .btn {
+       display: inline-block;
+       padding: 10px 20px;
+       background-color: #ff7f00;
+       color: white;
+       text-decoration: none;
+       border: none;
+       border-radius: 5px;
+       cursor: pointer;
+       border: solid;
+       margin: 10px;
+        }
+
+   .btn:hover {
+       background-color: #0056b3;
+   }
+
+   h1 {
+       margin: 20px;
+   }
+
+   .image {
+        display: flex;
+        justify-content: center;
+        margin: 20px;
+   }
+
+   .text {
+        text-align: center;
+         margin: 20px;
+   }
+
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tour Canceled</title>
+</head>
+<body>
+    <h1>Tour Canceled</h1>
+    <p>The following tour has been successfully canceled:</p>
+    <h2>{{ tour.title }}</h2>
+    <div class="image">
+        <img src="{{ tour.pictureURL }}" style="width: 100vh; max-height: 50vh;" alt="{{ tour.title }}">
+    </div>
+    <div class="text">
+        <p>Date: {{ tour.date }}</p>
+        <p>Destination: {{ tour.destination }}</p>
+        <p>Duration: {{ tour.duration }}</p>
+        <p>Cost: {{ tour.cost }}</p>
+        <p>Max travelers: {{ tour.max_travelers }}</p>
+        <p>Language: {{ tour.language }}</p>
+    </div>
+    <a href="/user_tours" class="btn">Back to My Tours</a>
+    <a href="/home" class="btn">Go back to Home</a>
+</body>
+</html>

@@ -1,156 +1,159 @@
 <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
 
-        header input[type="text"] {
-            padding: 10px;
-            width: 25rem;
-            border: none;
-        }
+    main {
+        padding: 20px;
+    }
 
-        main {
-            padding: 20px;
-        }
+    h2 {
+        font-size: 24px;
+    }
 
-        h2 {
-            font-size: 24px;
-        }
+    p {
+        font-size: 16px;
+        line-height: 1.5;
+        white-space: pre-line;
+    }
 
+    button {
+        background-color: #ff7f00;
+        color: white;
+        padding: 10px 20px;
+        border: solid;
+        cursor: pointer;
+    }
 
+    button:hover {
+        background-color: #0056b3;
+    }
 
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-            white-space: pre-line;
-        }
+    footer {
+        background-color: #ff7f00;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+    }
 
-        button {
-            background-color: #ff7f00;
-            color: white;
-            padding: 10px 20px;
-            border: solid;
-            cursor: pointer;
-        }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ff7f00;
+        color: #fff;
+        padding: 10px 20px;
+    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+    .left-section {
+        display: flex;
+        flex-direction: column;
+        width: 100vh;
+    }
 
-        footer {
-            background-color: #ff7f00;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-        }
+    .left-section h2 {
+        margin-bottom: 10px;
+    }
 
-        header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background-color: #ff7f00;
-          color: #fff;
-          padding: 10px 20px;
-        }
+    .right-section {
+        display: flex;
+        align-items: center;
+        width: 29vh;
+        height: 15vh;
+        justify-content: center;
+    }
 
-        .left-section {
-          display: flex;
-          flex-direction: column;
-          width: 100vh
-        }
+    .dropdown-menu {
+        position: relative;
+    }
 
-        .left-section h2 {
-          margin-bottom: 10px;
-        }
+    .dropdown-menu:hover .hidden-menu {
+        display: flex;
+        flex-direction: column;
+    }
 
-        .right-section {
-          display: flex;
-          align-items: center;
-          width: 20vh;
-          height: 15vh;
-          justify-content: center;
-        }
+    .hidden-menu {
+        display: none;
+        width: 20vh;
+        margin-left: -8vh;
+        align-items: center;
+    }
 
-        .dropdown-menu {
-            position: relative;
-          }
+    .dropdown-menu .hidden-menu {
+        position: absolute;
+        width: 10rem;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+    }
 
-        .dropdown-menu:hover .hidden-menu {
-            display: flex;
-            flex-direction: column
+    a {
+        color: #000000;
+        text-decoration: none;
+        padding: 8px 20px;
+    }
 
-          }
+    .filter-menu {
+        display: none;
+        background-color: #ffcc99;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 1;
+    }
 
-        .hidden-menu {
-            display: none;
-            width: 20vh;
-            margin-left: -8vh;
-            align-items: center;
-        }
+    .filter-menu ul {
+        list-style-type: none;
+        padding: 0;
+    }
 
-        .dropdown-menu .hidden-menu{
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            border-radius: 5px;
-          }
+    .filter-menu ul li {
+        padding: 5px 0;
+    }
 
-        a {
-            color: #000000;
-            text-decoration: none;
-            padding: 8px 20px;
-        }
-        .filter-menu {
-            display: none;
-            background-color: #ffcc99;
-            padding: 6px;
-        }
+    .filter-menu ul li input {
+        width: 150px;
+        padding: 5px;
+        margin-left: 8px;
+    }
 
-        .filter-menu ul{
-            list-style-type: none;
-        }
+    .filter-menu ul li input#destination-input {
+        margin-left: 0;
+    }
 
-        .filter-menu ul li{
-            padding: 2px;
-        }
+    .filter-menu input[type="submit"] {
+        background-color: #ff7f00;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
 
-        form[action="/home/filter"] input[type="submit"] {
-            background-color: #ff7f00;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
+    .filter-menu input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
 
+    header input[type="text"] {
+        padding: 10px;
+        width: 25rem;
+        border: none;
+    }
 
-        form[action="/home/filter"] input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
+    .button-placement{
+        margin-top: 6.3;
+        position: absolute;
+        margin-left: 500;
+    }
 
-        .filter-menu ul li input {
-            width: 100px;
-        }
-
-        .filter-menu ul li input#destination-input {
-             margin-left: 8px;
-        }
-
-        .filter-menu ul li input#language-input {
-            margin-left: 15px;
-        }
-
-        .button-placement{
-            margin-top: 63;
-            position: absolute;
-            margin-left: 500;
-        }
-    </style>
+</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -165,6 +168,9 @@
                 <input type="text" name="q" placeholder="Search">
                 <button type="submit">Search</button>
             </form>
+             <form action="/new_tour" method="get">
+                <button type="submit">New Tour</button>
+            </form>
         </div>
         <button class="filter-button button-placement">filter menu</button>
         <div class="right-section">
@@ -175,6 +181,7 @@
                 <div class="hidden-menu">
                     <a href="/profile">Profile</a>
                     <a href="/user_tours" class="your-tours-button">My tours</a>
+                    <a href="/guide_tours" class="your-tours-button">Published tours</a>
                 </div>
             </nav>
         </div>
@@ -189,7 +196,7 @@
             <input type="submit" value="Filter">
         </div>
     </form>
-    <h1>Welcome, choose your adventure</h1>
+    <h1>Welcome, choose your adventure or give others many adventures</h1>
     <main>
         {% for tour in tours %}
         <div class="tour">
@@ -215,7 +222,6 @@
     <footer>
         <p>&copy; Copyright Gruppe 18</p>
     </footer>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const filterButton = document.querySelector(".filter-button");
@@ -230,5 +236,6 @@
             });
         });
     </script>
+
 </body>
 </html>

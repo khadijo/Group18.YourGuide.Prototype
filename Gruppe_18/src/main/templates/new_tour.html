@@ -47,13 +47,16 @@
     <title>Register</title>
 </head>
 <body>
-<form method="POST" action="{{url_for('account_reg') }}">
-    <input type="text" name="usertype" placeholder="Usertype" required>
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="text" name="phoneNumber" placeholder="PhoneNumber" required>
-    <input type="text" name="emailAddress" placeholder="EmailAddress" required>
-    <input type="submit" value="Register">
+<form method="POST" action="{{url_for('new_tour')}}">
+    <input type="text" name="title" placeholder="title" required>
+    <input type="text" name="date" placeholder="yy-mm-dd" required>
+    <input type="text" name="destination" placeholder="destination" required>
+    <input type="text" name="duration" placeholder="duration" required>
+    <input type="text" name="cost" placeholder="cost" required>
+    <input type="text" name="max_travelers" placeholder="max travlers" required>
+    <input type="text" name="language" placeholder="language" required>
+    <input type="text" name="pictureURL" placeholder="pictureURL" required>
+    <input type="submit" value="Post">
 </form>
 
 </body>

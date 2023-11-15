@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+
+        }
+
+        header input[type="text"] {
+            padding: 10px;
+            width: 40%;
+            border: none;
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-grow: 1;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        button {
+            background-color: #ff7f00;
+            color: white;
+            padding: 10px 20px;
+            border: solid;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #ff7f00;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ff7f00;
+            color: #fff;
+            padding: 10px 20px;
+        }
+
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            width: 100vh;
+        }
+
+        .left-section h2 {
+            margin-bottom: 10px;
+        }
+
+        .dropdown-menu {
+            position: relative;
+        }
+
+        .dropdown-menu:hover .hidden-menu {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden-menu {
+            display: none;
+            width: 20vh;
+            margin-left: -8vh;
+            align-items: center;
+        }
+
+        .dropdown-menu .hidden-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        a {
+            color: #000000;
+            text-decoration: none;
+            padding: 8px 20px;
+        }
+        .admin_dashboard {
+            border: solid;
+            padding: 2rem;
+            background-color: white;
+        }
+
+        .tour {
+            border: solid;
+            padding: 2rem;
+            background-color: white;
+        }
+
+        .user {
+            border: solid;
+            padding: 2rem;
+            background-color: white;
+        }
+
+    .dropdown-menu {
+        position: relative;
+    }
+
+    .dropdown-menu:hover .hidden-menu {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hidden-menu {
+        display: none;
+        width: 20vh;
+        margin-left: -8vh;
+        align-items: center;
+    }
+
+    .dropdown-menu .hidden-menu {
+        position: absolute;
+        width: 10rem;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    .right-section {
+        display: flex;
+        align-items: center;
+        width: 29vh;
+        height: 15vh;
+        justify-content: center;
+    }
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1 class="yourtour">Your Guide</h1>
+        <div class="right-section">
+            <nav class="dropdown-menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+                </svg>
+                <div class="hidden-menu">
+                    <a href="/profile">Profile</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <h1>Welcome, to Your Guide administration</h1>
+    <main>
+        <form action="{% if show_dashboard %}/hide_dashboard{% else %}/show_dashboard{% endif %}" method="get">
+            {% if show_dashboard %}
+                <button type="submit">Hide dashboard</button>
+            {% else %}
+                <button type="submit">Show dashboard</button>
+            {% endif %}
+        </form>
+        {% if show_dashboard %}
+            <div class="admin_dashboard">
+                <h1>Admin Dashboard</h1>
+                <p>Number of users: {{ num_users }}</p>
+                <p>Number of tours: {{ num_tours }}</p>
+                <p>Number of booked tours: {{ num_booked_tours }}</p>
+                <p>Number of guides: {{ num_guides }}</p>
+                <p>Number of admin: {{ num_admin}}</p>
+                <p>Number of regular users: {{ num_regular_users }}</p>
+            </div>
+        {% endif %}
+
+        <form action="{% if show_all_tours %}/hide_tours{% else %}/show_all_tours{% endif %}" method="get">
+            {% if show_all_tours %}
+                <button type="submit">Hide Tours</button>
+            {% else %}
+                <button type="submit">Show All Tours</button>
+            {% endif %}
+        </form>
+        <form action="{% if show_all_users %}/hide_all_users{% else %}/show_all_users{% endif %}" method="get">
+            {% if show_all_users %}
+                <button type="submit">Hide All Users</button>
+            {% else %}
+                <button type="submit">Show All Users</button>
+            {% endif %}
+        </form>
+        {% if show_all_tours %}
+            <div id="tour-container">
+                {% for tour in tours %}
+                    <div class="tour">
+                        <h2>{{ tour.title }}</h2>
+                        <div class="image">
+                            <img src="{{ tour.pictureURL }}" style="width: 100vh; max-height: 50vh;" alt="{{ tour.title }}">
+                        </div>
+                        <div class="text">
+                            <p>Date: {{ tour.date }}</p>
+                            <p>Destination: {{ tour.destination }}</p>
+                            <p>Duration: {{ tour.duration }}</p>
+                            <p>Cost: {{ tour.cost }}</p>
+                            <p>Max travelers: {{ tour.max_travelers }}</p>
+                            <p>Language: {{ tour.language }}</p>
+                             <form action="/delete_tour" method="post">
+                                <input type="hidden" name="tour_id" value="{{ tour.id }}">
+                                <button type="submit" class="btn">Delete tour</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if show_all_users %}
+            <div id="user-container">
+                {% for user in users %}
+                    <div class="user">
+                        <h2>{{ user.username }}</h2>
+                        <div class="image">
+                            <img src="https://webstockreview.net/images/pe-clipart-exercise-physiology-11.png"
+                                 style="width: 50vh; max-height: 100vh;" alt="{{ user.username }}">
+                        </div>
+                        <div class="user">
+                            <p>Usertype: {{ user.usertype }}</p>
+                            <p>Username: {{ user.username}}</p>
+                            <p>Email: {{ user.emailAddress }}</p>
+                            <p>PhoneNumber: {{ user.phoneNumber }}</p>
+                            <form action="/delete_account" method="post">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <button type="submit">Delete account</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+    <footer>
+        <p>&copy; Copyright Gruppe 18</p>
+    </footer>
+</body>
+

@@ -54,6 +54,3 @@ class JSONRepository:
         return items
 
 
-
-
-    # def from_json(self, entity, ):
