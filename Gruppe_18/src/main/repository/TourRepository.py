@@ -1,3 +1,5 @@
+from sqlalchemy import func
+
 from Gruppe_18.src.main.model.models import Tour, guide_tour_association, Account
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 
@@ -123,3 +125,30 @@ class TourRepository(JSONRepository):
         else:
             print("Tour or user is not found.")
 
+    def admin_dashboard(self):
+        # Antall brukere
+        num_users = self.session.query(func.count(Account.id)).scalar()
+
+        # Antall turer
+        num_tours = self.session.query(func.count(Tour.id)).scalar()
+
+        # Antall bookede turer
+        num_booked_tours = self.session.query(func.sum(Tour.booked)).scalar()
+        # Antall guider
+        num_guides = self.session.query(func.count(Account.id)).join(
+            guide_tour_association, Account.id == guide_tour_association.c.guide_id
+        ).filter(guide_tour_association.c.guide_id.isnot(None)).scalar()
+
+        num_admin = self.session.query(func.count(Account.id)).filter(Account.usertype == "admin").scalar()
+
+        # Antall vanlige brukere
+        num_regular_users = num_users - (num_guides + num_admin)
+
+        return {
+            'num_users': num_users,
+            'num_tours': num_tours,
+            'num_booked_tours': num_booked_tours,
+            'num_guides': num_guides,
+            'num_admin': num_admin,
+            'num_regular_users': num_regular_users
+        }

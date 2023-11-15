@@ -1,4 +1,6 @@
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+
+from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
@@ -36,7 +38,7 @@ def login():
 
 @app.route('/home')
 def home():
-    return account_controller.homepage_based_on_usertype()
+    return tour_controller.homepage_based_on_usertype()
 
 
 @app.route('/logout')
@@ -115,7 +117,7 @@ def delete_account():
 
 @app.route('/show_dashboard', methods=['GET'])
 def show_dashboard():
-    data = account_rep.admin_dashboard()
+    data = tour_rep.admin_dashboard()
     return render_template('homepage_admin.html', **data, show_dashboard=True)
 
 
@@ -123,8 +125,16 @@ def show_dashboard():
 def hide_dashboard():
     return render_template('homepage_admin.html', show_dashboard=False)
 
+@app.route('/profile')
+@login_required
+def profile():
+    user_data = load_user(current_user.get_id())
+    return render_template('profile.html', user_data=user_data)
 
-# Delete user account
+@app.route('/home/filter', methods=['GET','POST'])
+def filter_tour():
+    return tour_controller.filter_app()
+
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
     if current_user.is_authenticated:

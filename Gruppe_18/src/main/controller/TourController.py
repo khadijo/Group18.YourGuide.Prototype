@@ -1,11 +1,12 @@
 import uuid
 from datetime import datetime
 
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for
 from sqlite3 import IntegrityError
 
 from flask_login import current_user
-
+from Gruppe_18.src.main.controller.AccountController import AccountController
+from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.model.models import Tour, tour_account_association, Account, guide_tour_association
 
 
@@ -14,6 +15,17 @@ class TourController():
         self.tour_repository = tour_repository
         self.session = session
 
+    def homepage_based_on_usertype(self, tours=None):
+        if tours is None:
+            tours = self.session.query(Tour).all()
+        if current_user.usertype == "admin":
+            data = self.tour_repository.admin_dashboard()
+            return render_template('homepage_admin.html', **data)
+        elif current_user.usertype == "guide":
+            return render_template('homepage_guide.html', tours=tours)
+        else:
+            return render_template('homepage.html', tours=tours)
+
     def filter_app(self):
         if request.method == 'POST':
             destination = request.form['destination']
@@ -21,14 +33,13 @@ class TourController():
             min_price = request.form['min_price']
             language = request.form['language']
             try:
-                if destination or max_price or min_price or language:
-                    filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
-                else:
-                    filter_tours = self.tour_repository.get_all_tours()
-                return render_template("homepage.html", tours=filter_tours)
+                filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
+                return self.homepage_based_on_usertype(tours=filter_tours)
             except IntegrityError:
                 flash('there was a mistake', 'danger')
-            return render_template("homepage.html")
+                return self.homepage_based_on_usertype()
+
+
 
     def search_tour(self):
         q = request.args.get("q")
@@ -42,7 +53,7 @@ class TourController():
             print(results)
         else:
             results = []
-        return render_template("homepage.html", tours=results)
+        return self.homepage_based_on_usertype(tours=results)
 
     def get_user_tours(self):
         if current_user.is_authenticated:

@@ -1,7 +1,3 @@
-import uuid
-
-from sqlalchemy import func
-
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association, guide_tour_association
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
@@ -35,7 +31,7 @@ class AccountRepository(JSONRepository):
         return account
 
     # Update account
-    def update_account(self, email, new_username, new_telephone_number,new_email):
+    def update_account(self, email, new_username, new_telephone_number, new_email):
         user = self.session.query(Account).filter_by(emailAddress=email).first()
         user.username = new_username
         user.phoneNumber = new_telephone_number
@@ -88,30 +84,3 @@ class AccountRepository(JSONRepository):
         logged_in = status
         return logged_in
 
-    def admin_dashboard(self):
-        # Antall brukere
-        num_users = self.session.query(func.count(Account.id)).scalar()
-
-        # Antall turer
-        num_tours = self.session.query(func.count(Tour.id)).scalar()
-
-        # Antall bookede turer
-        num_booked_tours = self.session.query(func.sum(Tour.booked)).scalar()
-        # Antall guider
-        num_guides = self.session.query(func.count(Account.id)).join(
-            guide_tour_association, Account.id == guide_tour_association.c.guide_id
-        ).filter(guide_tour_association.c.guide_id.isnot(None)).scalar()
-
-        num_admin = self.session.query(func.count(Account.id)).filter(Account.usertype == "admin").scalar()
-
-        # Antall vanlige brukere
-        num_regular_users = num_users - (num_guides + num_admin)
-
-        return {
-            'num_users': num_users,
-            'num_tours': num_tours,
-            'num_booked_tours': num_booked_tours,
-            'num_guides': num_guides,
-            'num_admin': num_admin,
-            'num_regular_users': num_regular_users
-        }
