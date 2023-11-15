@@ -11,6 +11,11 @@ class AccountController:
         self.account_repository = account_repository
         self.session = session
 
+    def get_specific_account_by_id(self):
+        user_id = current_user.id
+        user = self.session.query(Account).filter_by(id=user_id).first()
+        return user
+
     def account_login(self):
         if request.method == 'POST':
             username = request.form['username']
@@ -67,8 +72,6 @@ class AccountController:
             flash('You must be logged in to cancel a tour.', 'danger')
             return redirect(url_for('login'))
 
-
-
     def deleting_account(self):
         if current_user.is_authenticated:
             user_id = request.form.get('user_id')
@@ -81,4 +84,23 @@ class AccountController:
             flash('You must be logged in to delete the account.', 'danger')
             return redirect(url_for('login'))
 
+    def delete_my_account(self):
+        if current_user.is_authenticated:
+            account_id = current_user.id
+            account = self.session.query(Account).filter_by(id=account_id).first()
+            if account:
+                self.account_repository.delete_account(account_id)
+                self.session.commit()
+            return render_template('User_register.html')
 
+    def update_user_information(self):
+        if current_user.is_authenticated:
+            new_username = request.form.get("username")
+            new_telephone_number = request.form.get("phoneNumber")
+            new_email = request.form.get("email")
+
+            current_email = current_user.emailAddress
+            self.account_repository.update_account(current_email, new_username, new_telephone_number, new_email)
+
+            self.session.commit()
+            return redirect(url_for('home'))

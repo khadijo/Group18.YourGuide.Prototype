@@ -70,60 +70,58 @@
           color: #fff;
         }
 
-        /* Left Section with H2 and Search Bar */
-        .left-section {
-          display: flex;
-          flex-direction: column; /* Stack items vertically */
-          width: 100vh
-        }
+    .left-section {
+       display: flex;
+       flex-direction: column;
+       width: 100vh
+    }
 
-        .left-section h2 {
-          margin-bottom: 10px; /* Adjust margin as needed */
-        }
+    .left-section h2 {
+        margin-bottom: 10px;
+    }
 
-        /* Right Section with Profile Icon */
-        .right-section {
-          display: flex;
-          align-items: center;
-          width: 20vh;
-          height: 15vh;
-          justify-content: center;
-        }
+    .right-section {
+        display: flex;
+        align-items: center;
+        width: 20vh;
+        height: 15vh;
+        justify-content: center;
+    }
 
-        .dropdown-menu {
-            position: relative;
-          }
+    .dropdown-menu {
+        position: relative;
+    }
 
-        .dropdown-menu:hover .hidden-menu {
-            display: flex;
-            flex-direction: column
+    .dropdown-menu:hover .hidden-menu {
+        display: flex;
+        flex-direction: column
+    }
 
-          }
+    .hidden-menu {
+        display: none;
+        width: 20vh;
+        margin-left: -8vh;
+        align-items: center;
+    }
 
-        .hidden-menu {
-            display: none;
-            width: 20vh;
-            margin-left: -8vh;
-            align-items: center;
-        }
+    .dropdown-menu .hidden-menu{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+    }
 
-        .dropdown-menu .hidden-menu{
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1;
-            border: 1px solid #ccc; /* Add a border to the menu */
-            background-color: #fff; /* Set the background color for the menu */
-            border-radius: 5px; /* Add rounded corners to the menu */
-          }
+    a {
+        color: #000000;
+        text-decoration: none;
+        padding: 8px 20px;
+    }
 
-        a {
-            color: #000000;
-            text-decoration: none;
-            padding: 8px 20px;
-        }
-        .yourtour {
-            color: #fff;
+    .yourtour {
+        color: #fff;
     }
     .buttons-style {
         display: flex;

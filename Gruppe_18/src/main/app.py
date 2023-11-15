@@ -1,10 +1,10 @@
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_required, logout_user, current_user
 
 from Gruppe_18.src.main.controller.TourController import TourController
-from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
+from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from flask import render_template, request, flash, redirect, url_for, jsonify
+from flask import render_template, redirect, url_for
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
@@ -125,41 +125,28 @@ def show_dashboard():
 def hide_dashboard():
     return render_template('homepage_admin.html', show_dashboard=False)
 
+
 @app.route('/profile')
 @login_required
 def profile():
     user_data = load_user(current_user.get_id())
     return render_template('profile.html', user_data=user_data)
 
-@app.route('/home/filter', methods=['GET','POST'])
+
+@app.route('/home/filter', methods=['GET', 'POST'])
 def filter_tour():
     return tour_controller.filter_app()
 
+
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
-    if current_user.is_authenticated:
-        account_email = current_user.emailAddress
-        account = session.query(Account).filter_by(emailAddress=account_email).first()
-        if account:
-            account_rep.delete_account(account_email)
-            session.commit()
-        return render_template('User_register.html')
+    return account_controller.delete_my_account()
 
 
 # Update user info
 @app.route('/update_user_info', methods=['POST'])
 def update_user_info():
-    if current_user.is_authenticated:
-        # Getting input values from user
-        new_username = request.form.get("username")
-        new_telephone_number = request.form.get("phoneNumber")
-        new_email = request.form.get("email")
-
-        current_email = current_user.emailAddress
-        account_rep.update_account(current_email, new_username, new_telephone_number,new_email)
-
-        session.commit()
-        return redirect(url_for('home'))
+    return account_controller.update_user_information()
 
 
 if __name__ == '__main__':
