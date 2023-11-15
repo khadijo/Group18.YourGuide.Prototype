@@ -1,9 +1,21 @@
-<style>
-    body {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <style>
+        body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Minst 100% av visningshøyden */
+            background-image: url('https://images.pexels.com/photos/326119/pexels-photo-326119.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         header input[type="text"] {
@@ -14,13 +26,18 @@
 
         main {
             padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-grow: 1; /* Bruk all tilgjengelig plass i hovedinnholdet */
+        }
+
+        h1 {
+            text-align: center;
         }
 
         h2 {
             font-size: 24px;
         }
-
-
 
         p {
             font-size: 16px;
@@ -48,43 +65,32 @@
         }
 
         header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background-color: #ff7f00;
-          color: #fff;
-          padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ff7f00;
+            color: #fff;
+            padding: 10px 20px;
         }
 
-        /* Left Section with H2 and Search Bar */
         .left-section {
-          display: flex;
-          flex-direction: column; /* Stack items vertically */
-          width: 100vh
+            display: flex;
+            flex-direction: column;
+            width: 100vh;
         }
 
         .left-section h2 {
-          margin-bottom: 10px; /* Adjust margin as needed */
-        }
-
-        /* Right Section with Profile Icon */
-        .right-section {
-          display: flex;
-          align-items: center;
-          width: 20vh;
-          height: 15vh;
-          justify-content: center;
+            margin-bottom: 10px;
         }
 
         .dropdown-menu {
             position: relative;
-          }
+        }
 
         .dropdown-menu:hover .hidden-menu {
             display: flex;
-            flex-direction: column
-
-          }
+            flex-direction: column;
+        }
 
         .hidden-menu {
             display: none;
@@ -93,28 +99,39 @@
             align-items: center;
         }
 
-        .dropdown-menu .hidden-menu{
+        .dropdown-menu .hidden-menu {
             position: absolute;
             top: 100%;
             left: 0;
             z-index: 1;
-            border: 1px solid #ccc; /* Add a border to the menu */
-            background-color: #fff; /* Set the background color for the menu */
-            border-radius: 5px; /* Add rounded corners to the menu */
-          }
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 5px;
+        }
 
         a {
-        color: #000000;
-        text-decoration: none;
-        padding: 8px 20px;
+            color: #000000;
+            text-decoration: none;
+            padding: 8px 20px;
         }
-</style>
+        .admin_dashboard {
+            border: solid;
+            padding: 2rem;
+            background-color: white;
+        }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin</title>
+        .tour {
+            border: solid;
+            padding: 2rem;
+            background-color: white;
+        }
+
+        .user {
+            border: solid;
+            padding: 2rem;
+            background-color: white;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -122,6 +139,24 @@
     </header>
     <h1>Welcome, to Your Guide administration</h1>
     <main>
+        <form action="{% if show_dashboard %}/hide_dashboard{% else %}/show_dashboard{% endif %}" method="get">
+            {% if show_dashboard %}
+                <button type="submit">Hide dashboard</button>
+            {% else %}
+                <button type="submit">Show dashboard</button>
+            {% endif %}
+        </form>
+        {% if show_dashboard %}
+            <div class="admin_dashboard">
+                <h1>Admin Dashboard</h1>
+                <p>Number of users: {{ num_users }}</p>
+                <p>Number of tours: {{ num_tours }}</p>
+                <p>Number of booked tours: {{ num_booked_tours }}</p>
+                <p>Number of guides: {{ num_guides }}</p>
+                <p>Number of regular users: {{ num_regular_users }}</p>
+            </div>
+        {% endif %}
+
         <form action="{% if show_all_tours %}/hide_tours{% else %}/show_all_tours{% endif %}" method="get">
             {% if show_all_tours %}
                 <button type="submit">Hide Tours</button>
@@ -137,7 +172,7 @@
             {% endif %}
         </form>
         {% if show_all_tours %}
-            <div id="tour-container" >
+            <div id="tour-container">
                 {% for tour in tours %}
                     <div class="tour">
                         <h2>{{ tour.title }}</h2>
@@ -170,7 +205,7 @@
                             <img src="https://webstockreview.net/images/pe-clipart-exercise-physiology-11.png"
                                  style="width: 50vh; max-height: 100vh;" alt="{{ user.username }}">
                         </div>
-                        <div class="text">
+                        <div class="user">
                             <p>Usertype: {{ user.usertype }}</p>
                             <p>Username: {{ user.username}}</p>
                             <p>Email: {{ user.emailAddress }}</p>
@@ -189,4 +224,4 @@
         <p>&copy; Copyright Gruppe 18</p>
     </footer>
 </body>
-</html>
+

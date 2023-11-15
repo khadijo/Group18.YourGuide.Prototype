@@ -1,5 +1,3 @@
-import uuid
-
 from Gruppe_18.src.main.model.models import Tour, guide_tour_association, Account
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 

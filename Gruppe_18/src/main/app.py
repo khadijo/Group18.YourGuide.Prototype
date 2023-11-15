@@ -1,5 +1,7 @@
 from flask_login import LoginManager, login_required, logout_user
-from Gruppe_18.src.main.model.models import Account, Tour
+from sqlalchemy import func
+
+from Gruppe_18.src.main.model.models import Account, Tour, guide_tour_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
@@ -113,6 +115,16 @@ def hide_all_users():
 def delete_account():
     return account_controller.deleting_account()
 
+
+@app.route('/show_dashboard', methods=['GET'])
+def show_dashboard():
+    data = account_rep.admin_dashboard()
+    return render_template('homepage_admin.html', **data, show_dashboard=True)
+
+
+@app.route('/hide_dashboard', methods=['GET'])
+def hide_dashboard():
+    return render_template('homepage_admin.html', show_dashboard=False)
 
 
 if __name__ == '__main__':

@@ -2,8 +2,9 @@ import uuid
 
 from flask import request, redirect, render_template, flash, url_for
 from flask_login import login_user, current_user
+from sqlalchemy import func
 
-from Gruppe_18.src.main.model.models import Account, Tour
+from Gruppe_18.src.main.model.models import Account, Tour, guide_tour_association
 
 
 class AccountController:
@@ -35,7 +36,8 @@ class AccountController:
             emailAddress = request.form.get('emailAddress')
 
             if username and password:
-                user = Account(id=str(uuid.uuid4()), usertype=usertype, username=username, password=password, phoneNumber=phoneNumber,
+                user = Account(id=str(uuid.uuid4()), usertype=usertype, username=username, password=password,
+                               phoneNumber=phoneNumber,
                                emailAddress=emailAddress)
                 self.account_repository.create_account(user)
                 return render_template('index.html')
@@ -69,7 +71,9 @@ class AccountController:
     def homepage_based_on_usertype(self):
         tours = self.session.query(Tour).all()
         if current_user.usertype == "admin":
-            return render_template('homepage_admin.html')
+            data = self.account_repository.admin_dashboard()
+            print(f"DETT ER DATA: {data}")
+            return render_template('homepage_admin.html', **data)
         elif current_user.usertype == "guide":
             return render_template('homepage_guide.html', tours=tours)
         else:
@@ -86,3 +90,5 @@ class AccountController:
         else:
             flash('You must be logged in to delete the account.', 'danger')
             return redirect(url_for('login'))
+
+
