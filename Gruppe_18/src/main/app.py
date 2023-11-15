@@ -1,14 +1,11 @@
-from flask_login import LoginManager, login_required, logout_user
-from sqlalchemy import func
-
-from Gruppe_18.src.main.model.models import Account, Tour, guide_tour_association
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from Gruppe_18.src.main.repository.TourRepository import TourRepository
-from flask import render_template, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
-from Gruppe_18.src.main.controller.TourController import TourController
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -125,6 +122,34 @@ def show_dashboard():
 @app.route('/hide_dashboard', methods=['GET'])
 def hide_dashboard():
     return render_template('homepage_admin.html', show_dashboard=False)
+
+
+# Delete user account
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    if current_user.is_authenticated:
+        account_email = current_user.emailAddress
+        account = session.query(Account).filter_by(emailAddress=account_email).first()
+        if account:
+            account_rep.delete_account(account_email)
+            session.commit()
+        return render_template('User_register.html')
+
+
+# Update user info
+@app.route('/update_user_info', methods=['POST'])
+def update_user_info():
+    if current_user.is_authenticated:
+        # Getting input values from user
+        new_username = request.form.get("username")
+        new_telephone_number = request.form.get("phoneNumber")
+        new_email = request.form.get("email")
+
+        current_email = current_user.emailAddress
+        account_rep.update_account(current_email, new_username, new_telephone_number,new_email)
+
+        session.commit()
+        return redirect(url_for('home'))
 
 
 if __name__ == '__main__':

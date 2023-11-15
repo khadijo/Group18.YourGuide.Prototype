@@ -38,50 +38,25 @@ class TourRepository(JSONRepository):
             return "Tour not found"
 
     def get_spesific_tour(self, id):
-        return self.session.query(Tour).filter_by(tour_id=id).first()
+        return self.session.query(Tour).filter_by(id=id).first()
     
     def get_all_tours(self):
         return self.session.query(Tour).all()
 
-    def filter_tour_by_destination(self, destination):
-        return self.session.query(Tour).filter_by(destination=destination).all()
-
-    def filter_tour_by_price(self, min_price, max_price):
-        return self.session.query(Tour).filter(Tour.cost.between(min_price, max_price)).all()
-
-    def filter_tour_by_language(self, language):
-        return self.session.query(Tour).filter_by(language=language).all()
-
-    def filter_tour_by_price_and_destination(self, destination, min_price, max_price):
-        return self.session.query(Tour).filter(Tour.cost.between(min_price, max_price))\
-            .filter_by(destination=destination).all()
-
-    def filter_tour_by_destination_and_language(self, destination, language):
-        return self.session.query(Tour).filter_by(destination=destination).filter_by(language=language).all()
-
-    def filter_tour_by_price_and_language(self, min_price, max_price, language):
-        return self.session.query(Tour).filter(Tour.cost.between(min_price, max_price))\
-            .filter_by(language=language).all()
-
-    def filter_tour_by_destination_price_language(self, destination, min_price, max_price, language):
-        return self.session.query(Tour).filter_by(destination=destination).filter_by(language=language)\
-            .filter(Tour.cost.between(min_price, max_price)).all()
-
     def filter_combinations(self, destination, min_price, max_price, language):
-        if destination and min_price and max_price and language:
-            return self.filter_tour_by_destination_price_language(destination, min_price, max_price, language)
-        elif destination and language:
-            return self.filter_tour_by_destination_and_language(destination, language)
-        elif destination and min_price and max_price:
-            return self.filter_tour_by_price_and_destination(destination, min_price, max_price)
-        elif min_price and max_price and language:
-            return self.filter_tour_by_price_and_language(min_price, max_price, language)
-        elif destination:
-            return self.filter_tour_by_destination(destination)
-        elif language:
-            return self.filter_tour_by_language(language)
-        elif min_price and max_price:
-            return self.filter_tour_by_price(min_price, max_price)
+        session = self.session
+        query = session.query(Tour)
+        if destination:
+            query = query.filter_by(destination=destination)
+        if min_price or max_price:
+            if not max_price:
+                max_price = 90000
+            if not min_price:
+                min_price = 0
+            query = query.filter(Tour.cost.between(min_price, max_price))
+        if language:
+            query = query.filter_by(language=language)
+        return query.all()
 
     def create_tour(self, tour):
         tour = Tour(id=tour.id,

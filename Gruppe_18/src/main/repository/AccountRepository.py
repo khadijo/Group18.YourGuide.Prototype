@@ -34,6 +34,17 @@ class AccountRepository(JSONRepository):
         self.session.commit()
         return account
 
+    # Update account
+    def update_account(self, email, new_username, new_telephone_number,new_email):
+        user = self.session.query(Account).filter_by(emailAddress=email).first()
+        user.username = new_username
+        user.phoneNumber = new_telephone_number
+        user.emailAddress = new_email
+        self.session.add(user)
+        self.session.commit()
+        return True
+
+    # Create a get account
     def account_register_to_tour(self, tour_id, user_id):
         existing_registration = self.session.query(tour_account_association).filter_by(
             tour_id=tour_id,
@@ -56,7 +67,7 @@ class AccountRepository(JSONRepository):
                 self.session.commit()
                 return True
             else:
-                print("Tour or user not found")
+                print("Tur eller bruker ble ikke funnet.")
 
     def account_cancel_tour(self, tour_id, user_id):
         tour = self.session.query(Tour).filter_by(id=tour_id).first()

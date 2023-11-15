@@ -8,7 +8,7 @@
 
         header input[type="text"] {
             padding: 10px;
-            width: 40%;
+            width: 25rem;
             border: none;
         }
 
@@ -104,11 +104,54 @@
           }
 
         a {
-        color: #000000;
-        text-decoration: none;
-        padding: 8px 20px;
+            color: #000000;
+            text-decoration: none;
+            padding: 8px 20px;
+        }
+        .filter-menu {
+            display: none;
+            background-color: #ffcc99;
+            padding: 6px;
         }
 
+        .filter-menu ul{
+            list-style-type: none;
+        }
+
+        .filter-menu ul li{
+            padding: 2px;
+        }
+
+        form[action="/home/filter"] input[type="submit"] {
+            background-color: #ff7f00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        form[action="/home/filter"] input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .filter-menu ul li input {
+            width: 100px;
+        }
+
+        .filter-menu ul li input#destination-input {
+             margin-left: 8px;
+        }
+
+        .filter-menu ul li input#language-input {
+            margin-left: 15px;
+        }
+
+        .button-placement{
+            margin-top: 63;
+            position: absolute;
+            margin-left: 500;
+        }
     </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -126,6 +169,7 @@
                 <button type="submit">Search</button>
             </form>
         </div>
+        <button class="filter-button button-placement">filter menu</button>
         <div class="right-section">
             <!-- Navbar -->
             <nav class="dropdown-menu">
@@ -133,12 +177,22 @@
                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
                 </svg>
                 <div class="hidden-menu">
-                    <a href="#">Profile</a>
+                    <a href="/profile">Profile</a>
                     <a href="/user_tours" class="your-tours-button">My tours</a>
                 </div>
             </nav>
         </div>
     </header>
+    <form action="/home/filter" method="post">
+        <div class="filter-menu">
+            <ul>
+                <li>Destination: <input type="text" id="destination-input" name="destination"></li>
+                <li>Price Range: <input type="number" id="min-price-input" name="min_price" placeholder="Min"> - <input type="number" id="max-price-input" name="max_price" placeholder="Max"></li>
+                <li>Language: <input type="text" id="language-input" name="language"></li>
+            </ul>
+            <input type="submit" value="Filter">
+        </div>
+    </form>
     <h1>Welcome, choose your adventure</h1>
     <main>
         <!-- For hver tur i listen av turer, generer HTML-innhold -->
@@ -167,5 +221,19 @@
         <p>&copy; Copyright Gruppe 18</p>
     </footer>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const filterButton = document.querySelector(".filter-button");
+            const filterMenu = document.querySelector(".filter-menu");
+
+            filterButton.addEventListener("click", function () {
+                if (filterMenu.style.display === "none" || filterMenu.style.display === "") {
+                    filterMenu.style.display = "block";
+                } else {
+                    filterMenu.style.display = "none";
+                }
+            });
+        });
+    </script>
 </body>
 </html>
