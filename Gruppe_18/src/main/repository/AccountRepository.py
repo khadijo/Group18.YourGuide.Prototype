@@ -91,13 +91,16 @@ class AccountRepository(JSONRepository):
             guide_tour_association, Account.id == guide_tour_association.c.guide_id
         ).filter(guide_tour_association.c.guide_id.isnot(None)).scalar()
 
+        num_admin = self.session.query(func.count(Account.id)).filter(Account.usertype == "admin").scalar()
+
         # Antall vanlige brukere
-        num_regular_users = num_users - num_guides
+        num_regular_users = num_users - (num_guides + num_admin)
 
         return {
             'num_users': num_users,
             'num_tours': num_tours,
             'num_booked_tours': num_booked_tours,
             'num_guides': num_guides,
+            'num_admin': num_admin,
             'num_regular_users': num_regular_users
         }
