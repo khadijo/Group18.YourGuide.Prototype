@@ -1,5 +1,5 @@
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
-from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
+from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association, guide_tour_association
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 
@@ -8,8 +8,8 @@ class AccountRepository(JSONRepository):
         self.session = session
         self.tour_repo = TourRepository(session)
 
-    def delete_account(self, user):
-        account_to_delete = self.session.query(Account).filter_by(username=user.username).first()
+    def delete_account(self, user_id):
+        account_to_delete = self.session.query(Account).filter_by(id=user_id).first()
 
         if account_to_delete:
             self.session.delete(account_to_delete)
@@ -19,7 +19,8 @@ class AccountRepository(JSONRepository):
         return False
 
     def create_account(self, user):
-        account = Account(usertype=user.usertype,
+        account = Account(id=user.id,
+                          usertype=user.usertype,
                           username=user.username,
                           password=user.password,
                           phoneNumber=user.phoneNumber,
@@ -29,6 +30,15 @@ class AccountRepository(JSONRepository):
         self.session.commit()
         return account
 
+    def update_account(self, email, new_username, new_telephone_number, new_email):
+        user = self.session.query(Account).filter_by(emailAddress=email).first()
+        user.username = new_username
+        user.phoneNumber = new_telephone_number
+        user.emailAddress = new_email
+        self.session.add(user)
+        self.session.commit()
+        return True
+
     def account_register_to_tour(self, tour_id, user_id):
         existing_registration = self.session.query(tour_account_association).filter_by(
             tour_id=tour_id,
@@ -36,7 +46,7 @@ class AccountRepository(JSONRepository):
         ).first()
 
         if existing_registration:
-            print("Du er allerede registrert for denne turen.")
+            print("You are already registered for that tour.")
         else:
             tour = self.session.query(Tour).filter_by(id=tour_id).first()
             user = self.session.query(Account).filter_by(id=user_id).first()
@@ -66,8 +76,10 @@ class AccountRepository(JSONRepository):
             self.session.execute(stmt)
             self.session.commit()
         else:
-            print("Tur eller bruker ble ikke funnet.")
+            print("Tour or user is not found.")
+
 
     def account_logged_in(self, status=False):
         logged_in = status
         return logged_in
+

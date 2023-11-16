@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from approvaltests.scrubbers import scrub_all_guids
 from sqlalchemy import create_engine
@@ -21,7 +22,7 @@ def tour_re():
 
 @pytest.fixture()
 def tour():
-    return Tour("Welcome to Dubai",
+    return Tour(str(uuid.uuid4()), "Welcome to Dubai",
         datetime.date(2020, 10, 15),
         "Dubai",
         4,
@@ -33,6 +34,7 @@ def tour():
 @pytest.fixture
 def tour_2():
     return Tour(
+        str(uuid.uuid4()),
     "Bergen Fjord Exploration",
     datetime.date(2024, 7, 10),
     "Bergen, Norway",
@@ -47,6 +49,7 @@ def tour_2():
 @pytest.fixture
 def tour_3():
     return Tour(
+        str(uuid.uuid4()),
     "Discover Oslo's Charm",
     datetime.date(2024, 8, 5),
     "Oslo, Norway",

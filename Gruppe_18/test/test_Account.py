@@ -1,5 +1,6 @@
 import os
 import datetime
+import uuid
 
 import pytest
 from approvaltests import verify, Options
@@ -31,6 +32,8 @@ def sqlalchemy_session():
 @pytest.fixture
 def account():
     return Account(
+        str(uuid.uuid4()),
+        "user",
         "username",
         "password",
         "12345678",
@@ -40,6 +43,7 @@ def account():
 @pytest.fixture
 def tour_1():
     return Tour(
+       uuid.uuid4(),
     "Discover Oslo's Charm",
     datetime.date(2024, 8, 5),
     "Oslo, Norway",
@@ -63,7 +67,7 @@ def tour_rep(sqlalchemy_session):
 
 def test_account_can_be_created_and_saved(account_rep, account, sqlalchemy_session):
     account_rep.create_account(account)
-    saved_account_from_db = sqlalchemy_session.query(Account).filter_by(username=account.username).first()
+    saved_account_from_db = sqlalchemy_session.query(Account).filter_by(id=account.id).first()
     assert saved_account_from_db.id is not None
     assert saved_account_from_db.username == account.username
     assert saved_account_from_db.password == account.password

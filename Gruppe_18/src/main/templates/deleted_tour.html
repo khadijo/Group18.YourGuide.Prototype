@@ -1,4 +1,4 @@
-   <style>
+<style>
    body {
        font-family: Arial, sans-serif;
        background-color: #f0f0f0;
@@ -44,15 +44,16 @@
    }
 
 </style>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tour Canceled</title>
+    <title>Tour Deleted</title>
 </head>
 <body>
-    <h1>Tour Canceled</h1>
-    <p>The following tour has been successfully canceled:</p>
+    <h1>Tour Deleted</h1>
+    <p>The following tour has been successfully deleted:</p>
     <h2>{{ tour.title }}</h2>
     <div class="image">
         <img src="{{ tour.pictureURL }}" style="width: 100vh; max-height: 50vh;" alt="{{ tour.title }}">
@@ -65,7 +66,6 @@
         <p>Max travelers: {{ tour.max_travelers }}</p>
         <p>Language: {{ tour.language }}</p>
     </div>
-    <a href="/user_tours" class="btn">Back to My Tours</a>
     <a href="/home" class="btn">Go back to Home</a>
 </body>
 </html>

@@ -66,19 +66,19 @@ Oslo = Tour(
     "https://th.bing.com/th/id/R.204fc958e56b888bc534eaeeb0d20e56?rik=%2fW47vQ1hMRsekA&pid=ImgRaw&r=0"
 )
 
-
+'''
 tour_repository.create_tour(Dubai)
 tour_repository.create_tour(Lofoten)
 tour_repository.create_tour(Hawaii)
 tour_repository.create_tour(Oslo)
-
+'''
 
 
 #result = tour_repository.book_tour(new_tour)
 #result1 = tour_repository.book_tour(new_tour)
+'''
 
-
-
+'''
 tour_repository.delete_tour("50856c60-208a-4316-8025-1c8ba5ff47e4")
 tour_repository.delete_tour("3bc8b319-400a-4b72-ba08-f82bdda82a24")
 
@@ -90,12 +90,7 @@ account_rep.account_register_to_tour("3bc8b319-400a-4b72-ba08-f82bdda82a24", "22
 account_rep.account_register_to_tour("50856c60-208a-4316-8025-1c8ba5ff47e4", "2258e3d1-edc2-4740-9757-b5ee64721904")
 session.commit()
 
-account = session.query(Account).all()
-print(account)
-account_rep.delete_account(account[len(account)- 1])
-session.commit()
 '''
-
 
 
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.pexels.com/photos/326119/pexels-photo-326119.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        width: 300px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form input {
+        border: 1.5px solid #7a7a7a;
+        margin: 9px 0;
+        width: 200px;
+        padding: 10px;
+        font-size: 15px;
+        background-color: #c1c4c2;
+
+}
+    }
+     input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<form method="POST" action="{{url_for('new_tour')}}">
+    <input type="text" name="title" placeholder="title" required>
+    <input type="text" name="date" placeholder="yy-mm-dd" required>
+    <input type="text" name="destination" placeholder="destination" required>
+    <input type="text" name="duration" placeholder="duration" required>
+    <input type="text" name="cost" placeholder="cost" required>
+    <input type="text" name="max_travelers" placeholder="max travlers" required>
+    <input type="text" name="language" placeholder="language" required>
+    <input type="text" name="pictureURL" placeholder="pictureURL" required>
+    <input type="submit" value="Post">
+</form>
+
+</body>
+</html>

@@ -1,150 +1,203 @@
 <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
 
-        header input[type="text"] {
-            padding: 10px;
-            width: 40%;
-            border: none;
-        }
+    main {
+        padding: 20px;
+    }
 
-        main {
-            padding: 20px;
-        }
+    h2 {
+        font-size: 24px;
+    }
 
-        h2 {
-            font-size: 24px;
-        }
+    p {
+        font-size: 16px;
+        line-height: 1.5;
+        white-space: pre-line;
+    }
 
+    button {
+        background-color: #ff7f00;
+        color: white;
+        padding: 10px 20px;
+        border: solid;
+        cursor: pointer;
+    }
 
+    button:hover {
+        background-color: #0056b3;
+    }
 
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-            white-space: pre-line;
-        }
+    footer {
+        background-color: #ff7f00;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+    }
 
-        button {
-            background-color: #ff7f00;
-            color: white;
-            padding: 10px 20px;
-            border: solid;
-            cursor: pointer;
-        }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ff7f00;
+        color: #fff;
+        padding: 10px 20px;
+    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+    .left-section {
+        display: flex;
+        flex-direction: column;
+        width: 100vh;
+    }
 
-        footer {
-            background-color: #ff7f00;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-        }
+    .left-section h2 {
+        margin-bottom: 10px;
+    }
 
-        header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background-color: #ff7f00;
-          color: #fff;
-          padding: 10px 20px;
-        }
+    .right-section {
+        display: flex;
+        align-items: center;
+        width: 29vh;
+        height: 15vh;
+        justify-content: center;
+    }
 
-        /* Left Section with H2 and Search Bar */
-        .left-section {
-          display: flex;
-          flex-direction: column; /* Stack items vertically */
-          width: 100vh
-        }
+    .dropdown-menu {
+        position: relative;
+    }
 
-        .left-section h2 {
-          margin-bottom: 10px; /* Adjust margin as needed */
-        }
+    .dropdown-menu:hover .hidden-menu {
+        display: flex;
+        flex-direction: column;
+    }
 
-        /* Right Section with Profile Icon */
-        .right-section {
-          display: flex;
-          align-items: center;
-          width: 20vh;
-          height: 15vh;
-          justify-content: center;
-        }
+    .hidden-menu {
+        display: none;
+        width: 20vh;
+        margin-left: -8vh;
+        align-items: center;
+    }
 
-        .dropdown-menu {
-            position: relative;
-          }
+    .dropdown-menu .hidden-menu {
+        position: absolute;
+        width: 10rem;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+    }
 
-        .dropdown-menu:hover .hidden-menu {
-            display: flex;
-            flex-direction: column
-
-          }
-
-        .hidden-menu {
-            display: none;
-            width: 20vh;
-            margin-left: -8vh;
-            align-items: center;
-        }
-
-        .dropdown-menu .hidden-menu{
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1;
-            border: 1px solid #ccc; /* Add a border to the menu */
-            background-color: #fff; /* Set the background color for the menu */
-            border-radius: 5px; /* Add rounded corners to the menu */
-          }
-
-        a {
+    a {
         color: #000000;
         text-decoration: none;
         padding: 8px 20px;
-        }
+    }
 
-    </style>
+    .filter-menu {
+        display: none;
+        background-color: #ffcc99;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 1;
+    }
+
+    .filter-menu ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .filter-menu ul li {
+        padding: 5px 0;
+    }
+
+    .filter-menu ul li input {
+        width: 150px;
+        padding: 5px;
+        margin-left: 8px;
+    }
+
+    .filter-menu ul li input#destination-input {
+        margin-left: 0;
+    }
+
+    .filter-menu input[type="submit"] {
+        background-color: #ff7f00;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .filter-menu input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    header input[type="text"] {
+        padding: 10px;
+        width: 25rem;
+        border: none;
+    }
+
+    .button-placement{
+        margin-top: 6.3;
+        position: absolute;
+        margin-left: 500;
+    }
+
+</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <style>
-        /* Stildefinisjoner går her */
-    </style>
 </head>
 <body>
     <header class="header">
         <div class="left-section">
             <h1 class="yourtour">Your Guide</h1>
-            <!-- Legg til funksjonalitet for søkefeltet -->
             <form action="/search" method="get" class="search-bar">
                 <input type="text" name="q" placeholder="Search">
                 <button type="submit">Search</button>
             </form>
+             <form action="/new_tour" method="get">
+                <button type="submit">New Tour</button>
+            </form>
         </div>
+        <button class="filter-button button-placement">filter menu</button>
         <div class="right-section">
-            <!-- Navbar -->
             <nav class="dropdown-menu">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi" viewBox="0 0 16 16">
                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
                 </svg>
                 <div class="hidden-menu">
-                    <a href="#">Profile</a>
+                    <a href="/profile">Profile</a>
                     <a href="/user_tours" class="your-tours-button">My tours</a>
+                    <a href="/guide_tours" class="your-tours-button">Published tours</a>
                 </div>
             </nav>
         </div>
     </header>
-    <h1>Welcome, choose your adventure</h1>
+    <form action="/home/filter" method="post">
+        <div class="filter-menu">
+            <ul>
+                <li>Destination: <input type="text" id="destination-input" name="destination"></li>
+                <li>Price Range: <input type="number" id="min-price-input" name="min_price" placeholder="Min"> - <input type="number" id="max-price-input" name="max_price" placeholder="Max"></li>
+                <li>Language: <input type="text" id="language-input" name="language"></li>
+            </ul>
+            <input type="submit" value="Filter">
+        </div>
+    </form>
+    <h1>Welcome, choose your adventure or give others many adventures</h1>
     <main>
-        <!-- For hver tur i listen av turer, generer HTML-innhold -->
         {% for tour in tours %}
         <div class="tour">
             <h2>{{ tour.title }}</h2>
@@ -169,6 +222,20 @@
     <footer>
         <p>&copy; Copyright Gruppe 18</p>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const filterButton = document.querySelector(".filter-button");
+            const filterMenu = document.querySelector(".filter-menu");
+
+            filterButton.addEventListener("click", function () {
+                if (filterMenu.style.display === "none" || filterMenu.style.display === "") {
+                    filterMenu.style.display = "block";
+                } else {
+                    filterMenu.style.display = "none";
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

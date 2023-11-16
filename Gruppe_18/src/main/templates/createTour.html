@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Tour</title>
+</head>
+<style>
+    body {
+        font-family: sans-serif regular;
+        background-color: #fff;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    main {
+        margin-top: 2vh;
+        margin-bottom: 2vh
+    }
+
+     footer {
+        background-color: #ff7f00;
+        color: #fff;
+
+        }
+
+     form {
+        display: flex;
+        flex-direction: column;
+        align-items: center
+    }
+    input{
+      width: 34vh;
+      margin-bottom: 10px;
+      height: 3vh;
+      border-radius: 3px;
+      padding: 10px;
+    }
+
+    label {
+        width: fit-content;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    input:hover {
+        background-color: #0056b3;
+        color: #fff;
+        border-radius: 4px;
+    }
+
+    button {
+         background-color: #ff7f00;
+         color: white;
+         padding: 10px 20px;
+         border: solid;
+         cursor: pointer;
+         border-radius: 25%;
+    }
+
+    button:hover {
+         background-color: #0056b3;
+    }
+
+    header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #ff7f00;
+          color: #fff;
+        }
+
+    .left-section {
+       display: flex;
+       flex-direction: column;
+       width: 100vh
+    }
+
+    .left-section h2 {
+        margin-bottom: 10px;
+    }
+
+    .right-section {
+        display: flex;
+        align-items: center;
+        width: 20vh;
+        height: 15vh;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        position: relative;
+    }
+
+    .dropdown-menu:hover .hidden-menu {
+        display: flex;
+        flex-direction: column
+    }
+
+    .hidden-menu {
+        display: none;
+        width: 20vh;
+        margin-left: -8vh;
+        align-items: center;
+    }
+
+    .dropdown-menu .hidden-menu{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+
+    a {
+        color: #000000;
+        text-decoration: none;
+        padding: 8px 20px;
+    }
+
+    .yourtour {
+        color: #fff;
+    }
+    .buttons-style {
+        display: flex;
+        flex-direction: row;
+    }
+
+</style>
+<body>
+<header>
+        <div class="left-section">
+            <a href="/homepage"><h1 class="yourtour">Your Guide</h1></a>
+        </div>
+
+        <div class="right-section">
+            <!-- Navbar -->
+            <nav class="dropdown-menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+                </svg>
+                <div class="hidden-menu">
+                    <a href="/profile">Profile</a>
+                    <a href="/user_tours" class="your-tours-button">My tours</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+<main>
+
+    <form class="create-tour-form">
+
+        <label>Title</label>
+        <input placeholder="Place enter title for the tour">
+        <label>Date</label>
+        <input type="date">
+        <label>Destination</label>
+        <input placeholder="Enter city,Country">
+        <label>Duration</label>
+        <input placeholder="How many days">
+        <label>Price</label>
+        <input placeholder="The price is in NOK">
+        <label>Max travelers</label>
+        <input placeholder="Max travelers are 50">
+        <label>Language</label>
+        <input placeholder="Which language are you speaking in?">
+        <label>Picture</label>
+        <input placeholder="Please provide a URL">
+        <div class="buttons-style">
+        <button>Submit</button>
+        <button>Cancel</button>
+            </div>
+
+    </form>
+
+</main>
+<footer>
+    <p>Gruppe 18</p>
+</footer>
+</body>
+</html>

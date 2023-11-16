@@ -7,10 +7,10 @@ from Gruppe_18.src.main.controller.tourController import tourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from flask import render_template, request, flash, redirect, url_for
-from Gruppe_18.src.main.repository.TourRepository import TourRepository
+from flask import render_template, redirect, url_for
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -23,10 +23,12 @@ db_path = test_database if is_testing else "YourGuide.db"
 
 session = get_session(db_path)
 account_rep = AccountRepository(session)
-account_controller = AccountController(account_rep)
 tour_rep = TourRepository(session)
-tourC = tourController(tour_rep)
+account_controller = AccountController(account_rep, session)
+tour_controller = TourController(tour_rep, session)
 app.secret_key = 'gruppe_18'
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -40,29 +42,12 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    return account_controller.account_login()
 
-        user = session.query(Account).filter_by(username=username).first()
-
-        if user and user.password == password:
-            login_user(user, remember=True)
-            return redirect(url_for('home'))
-
-        flash('Wrong username or password', 'danger')
-
-    return render_template('index.html')
 
 @app.route('/home')
 def home():
-    if current_user.usertype == "user":
-        tours = session.query(Tour).all()
-        return render_template('homepage.html', tours=tours)
-    elif current_user.usertype == "guide":
-        tours = session.query(Tour).all()
-        return render_template('homepage_guide.html', tours=tours)
-
+    return tour_controller.homepage_based_on_usertype()
 
 
 @app.route('/logout')
@@ -74,81 +59,103 @@ def logout():
 
 @app.route('/account_reg', methods=['GET', 'POST'])
 def account_reg():
-    if request.method == 'POST':
-        usertype = request.form.get('usertype')
-        username = request.form.get('username')
-        password = request.form.get('password')
-        phoneNumber = request.form.get('phoneNumber')
-        emailAddress = request.form.get('emailAddress')
-
-        if username and password:
-            user = Account(usertype=usertype, username=username, password=password, phoneNumber=phoneNumber, emailAddress=emailAddress)
-            account_rep.create_account(user)
-            return render_template('index.html')
-
-    return render_template('User_register.html')
+    return account_controller.account_registration()
 
 
 @app.route('/search', methods=['GET'])
 def search():
-    q = request.args.get("q")
-    # q is short for query
-    print(str(q))
-    qs = str(q)
-    if q:
-        results = session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
-        # on the above code, please order the result
-        print(str(q))
-        print(results)
-    else:
-        results = []
-    return render_template("homepage.html", tours=results)
+    return tour_controller.search_tour()
 
-# Run this code to open the application
 
 @app.route('/register_for_tour', methods=['POST'])
 def register_for_tour():
-    if current_user.is_authenticated:
-        tour_id = request.form.get('tour_id')
-        user_id = current_user.id
-
-        account_rep.account_register_to_tour(tour_id, user_id)
-        return redirect(url_for('user_tours'))
-    else:
-        flash('You must be logged in to register for a tour', 'danger')
-        return redirect(url_for('home'))
-
+    return account_controller.tour_registration()
 
 
 @app.route('/user_tours')
 def user_tours():
-    if current_user.is_authenticated:
-        user_id = current_user.id
-        user_tours = session.query(Tour).join(
-            tour_account_association, Tour.id == tour_account_association.c.tour_id
-        ).filter(tour_account_association.c.account_id == user_id).all()
-
-        user = session.query(Account).filter_by(id=user_id).first()
-
-        return render_template('user_tours.html', user_tours=user_tours, user=user)
-    else:
-        flash('You must be logged in to see your registered tours.', 'danger')
-        return redirect(url_for('login'))
+    return tour_controller.get_user_tours()
 
 
 @app.route('/cancel_tour', methods=['POST'])
 def cancel_tour():
-    if current_user.is_authenticated:
-        tour_id = request.form.get('tour_id')
-        user_id = current_user.id
-        tour = session.query(Tour).filter_by(id=tour_id).first()
-        if tour:
-            account_rep.account_cancel_tour(tour_id, user_id)
-            session.commit()
-        return render_template('canceled_tour.html', tour=tour)
-    else:
-        flash('You must be logged in to cancel a tour.', 'danger')
-        return redirect(url_for('login'))
+    return account_controller.account_cancel_tour()
+
+
+@app.route('/new_tour', methods=['POST', 'GET'])
+def new_tour():
+    return tour_controller.make_new_tour()
+
+
+@app.route('/guide_tours')
+def guide_tours():
+    return tour_controller.show_guide_tour()
+
+
+@app.route('/delete_tour', methods=['POST'])
+def delete_tour():
+    return tour_controller.deleting_tour()
+
+
+@app.route('/show_all_tours', methods=['GET'])
+def show_tours():
+    tours = session.query(Tour).all()
+    return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
+
+
+@app.route('/hide_tours', methods=['GET'])
+def hide_tours():
+    return render_template('homepage_admin.html', show_all_tours=False)
+
+
+@app.route('/show_all_users', methods=['GET'])
+def show_all_users():
+    users = session.query(Account).all()
+    return render_template('homepage_admin.html', users=users, show_all_users=True)
+
+
+@app.route('/hide_all_users', methods=['GET'])
+def hide_all_users():
+    return render_template('homepage_admin.html', show_all_users=False)
+
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    return account_controller.deleting_account()
+
+
+@app.route('/show_dashboard', methods=['GET'])
+def show_dashboard():
+    data = tour_rep.admin_dashboard()
+    return render_template('homepage_admin.html', **data, show_dashboard=True)
+
+
+@app.route('/hide_dashboard', methods=['GET'])
+def hide_dashboard():
+    return render_template('homepage_admin.html', show_dashboard=False)
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    user_data = load_user(current_user.get_id())
+    return render_template('profile.html', user_data=user_data)
+
+
+@app.route('/home/filter', methods=['GET', 'POST'])
+def filter_tour():
+    return tour_controller.filter_app()
+
+
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    return account_controller.delete_my_account()
+
+
+# Update user info
+@app.route('/update_user_info', methods=['POST'])
+def update_user_info():
+    return account_controller.update_user_information()
 
 
 @app.route('/home/filter', methods=['GET','POST'])

@@ -1,4 +1,6 @@
-from Gruppe_18.src.main.model.models import Tour
+from sqlalchemy import func
+
+from Gruppe_18.src.main.model.models import Tour, guide_tour_association, Account
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 
 
@@ -62,7 +64,8 @@ class TourRepository(JSONRepository):
         return self.session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
 
     def create_tour(self, tour):
-        tour = Tour(title=tour.title,
+        tour = Tour(id=tour.id,
+                    title=tour.title,
                     date=tour.date,
                     destination=tour.destination,
                     duration=tour.duration,
@@ -70,10 +73,35 @@ class TourRepository(JSONRepository):
                     max_travelers=tour.max_travelers,
                     language=tour.language,
                     pictureURL=tour.pictureURL)
-
         self.session.add(tour)
         self.session.commit()
         return tour
+
+    def guide_register_to_tour(self, tour_id, user_id):
+        print(f"Tour ID: {tour_id}, Guide ID: {user_id}")
+        existing_registration = self.session.query(guide_tour_association).filter_by(
+            tour_id=tour_id,
+            guide_id=user_id
+        ).first()
+
+        if existing_registration:
+            print("You have already posted that tour.")
+        else:
+            tour = self.session.query(Tour).filter_by(id=tour_id).first()
+            guide = self.session.query(Account).filter_by(id=user_id).first()
+            print(f"Tour: {tour}")
+            print(f"Guide: {guide}")
+
+            if tour is not None and guide is not None:
+                tour_guide_assoc_obj = guide_tour_association.insert().values(
+                    tour_id=tour_id,
+                    guide_id=user_id
+                )
+                self.session.execute(tour_guide_assoc_obj)
+                self.session.commit()
+                return True
+            else:
+                print("Tour or guide were not found.")
 
     def delete_tour(self, tour_id):
         tour = self.session.query(Tour).filter_by(id=tour_id).first()
@@ -85,3 +113,45 @@ class TourRepository(JSONRepository):
         else:
             return False
 
+    def guide_delete_tour(self, tour_id, user_id):
+        tour = self.session.query(Tour).filter_by(id=tour_id).first()
+        user = self.session.query(Account).filter_by(id=user_id).first()
+
+        if tour is not None and user is not None:
+            stmt = guide_tour_association.delete().where(
+                guide_tour_association.c.tour_id == tour_id,
+                guide_tour_association.c.guide_id == user_id
+            )
+            self.delete_tour(tour.id)
+            self.session.execute(stmt)
+            self.session.commit()
+        else:
+            print("Tour or user is not found.")
+
+    def admin_dashboard(self):
+        # Antall brukere
+        num_users = self.session.query(func.count(Account.id)).scalar()
+
+        # Antall turer
+        num_tours = self.session.query(func.count(Tour.id)).scalar()
+
+        # Antall bookede turer
+        num_booked_tours = self.session.query(func.sum(Tour.booked)).scalar()
+        # Antall guider
+        num_guides = self.session.query(func.count(Account.id)).join(
+            guide_tour_association, Account.id == guide_tour_association.c.guide_id
+        ).filter(guide_tour_association.c.guide_id.isnot(None)).scalar()
+
+        num_admin = self.session.query(func.count(Account.id)).filter(Account.usertype == "admin").scalar()
+
+        # Antall vanlige brukere
+        num_regular_users = num_users - (num_guides + num_admin)
+
+        return {
+            'num_users': num_users,
+            'num_tours': num_tours,
+            'num_booked_tours': num_booked_tours,
+            'num_guides': num_guides,
+            'num_admin': num_admin,
+            'num_regular_users': num_regular_users
+        }
