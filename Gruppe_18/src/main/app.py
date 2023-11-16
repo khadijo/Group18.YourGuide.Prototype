@@ -17,7 +17,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 is_testing = os.environ.get("locust_test", False)
-test_database = os.path.abspath('../../test/Test2.db')
+test_database = os.path.abspath('../../test/Test.db')
 
 db_path = test_database if is_testing else "YourGuide.db"
 
