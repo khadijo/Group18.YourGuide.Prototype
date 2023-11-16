@@ -1,13 +1,15 @@
 from flask_login import LoginManager, login_required, logout_user, current_user
+from flask_sqlalchemy import SQLAlchemy
 
 from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour
-from Gruppe_18.src.main.database.sql_alchemy import app
+from Gruppe_18.src.main.database.app_config import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from flask import render_template, redirect, url_for
-from Gruppe_18.src.main.database.sql_alchemy import get_session
+from Gruppe_18.src.main.database.create_data_db import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
