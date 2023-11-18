@@ -10,8 +10,6 @@ from Gruppe_18.src.main.database.create_data_db import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
-
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -150,6 +148,11 @@ def delete_user():
 @app.route('/update_user_info', methods=['POST'])
 def update_user_info():
     return account_controller.update_user_information()
+
+
+@app.route('/upgrade_usertype', methods=['POST'])
+def upgrade_usertype():
+    return account_controller.update_usertype()
 
 
 if __name__ == '__main__':
