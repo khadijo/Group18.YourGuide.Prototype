@@ -1,9 +1,8 @@
 from sqlalchemy import Table, Column, String, Integer, ForeignKey, DATETIME
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
-import uuid
 
-from Gruppe_18.src.main.database.sql_alchemy import db
+from Gruppe_18.src.main.database.app_config import db
 
 tour_account_association = Table(
     'tour_account_association', db.metadata,
