@@ -1,12 +1,12 @@
 import os
 import datetime
 import uuid
+from sqlite3 import IntegrityError
 
 import pytest
 from approvaltests import Options
 from approvaltests.scrubbers import scrub_all_guids
 from sqlalchemy import create_engine
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import Account, db, Tour
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
@@ -74,9 +74,13 @@ def tour_rep(sqlalchemy_session):
 def test_account_creation_and_saving(account_rep, account, sqlalchemy_session, attribute):
     account_rep.create_account(account)
     saved_account_from_db = sqlalchemy_session.query(Account).filter_by(id=account.id).first()
-    assert saved_account_from_db.id is not None
 
     assert getattr(saved_account_from_db, attribute) == getattr(account, attribute)
+
+
+def test_account_missing_id_raises_integrity_error(account, account_rep, sqlalchemy_session):
+    account.id = None
+    assert account_rep.create_account(account) is False
 
 
 def test_account_missing_id_gives_failed_registration(account, account_rep, sqlalchemy_session):
@@ -84,12 +88,15 @@ def test_account_missing_id_gives_failed_registration(account, account_rep, sqla
     with pytest.raises(IntegrityError):
         account_rep.create_account(account)
         saved_account_from_db = sqlalchemy_session.query(Account).filter_by(id=account.id).first()
+
         assert saved_account_from_db.id is None
 
 
-def test_account_missing_information_gives_failed_registration(account, account_rep, sqlalchemy_session):
-    account.username = None  # Or set to an empty string, depending on your requirements
-    assert account_rep.create_account(account) == False
+@pytest.mark.parametrize("missing_column", ["usertype", "username", "password", "phoneNumber", "emailAddress"])
+def test_account_missing_information_returns_false(account, account_rep, sqlalchemy_session, missing_column):
+    setattr(account, missing_column, None)
+
+    assert account_rep.create_account(account) is False
 
 
 '''

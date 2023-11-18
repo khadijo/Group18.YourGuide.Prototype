@@ -1,12 +1,8 @@
 import uuid
 from datetime import datetime
-
 from flask import render_template, request, flash, redirect, url_for
 from sqlite3 import IntegrityError
-
 from flask_login import current_user
-from Gruppe_18.src.main.controller.AccountController import AccountController
-from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.model.models import Tour, tour_account_association, Account, guide_tour_association
 
 
@@ -38,8 +34,6 @@ class TourController():
             except IntegrityError:
                 flash('there was a mistake', 'danger')
                 return self.homepage_based_on_usertype()
-
-
 
     def search_tour(self):
         q = request.args.get("q")

@@ -2,7 +2,7 @@ import datetime
 import uuid
 
 from Gruppe_18.src.main.model.models import Tour, Account
-from Gruppe_18.src.main.database.sql_alchemy import get_session
+from Gruppe_18.src.main.database.create_data_db import get_session
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 
@@ -82,13 +82,11 @@ tour_repository.create_tour(Oslo)
 account_rep.create_account(a)
 account_rep.create_account(b)
 account_rep.create_account(g)
-''''''
+'''
 
 #result = tour_repository.book_tour(new_tour)
 #result1 = tour_repository.book_tour(new_tour)
-'''
 
-account_rep.create_account(a)
 '''
 tour_repository.delete_tour("b2ad50e1-ac86-4ecf-bf51-feeda5a910a3")
 tour_repository.delete_tour("c1f09a81-118b-4ca1-8f47-b387125f853f")
