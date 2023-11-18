@@ -1,8 +1,6 @@
 import uuid
-
 from flask import request, redirect, render_template, flash, url_for
 from flask_login import login_user, current_user
-
 from Gruppe_18.src.main.model.models import Account, Tour, guide_tour_association
 
 

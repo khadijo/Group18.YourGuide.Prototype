@@ -1,3 +1,5 @@
+from sqlite3 import IntegrityError
+
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association, guide_tour_association
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
@@ -19,16 +21,25 @@ class AccountRepository(JSONRepository):
         return False
 
     def create_account(self, user):
-        account = Account(id=user.id,
-                          usertype=user.usertype,
-                          username=user.username,
-                          password=user.password,
-                          phoneNumber=user.phoneNumber,
-                          emailAddress=user.emailAddress)
+        try:
+            if any(value is None for value in [user.usertype, user.username, user.password, user.phoneNumber, user.emailAddress]):
+                return False
+            else:
+                account = Account(id=user.id,
+                                  usertype=user.usertype,
+                                  username=user.username,
+                                  password=user.password,
+                                  phoneNumber=user.phoneNumber,
+                                  emailAddress=user.emailAddress)
 
-        self.session.add(account)
-        self.session.commit()
-        return account
+                self.session.add(account)
+                self.session.commit()
+                return True
+
+        except IntegrityError:
+            self.session.rollback()
+            return False
+
 
     def update_account(self, email, new_username, new_telephone_number, new_email):
         user = self.session.query(Account).filter_by(emailAddress=email).first()

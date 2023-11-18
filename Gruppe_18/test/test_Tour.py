@@ -1,7 +1,7 @@
 from io import StringIO
 
 import pytest
-from Gruppe_18.src.main.modell.Tour import Tour
+from Gruppe_18.src.main.model.models import Tour
 from approvaltests import verify, Options
 from approvaltests.scrubbers import scrub_all_guids
 from Gruppe_18.src.main.repository.TourRepository import TourRepository

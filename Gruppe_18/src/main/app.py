@@ -11,6 +11,7 @@ from Gruppe_18.src.main.controller.AccountController import AccountController
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
