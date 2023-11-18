@@ -45,7 +45,6 @@ class TourController():
         q = request.args.get("q")
         if q:
             results = self.tour_repository.search_tour(q)
-            print(results)
         else:
             results = []
         return self.homepage_based_on_usertype(tours=results)
@@ -81,7 +80,7 @@ class TourController():
             self.tour_repository.create_tour(tour)
             guide_id = current_user.id
             self.tour_repository.guide_register_to_tour(tour.id, guide_id)
-            tours = self.session.query(Tour).all()
+            tours = self.tour_repository.get_all_tours()
             return render_template('homepage_guide.html', tours=tours)
 
         return render_template('new_tour.html')
@@ -104,7 +103,7 @@ class TourController():
         if current_user.is_authenticated:
             tour_id = request.form.get('tour_id')
             user_id = current_user.id
-            tour = self.session.query(Tour).filter_by(id=tour_id).first()
+            tour = self.tour_repository.get_spesific_tour(tour_id)
             if tour:
                 self.tour_repository.guide_delete_tour(tour_id, user_id)
                 self.session.commit()
