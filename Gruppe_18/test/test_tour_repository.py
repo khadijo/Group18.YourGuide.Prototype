@@ -14,6 +14,7 @@ from Gruppe_18.test.database.database_handler import get_session
 import datetime
 from Gruppe_18.src.main.model.models import Tour
 
+approved_files_directory = os.path.join(os.path.dirname(__file__), "approved_files")
 
 @pytest.fixture
 def tour_re():
@@ -98,6 +99,7 @@ approval_options = Options().with_scrubber(scrub_all_guids)
 
 def test_if_tour_is_created_saved_and_retrived(tour_re, sqlalchemy_session):
     saved_data = tour_re.get_all_tours()
+
     verify(saved_data, options=approval_options)
 
 

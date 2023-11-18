@@ -43,13 +43,8 @@ class TourController():
 
     def search_tour(self):
         q = request.args.get("q")
-        # q is short for query
-        print(str(q))
-        qs = str(q)
         if q:
-            results = self.session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
-            # on the above code, please order the result
-            print(str(q))
+            results = self.tour_repository.search_tour(q)
             print(results)
         else:
             results = []

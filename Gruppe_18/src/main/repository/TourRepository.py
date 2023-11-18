@@ -61,7 +61,7 @@ class TourRepository(JSONRepository):
         return query.all()
 
     def search_tour(self, q):
-        return self.session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
+        return self.session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title).all()
 
     def create_tour(self, tour):
         tour = Tour(id=tour.id,
