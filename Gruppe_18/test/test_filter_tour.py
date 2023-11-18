@@ -62,7 +62,7 @@ def tour_3():
 
 @pytest.fixture()
 def tour_4():
-    return Tour(
+    return Tour(str(uuid.uuid4()),
     "Discover Oslo's Charm",
     datetime.date(2024, 8, 5),
     "Oslo, Norway",

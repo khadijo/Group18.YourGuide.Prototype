@@ -3,7 +3,7 @@ import os
 import sqlalchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
-from Gruppe_18.src.main.controller.tourController import tourController
+from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
 from Gruppe_18.src.main.database.sql_alchemy import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
@@ -17,7 +17,9 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 is_testing = os.environ.get("locust_test", False)
+
 test_database = os.path.abspath('../../test/Test.db')
+print(is_testing)
 
 db_path = test_database if is_testing else "YourGuide.db"
 
@@ -142,11 +144,6 @@ def profile():
     return render_template('profile.html', user_data=user_data)
 
 
-@app.route('/home/filter', methods=['GET', 'POST'])
-def filter_tour():
-    return tour_controller.filter_app()
-
-
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
     return account_controller.delete_my_account()
@@ -161,7 +158,7 @@ def update_user_info():
 @app.route('/home/filter', methods=['GET','POST'])
 def filter_tour():
     try:
-        return tourC.filter_app()
+        return tour_controller.filter_app()
     except sqlalchemy.exc.InvalidRequestError as e:
         return redirect(url_for('home'))
 

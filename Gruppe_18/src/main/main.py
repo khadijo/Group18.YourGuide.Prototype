@@ -4,11 +4,13 @@ from Gruppe_18.src.main.model.models import Tour, Account
 from Gruppe_18.src.main.database.sql_alchemy import get_session
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
+from Gruppe_18.src.main.model.models import Tour, guide_tour_association, Account
 
 session = get_session("YourGuide.db")
-''''
+
 account_rep = AccountRepository(session)
 tour_repository = TourRepository(session)
+'''
 a = Account(
         "user",
         "username",
@@ -67,10 +69,12 @@ Oslo = Tour(
 )
 
 '''
+'''
 tour_repository.create_tour(Dubai)
 tour_repository.create_tour(Lofoten)
 tour_repository.create_tour(Hawaii)
 tour_repository.create_tour(Oslo)
+'''
 '''
 
 
@@ -88,9 +92,12 @@ tour_repository.delete_tour("be56083c-4c4a-4064-a55a-b9a8f50409da")
 print(tour_repository.get_tour_description("67eed256-fef7-4314-8900-b543cf5a3ecd"))
 account_rep.account_register_to_tour("3bc8b319-400a-4b72-ba08-f82bdda82a24", "2258e3d1-edc2-4740-9757-b5ee64721904")
 account_rep.account_register_to_tour("50856c60-208a-4316-8025-1c8ba5ff47e4", "2258e3d1-edc2-4740-9757-b5ee64721904")
+'''
+all_accounts = session.query(User).all()
+print(all_accounts)
+account_rep.delete_account(all_accounts[len(all_accounts)-1])
 session.commit()
 
-'''
 
 
 

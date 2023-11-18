@@ -1,5 +1,6 @@
 import os
 import subprocess
+import uuid
 
 from locust import HttpUser, task, between
 
@@ -7,7 +8,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
 
-#oppretter test database
+# NB app.py skal ikke kjøre samtidi som locust_test. den kjører app her med test_database tilknyttet
+
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "Test.db")
@@ -30,37 +32,66 @@ class MyUser(HttpUser):
         response = self.client.get("/")
 
     @task
-    def access_account_reg(self):
-        register = self.client.post("/account_reg",
-                                    data={'usertype': 'user', 'username': 'testuser', 'password': 'testpassword',
-                                          'phoneNumber': '123456789', 'emailAddress': 'testuser@example.com'})
+    def access_user(self):
+        with session.begin():
+            username = str(uuid.uuid4())
+            password = str(uuid.uuid4())
+            register = self.client.post("/account_reg",
+                                        data={'usertype': 'user',
+                                              'username': username,
+                                              'password': password,
+                                              'phoneNumber': '123456789',
+                                              'emailAddress': 'testuser@example.com'})
+
+        if register.status_code == 200:
+            response_login = self.client.post("/login", data={'username': username, 'password': password})
+
+            if response_login.status_code == 200:
+                respons_home = self.client.get("/home")
+
+                response_filter = self.client.post("/home/filter",
+                                            data={'destination': 'some_destination',
+                                                  'max_price': 'some_max_price',
+                                                  'min_price': 'some_min_price',
+                                                  'language': 'some_language'})
+
+                response_search = self.client.get("/search?q=dubai")
 
     @task
-    def access_login_user(self):
-        response_login = self.client.post("/login", data={'username': 'username', 'password': 'password'})
+    def access_guider(self):
+        with session.begin():
+            username = str(uuid.uuid4())
+            password = str(uuid.uuid4())
+            register = self.client.post("/account_reg",
+                                        data={
+                                            'usertype': 'guide',
+                                            'username': username,
+                                            'password': password,
+                                            'phoneNumber': '123456789',
+                                            'emailAddress': 'testuser@example.com'})
+            session.commit()
+        if register.status_code == 200:
+            with session.begin():
+                create_tour = self.client.post('/new_tour', data={
+                    'title': "Welcome to tour!",
+                    'date': "2023, 11, 17",
+                    'destination': "country, city",
+                    'duration': 5,
+                    'cost': 1600,
+                    'max_travelers': 5,
+                    'language': "English",
+                    'pictureURL': "http://example.com/image.jpg"})
+                session.commit()
 
-        if response_login.status_code == 200:
-            response_home = self.client.get("/home")
-
-
-
-    @task
-    def access_filter(self):
-        response = self.client.post("/home/filter",
-                                    data={'destination': 'some_destination', 'max_price': 'some_max_price',
-                                          'min_price': 'some_min_price', 'language': 'some_language'})
-
+        check_published_tours = self.client.get("/guide_tours")
     @task
     def access_tours_registeret(self):
         response = self.client.get("/user_tours")
 
-    @task
-    def access_cancel_tour(self):
-        response = self.client.post("/cancel_tour")
+    def access_tour_registration(self):
+        respons = self.client.get()
 
-    @task
-    def access_search(self):
-        response = self.client.get("/search?q=dubai")
+
 
 
 if __name__ == "__main__":
@@ -81,6 +112,7 @@ if __name__ == "__main__":
             "--web-host 127.0.0.1 --web-port 8888 --users 100 --spawn-rate 10",
             shell=True)
 
+
     finally:
         # Legg til en kommando for å drepe Locust-prosessen når testen er fullført
         os.system("taskkill /F /IM locust")
@@ -88,6 +120,7 @@ if __name__ == "__main__":
         os.environ["locust_test"] = "False"
 
         # tømmer database
+
         session.close()
         db.metadata.drop_all(engine)
 
