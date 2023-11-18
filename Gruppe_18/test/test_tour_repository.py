@@ -175,6 +175,13 @@ def test_if_filtering_based_on_destination_price_and_language_is_as_expected(tou
     verify(filter_tour, options=approval_options)
 
 
+def test_if_getting_spesific_tour_is_possible(tour_re, sqlalchemy_session):
+    all_tours = tour_re.get_all_tours()
+    tour_1 = all_tours[0]
+    tour_1_id = tour_1.id
+    assert tour_1 == tour_re.get_spesific_tour(tour_1_id)
+
+
 def test_if_searching_tours_by_title_gives_is_as_expected(tour_re, sqlalchemy_session):
     searched_tour = tour_re.search_tour("dubai")
     verify(searched_tour, options=approval_options)
