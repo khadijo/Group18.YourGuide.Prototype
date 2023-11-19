@@ -1,8 +1,6 @@
 import uuid
-
 from flask import request, redirect, render_template, flash, url_for
 from flask_login import login_user, current_user
-
 from Gruppe_18.src.main.model.models import Account, Tour, guide_tour_association
 
 
@@ -33,14 +31,13 @@ class AccountController:
 
     def account_registration(self):
         if request.method == 'POST':
-            usertype = request.form.get('usertype')
             username = request.form.get('username')
             password = request.form.get('password')
             phoneNumber = request.form.get('phoneNumber')
             emailAddress = request.form.get('emailAddress')
 
             if username and password:
-                user = Account(id=str(uuid.uuid4()), usertype=usertype, username=username, password=password,
+                user = Account(id=str(uuid.uuid4()), usertype="user", username=username, password=password,
                                phoneNumber=phoneNumber,
                                emailAddress=emailAddress)
                 self.account_repository.create_account(user)
@@ -102,5 +99,12 @@ class AccountController:
             current_email = current_user.emailAddress
             self.account_repository.update_account(current_email, new_username, new_telephone_number, new_email)
 
+            self.session.commit()
+            return redirect(url_for('home'))
+
+    def update_usertype(self):
+        if current_user.is_authenticated:
+            user_to_upgrade = request.form.get("user_id")
+            self.account_repository.upgrade_usertype_to_guide(user_to_upgrade)
             self.session.commit()
             return redirect(url_for('home'))

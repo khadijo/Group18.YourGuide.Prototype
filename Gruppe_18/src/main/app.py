@@ -1,14 +1,12 @@
-import os
-
-import sqlalchemy
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_required, logout_user, current_user
+from flask_sqlalchemy import SQLAlchemy
 
 from Gruppe_18.src.main.controller.TourController import TourController
-from Gruppe_18.src.main.model.models import Account, Tour, tour_account_association
-from Gruppe_18.src.main.database.sql_alchemy import app
+from Gruppe_18.src.main.model.models import Account, Tour
+from Gruppe_18.src.main.database.app_config import app
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from flask import render_template, redirect, url_for
-from Gruppe_18.src.main.database.sql_alchemy import get_session
+from Gruppe_18.src.main.database.create_data_db import get_session
 from Gruppe_18.src.main.controller.AccountController import AccountController
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
@@ -144,6 +142,11 @@ def profile():
     return render_template('profile.html', user_data=user_data)
 
 
+@app.route('/home/filter', methods=['GET', 'POST'])
+def filter_tour():
+    return tour_controller.filter_app()
+
+
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
     return account_controller.delete_my_account()
@@ -153,6 +156,11 @@ def delete_user():
 @app.route('/update_user_info', methods=['POST'])
 def update_user_info():
     return account_controller.update_user_information()
+
+
+@app.route('/upgrade_usertype', methods=['POST'])
+def upgrade_usertype():
+    return account_controller.update_usertype()
 
 
 @app.route('/home/filter', methods=['GET','POST'])
