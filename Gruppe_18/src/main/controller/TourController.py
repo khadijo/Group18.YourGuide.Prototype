@@ -17,7 +17,7 @@ class TourController():
 
     def homepage_based_on_usertype(self, tours=None):
         if tours is None:
-            tours = self.session.query(Tour).all()
+            tours = self.tour_repository.get_all_tours()
         if current_user.usertype == "admin":
             data = self.tour_repository.admin_dashboard()
             return render_template('homepage_admin.html', **data)
@@ -46,7 +46,7 @@ class TourController():
         if q:
             results = self.tour_repository.search_tour(q)
         else:
-            results = []
+            results = self.tour_repository.get_all_tours()
         return self.homepage_based_on_usertype(tours=results)
 
     def get_user_tours(self):
