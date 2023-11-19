@@ -1,3 +1,6 @@
+import os
+
+import sqlalchemy
 from flask_login import LoginManager, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 
@@ -140,11 +143,6 @@ def hide_dashboard():
 def profile():
     user_data = load_user(current_user.get_id())
     return render_template('profile.html', user_data=user_data)
-
-
-@app.route('/home/filter', methods=['GET', 'POST'])
-def filter_tour():
-    return tour_controller.filter_app()
 
 
 @app.route('/delete_user', methods=['POST'])

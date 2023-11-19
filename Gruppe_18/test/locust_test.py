@@ -7,20 +7,20 @@ from locust import HttpUser, task, between
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
+from Gruppe_18.src.main.model.models import Account
+from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
+from Gruppe_18.test.database.database_handler import get_session
+Acc_Rep = AccountRepository(get_session())
 
 # NB app.py skal ikke kjøre samtidi som locust_test. den kjører app her med test_database tilknyttet
-
+guide = Account(str(uuid.uuid4()), "guide", "guide", "guide", "12345678","guide@gmial.com")
+admin = Account(str(uuid.uuid4()), "admin", "admin", "admin", "12345678","guide@gmial.com")
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "Test.db")
 engine = create_engine(f"sqlite:///{database_name}", echo=True)
 
 session = sessionmaker(bind=engine)()
-
-db.metadata.create_all(bind=engine)
-
-
-
 
 class MyUser(HttpUser):
     wait_time = between(1, 5)  # Brukerene venter 1-5 sekunder før de sender neste request
@@ -37,12 +37,11 @@ class MyUser(HttpUser):
             username = str(uuid.uuid4())
             password = str(uuid.uuid4())
             register = self.client.post("/account_reg",
-                                        data={'usertype': 'user',
-                                              'username': username,
+                                        data={'username': username,
                                               'password': password,
                                               'phoneNumber': '123456789',
                                               'emailAddress': 'testuser@example.com'})
-
+        session.commit()
         if register.status_code == 200:
             response_login = self.client.post("/login", data={'username': username, 'password': password})
 
@@ -59,18 +58,9 @@ class MyUser(HttpUser):
 
     @task
     def access_guider(self):
-        with session.begin():
-            username = str(uuid.uuid4())
-            password = str(uuid.uuid4())
-            register = self.client.post("/account_reg",
-                                        data={
-                                            'usertype': 'guide',
-                                            'username': username,
-                                            'password': password,
-                                            'phoneNumber': '123456789',
-                                            'emailAddress': 'testuser@example.com'})
-            session.commit()
-        if register.status_code == 200:
+        response_login = self.client.post("/login", data={'username': 'guide', 'password': 'guide'})
+
+        if response_login.status_code == 200:
             with session.begin():
                 create_tour = self.client.post('/new_tour', data={
                     'title': "Welcome to tour!",
@@ -81,8 +71,6 @@ class MyUser(HttpUser):
                     'max_travelers': 5,
                     'language': "English",
                     'pictureURL': "http://example.com/image.jpg"})
-                session.commit()
-
         check_published_tours = self.client.get("/guide_tours")
     @task
     def access_tours_registeret(self):
@@ -95,16 +83,16 @@ class MyUser(HttpUser):
 
 
 if __name__ == "__main__":
+
+    db.metadata.create_all(bind=engine)
+    Acc_Rep.create_account(guide)
+    Acc_Rep.create_account(admin)
     try:
-        # setter applikasjonen til å bruke test databasen
         os.environ["locust_test"] = "True"
-        # kjører applikasjonen
         app_script_path = os.path.abspath("../src/main/app.py")
         cwd_path = os.path.abspath("../src/main/")
 
         subprocess.Popen(["python", app_script_path], cwd=cwd_path)
-        # kjører selve locust test
-        # 100 brukere med en hastighet på 10 brukere per sekund
         # det betyr at det blir introdusert 10 brukere hvert sekund
         # til det blir 100 brukere
         subprocess.call(
@@ -114,9 +102,7 @@ if __name__ == "__main__":
 
 
     finally:
-        # Legg til en kommando for å drepe Locust-prosessen når testen er fullført
         os.system("taskkill /F /IM locust")
-        # setter applikasjonen tilbake til vanlig database
         os.environ["locust_test"] = "False"
 
         # tømmer database

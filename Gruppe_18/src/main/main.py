@@ -2,12 +2,12 @@ import datetime
 import uuid
 
 from Gruppe_18.src.main.model.models import Tour, Account
-from Gruppe_18.src.main.database.sql_alchemy import get_session
+from Gruppe_18.src.main.database.create_data_db import get_session
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 
 session = get_session("YourGuide.db")
-
+'''
 account_rep = AccountRepository(session)
 tour_repository = TourRepository(session)
 a = Account(str(uuid.uuid4()),
@@ -71,7 +71,6 @@ Oslo = Tour(str(uuid.uuid4()),
     "https://th.bing.com/th/id/R.204fc958e56b888bc534eaeeb0d20e56?rik=%2fW47vQ1hMRsekA&pid=ImgRaw&r=0"
 )
 
-'''
 tour_repository.create_tour(Dubai)
 tour_repository.create_tour(Lofoten)
 tour_repository.create_tour(Hawaii)
@@ -82,14 +81,13 @@ tour_repository.create_tour(Oslo)
 account_rep.create_account(a)
 account_rep.create_account(b)
 account_rep.create_account(g)
-''''''
+
 
 #result = tour_repository.book_tour(new_tour)
 #result1 = tour_repository.book_tour(new_tour)
-'''
+
 
 account_rep.create_account(a)
-'''
 tour_repository.delete_tour("b2ad50e1-ac86-4ecf-bf51-feeda5a910a3")
 tour_repository.delete_tour("c1f09a81-118b-4ca1-8f47-b387125f853f")
 tour_repository.delete_tour("7dcd6e7f-2ffe-4f23-855e-2990f23d4c3f")
