@@ -24,7 +24,8 @@ print(is_testing)
 
 db_path = test_database if is_testing else "YourGuide.db"
 
-session = get_session(db_path)
+def sessions():
+    return get_session(db_path)
 '''
 account_rep = AccountRepository(session)
 tour_rep = TourRepository(session)
@@ -51,7 +52,8 @@ def tour_repo():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return session.query(Account).get(user_id)
+    with sessions() as session:
+        return session.query(Account).get(user_id)
 
 
 @app.route('/')
@@ -128,8 +130,9 @@ def delete_tour():
 
 @app.route('/show_all_tours', methods=['GET'])
 def show_tours():
-    tours = session.query(Tour).all()
-    return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
+    with sessions() as session:
+        tours = session.query(Tour).all()
+        return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
 
 
 @app.route('/hide_tours', methods=['GET'])
@@ -139,8 +142,10 @@ def hide_tours():
 
 @app.route('/show_all_users', methods=['GET'])
 def show_all_users():
-    users = session.query(Account).all()
-    return render_template('homepage_admin.html', users=users, show_all_users=True)
+    with sessions() as session:
+        users = session.query(Account).all()
+        return render_template('homepage_admin.html', users=users, show_all_users=True)
+
 
 
 @app.route('/hide_all_users', methods=['GET'])

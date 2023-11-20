@@ -19,7 +19,7 @@ user = Account(str(uuid.uuid4()), "user", "user", "user", "12345678","guide@gmia
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "Test.db")
-engine = create_engine(f"sqlite:///{database_name}", echo=True)
+engine = create_engine(f"sqlite:///{database_name}", echo=True, connect_args={'check_same_thread': False}, pool_pre_ping=True)
 
 session = sessionmaker(bind=engine)()
 
@@ -57,24 +57,20 @@ class MyUser(HttpUser):
     def access_guider(self):
         response_login = self.client.post("/login", data={'username': 'guide', 'password': 'guide'})
         if response_login.status_code == 200:
-            with session.begin():
-                create_tour = self.client.post('/new_tour', data={
-                    'title': "Welcome to tour!",
-                    'date': "2023, 11, 17",
-                    'destination': "country, city",
-                    'duration': 5,
-                    'cost': 1600,
-                    'max_travelers': 5,
-                    'language': "English",
-                    'pictureURL': "http://example.com/image.jpg"})
+            create_tour = self.client.post('/new_tour', data={
+                'title': "Welcome to tour!",
+                'date': "2023, 11, 17",
+                'destination': "country, city",
+                'duration': 5,
+                'cost': 1600,
+                'max_travelers': 5,
+                'language': "English",
+                'pictureURL': "http://example.com/image.jpg"})
             check_published_tours = self.client.get("/guide_tours")
     @task
     def access_tours_registeret(self):
         response = self.client.get("/user_tours")
 
-    @task
-    def access_tour_registration(self):
-        respons = self.client.get()
 
 
 
