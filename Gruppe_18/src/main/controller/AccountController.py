@@ -35,7 +35,6 @@ class AccountController:
             password = request.form.get('password')
             phoneNumber = request.form.get('phoneNumber')
             emailAddress = request.form.get('emailAddress')
-            #HER MÅ DU GJØREOM SLIK AT MAN BRUKER FAKTISK CREATE ACCOUNT METODEN.
             if username and password:
                 user = Account(id=str(uuid.uuid4()), usertype="user", username=username, password=password,
                                phoneNumber=phoneNumber,

@@ -33,7 +33,7 @@ class AccountRepository(JSONRepository):
     def create_account(self, user):
         try:
             if any(value is None for value in
-                   [user.usertype, user.username, user.password, user.phoneNumber, user.emailAddress]):
+                   [user.username, user.password, user.phoneNumber, user.emailAddress]):
                 return False
             else:
                 account = Account(id=user.id,
