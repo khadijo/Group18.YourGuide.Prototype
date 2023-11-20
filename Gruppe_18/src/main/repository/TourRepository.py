@@ -125,6 +125,7 @@ class TourRepository(JSONRepository):
             self.delete_tour(tour.id)
             self.session.execute(stmt)
             self.session.commit()
+            return True
         else:
             print("Tour or user is not found.")
 

@@ -25,11 +25,27 @@ print(is_testing)
 db_path = test_database if is_testing else "YourGuide.db"
 
 session = get_session(db_path)
+'''
 account_rep = AccountRepository(session)
 tour_rep = TourRepository(session)
 account_controller = AccountController(account_rep, session)
 tour_controller = TourController(tour_rep, session)
+'''
 app.secret_key = 'gruppe_18'
+
+def account_c():
+    sessions = get_session(db_path)
+    repository = AccountRepository(sessions)
+    return AccountController(repository, sessions)
+
+def tour_c():
+    sessions = get_session(db_path)
+    repository = TourRepository(sessions)
+    return TourController(repository, sessions)
+
+def tour_repo():
+    sessions = get_session(db_path)
+    return TourRepository(sessions)
 
 
 
@@ -45,11 +61,13 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    account_controller = account_c()
     return account_controller.account_login()
 
 
 @app.route('/home')
 def home():
+    tour_controller = tour_c()
     return tour_controller.homepage_based_on_usertype()
 
 
@@ -62,41 +80,49 @@ def logout():
 
 @app.route('/account_reg', methods=['GET', 'POST'])
 def account_reg():
+    account_controller = account_c()
     return account_controller.account_registration()
 
 
 @app.route('/search', methods=['GET'])
 def search():
+    tour_controller = tour_c()
     return tour_controller.search_tour()
 
 
 @app.route('/register_for_tour', methods=['POST'])
 def register_for_tour():
+    account_controller = account_c()
     return account_controller.tour_registration()
 
 
 @app.route('/user_tours')
 def user_tours():
+    tour_controller = tour_c()
     return tour_controller.get_user_tours()
 
 
 @app.route('/cancel_tour', methods=['POST'])
 def cancel_tour():
+    account_controller = account_c()
     return account_controller.account_cancel_tour()
 
 
 @app.route('/new_tour', methods=['POST', 'GET'])
 def new_tour():
+    tour_controller = tour_c()
     return tour_controller.make_new_tour()
 
 
 @app.route('/guide_tours')
 def guide_tours():
+    tour_controller = tour_c()
     return tour_controller.show_guide_tour()
 
 
 @app.route('/delete_tour', methods=['POST'])
 def delete_tour():
+    tour_controller = tour_c()
     return tour_controller.deleting_tour()
 
 
@@ -124,11 +150,13 @@ def hide_all_users():
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
+    account_controller = account_c()
     return account_controller.deleting_account()
 
 
 @app.route('/show_dashboard', methods=['GET'])
 def show_dashboard():
+    tour_rep = tour_repo()
     data = tour_rep.admin_dashboard()
     return render_template('homepage_admin.html', **data, show_dashboard=True)
 
@@ -147,26 +175,27 @@ def profile():
 
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
+    account_controller = account_c()
     return account_controller.delete_my_account()
 
 
 # Update user info
 @app.route('/update_user_info', methods=['POST'])
 def update_user_info():
+    account_controller = account_c()
     return account_controller.update_user_information()
 
 
 @app.route('/upgrade_usertype', methods=['POST'])
 def upgrade_usertype():
+    account_controller = account_c()
     return account_controller.update_usertype()
 
 
 @app.route('/home/filter', methods=['GET','POST'])
 def filter_tour():
-    try:
-        return tour_controller.filter_app()
-    except sqlalchemy.exc.InvalidRequestError as e:
-        return redirect(url_for('home'))
+    tour_controller = tour_c()
+    return tour_controller.filter_app()
 
 
 if __name__ == '__main__':

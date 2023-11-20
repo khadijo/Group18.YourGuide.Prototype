@@ -15,6 +15,7 @@ Acc_Rep = AccountRepository(get_session())
 # NB app.py skal ikke kjøre samtidi som locust_test. den kjører app her med test_database tilknyttet
 guide = Account(str(uuid.uuid4()), "guide", "guide", "guide", "12345678","guide@gmial.com")
 admin = Account(str(uuid.uuid4()), "admin", "admin", "admin", "12345678","guide@gmial.com")
+user = Account(str(uuid.uuid4()), "user", "user", "user", "12345678","guide@gmial.com")
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "Test.db")
@@ -30,36 +31,31 @@ class MyUser(HttpUser):
     @task
     def access_start(self):
         response = self.client.get("/")
-
     @task
-    def access_user(self):
-        with session.begin():
-            username = str(uuid.uuid4())
-            password = str(uuid.uuid4())
+    def access_user_registration(self):
             register = self.client.post("/account_reg",
-                                        data={'username': username,
-                                              'password': password,
-                                              'phoneNumber': '123456789',
-                                              'emailAddress': 'testuser@example.com'})
-        session.commit()
-        if register.status_code == 200:
-            response_login = self.client.post("/login", data={'username': username, 'password': password})
+                                        data={'username': str(uuid.uuid4()),
+                                              'password': str(uuid.uuid4()),
+                                              'phoneNumber': str(uuid.uuid4()),
+                                              'emailAddress': str(uuid.uuid4())})
+    @task
+    def access_user_login(self):
+        response_login = self.client.post("/login", data={'username': 'user', 'password': 'user'})
 
-            if response_login.status_code == 200:
-                respons_home = self.client.get("/home")
+        if response_login.status_code == 200:
+            respons_home = self.client.get("/home")
 
-                response_filter = self.client.post("/home/filter",
-                                            data={'destination': 'some_destination',
-                                                  'max_price': 'some_max_price',
-                                                  'min_price': 'some_min_price',
-                                                  'language': 'some_language'})
+            response_filter = self.client.post("/home/filter",
+                                               data={'destination': 'some_destination',
+                                                     'max_price': 'some_max_price',
+                                                     'min_price': 'some_min_price',
+                                                     'language': 'some_language'})
 
-                response_search = self.client.get("/search?q=dubai")
+            response_search = self.client.get("/search?q=dubai")
 
     @task
     def access_guider(self):
         response_login = self.client.post("/login", data={'username': 'guide', 'password': 'guide'})
-
         if response_login.status_code == 200:
             with session.begin():
                 create_tour = self.client.post('/new_tour', data={
@@ -71,11 +67,12 @@ class MyUser(HttpUser):
                     'max_travelers': 5,
                     'language': "English",
                     'pictureURL': "http://example.com/image.jpg"})
-        check_published_tours = self.client.get("/guide_tours")
+            check_published_tours = self.client.get("/guide_tours")
     @task
     def access_tours_registeret(self):
         response = self.client.get("/user_tours")
 
+    @task
     def access_tour_registration(self):
         respons = self.client.get()
 
@@ -85,6 +82,7 @@ class MyUser(HttpUser):
 if __name__ == "__main__":
 
     db.metadata.create_all(bind=engine)
+    Acc_Rep.create_account(user)
     Acc_Rep.create_account(guide)
     Acc_Rep.create_account(admin)
     try:
@@ -106,7 +104,6 @@ if __name__ == "__main__":
         os.environ["locust_test"] = "False"
 
         # tømmer database
-
         session.close()
         db.metadata.drop_all(engine)
 

@@ -4,12 +4,13 @@ import uuid
 from approvaltests.scrubbers import scrub_all_guids
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from Gruppe_18.src.main.model.models import db
+from Gruppe_18.src.main.model.models import db, Account
 
 import pytest
 from approvaltests import verify, Options
 
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
+from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.test.database.database_handler import get_session
 import datetime
 from Gruppe_18.src.main.model.models import Tour
@@ -19,6 +20,10 @@ approved_files_directory = os.path.join(os.path.dirname(__file__), "approved_fil
 @pytest.fixture
 def tour_re():
     return TourRepository(get_session())
+
+@pytest.fixture()
+def acc_rep():
+    return AccountRepository(get_session())
 
 
 @pytest.fixture()
@@ -74,9 +79,22 @@ def tour_4():
     "https://www.example.com/oslo-city.jpg"
 )
 
+@pytest.fixture()
+def guide():
+    return Account("1", "guide", "guide", "guide", "12345678","guide@gmial.com")
 
 @pytest.fixture()
-def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
+def user():
+    return Account("2", "user", "user", "user", "12345678", "user@gmial.com")
+
+@pytest.fixture()
+def admin():
+    return Account("3", "admin", "admin", "admin", "12345678","admin@gmial.com")
+
+
+
+@pytest.fixture()
+def sqlalchemy_session(tour_re, acc_rep, tour, tour_2, tour_3, guide, user, admin):
     module_path = os.path.dirname(os.path.abspath(__file__))
     database_name = os.path.join(module_path, "Test.db")
     engine = create_engine(f"sqlite:///{database_name}", echo=True)
@@ -84,10 +102,12 @@ def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
     session = sessionmaker(bind=engine)()
 
     db.metadata.create_all(bind=engine)
-
     tour_re.create_tour(tour)
     tour_re.create_tour(tour_2)
     tour_re.create_tour(tour_3)
+    acc_rep.create_account(admin)
+    acc_rep.create_account(user)
+    acc_rep.create_account(guide)
     yield session
 
     session.close()
@@ -96,7 +116,7 @@ def sqlalchemy_session(tour_re, tour, tour_2, tour_3):
 
 approval_options = Options().with_scrubber(scrub_all_guids)
 
-
+#
 def test_if_tour_is_created_saved_and_retrived(tour_re, sqlalchemy_session):
     saved_data = tour_re.get_all_tours()
 
@@ -117,6 +137,7 @@ def test_if_booking_to_fully_booked_tour_is_not_possible(tour_re, sqlalchemy_ses
     assert tour_re.book_tour(tour) == False
 
 
+# 1.11.2
 def test_if_booked_goes_down_by_one_after_tour_cancelletion(tour_re, sqlalchemy_session):
     tours = tour_re.get_all_tours()
     tour = tours[0]
@@ -124,6 +145,7 @@ def test_if_booked_goes_down_by_one_after_tour_cancelletion(tour_re, sqlalchemy_
     assert tour.booked == -1
 
 
+# 1.3.1.3
 def test_if_description_for_a_tour_is_correctly_returnet(tour_re, sqlalchemy_session):
     data = tour_re.get_all_tours()
     tour = data[0]
@@ -149,7 +171,7 @@ def test_if_filtering_based_on_only_destination_is_as_expected(tour_re, sqlalche
     filter_tour = tour_re.filter_combinations("Dubai", "", "", "")
     verify(filter_tour, options=approval_options)
 
-
+#
 def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "500", "3000", "")
     verify(filter_tour, options=approval_options)
@@ -182,6 +204,80 @@ def test_if_getting_spesific_tour_is_possible(tour_re, sqlalchemy_session):
     assert tour_1 == tour_re.get_spesific_tour(tour_1_id)
 
 
+#
 def test_if_searching_tours_by_title_gives_is_as_expected(tour_re, sqlalchemy_session):
     searched_tour = tour_re.search_tour("dubai")
     verify(searched_tour, options=approval_options)
+
+
+def test_if_guide_and_tour_relationship_gets_made_after_tour_creation(acc_rep, tour_re, sqlalchemy_session, guide):
+    all_tours = tour_re.get_all_tours()
+    tour_1 = all_tours[0]
+    tour_1_id = tour_1.id
+    user_id = guide.id
+    assert tour_re.guide_register_to_tour(tour_1_id, user_id) == True
+
+
+def test_if_guide_and_tour_relation_dosent_get_made_for_already_posted_tour(acc_rep, tour_re, sqlalchemy_session, guide):
+    all_tours = tour_re.get_all_tours()
+    tour_1 = all_tours[0]
+    tour_1_id = tour_1.id
+    user_id = guide.id
+    tour_re.guide_register_to_tour(tour_1_id, user_id)
+
+    all_tours = tour_re.get_all_tours()
+    tour_1 = all_tours[0]
+    tour_1_id = tour_1.id
+    user_id = guide.id
+    assert tour_re.guide_register_to_tour(tour_1_id, user_id) == None
+
+
+def test_if_guide_tour_relation_dosent_get_made_if_tour_or_guide_dosent_exist(tour_re, sqlalchemy_session):
+    assert tour_re.guide_register_to_tour("id", "id") == None
+
+
+def test_if_guide_tour_relationship_gets_deleted_after_tour_get_deleted(tour_re, sqlalchemy_session, guide):
+    all_tours = tour_re.get_all_tours()
+    tour_1 = all_tours[0]
+    tour_1_id = tour_1.id
+    user_id = guide.id
+    tour_re.guide_register_to_tour(tour_1_id, user_id)
+
+    assert tour_re.guide_delete_tour(tour_1_id, user_id) == True
+
+
+def test_if_guide_tour_relationshio_of_none_existing_tour_is_not_possible(tour_re, sqlalchemy_session):
+    assert tour_re.guide_delete_tour("id", "id") == None
+
+
+def test_if_admin_gets_correct_number_of_total_users(tour_re, sqlalchemy_session):
+    info = tour_re.admin_dashboard()
+    assert info['num_users'] == 3
+
+
+def test_if_admin_gets_correct_number_of_tours(tour_re, sqlalchemy_session):
+    info = tour_re.admin_dashboard()
+    assert info['num_tours'] == 3
+
+
+def test_if_admin_gets_correct_number_of_guides(tour_re, sqlalchemy_session):
+    info = tour_re.admin_dashboard()
+    assert info['num_guides'] == 1
+
+
+def test_if_admin_gets_correct_number_of_regular_users(tour_re, sqlalchemy_session):
+    info = tour_re.admin_dashboard()
+    assert info['num_regular_users'] == 1
+
+
+def test_if_admin_gets_correct_number_of_admins(tour_re, sqlalchemy_session):
+    info = tour_re.admin_dashboard()
+    assert info['num_admin'] == 1
+
+
+def test_if_admin_can_see_number_of_bookings(tour_re, sqlalchemy_session):
+    tours = tour_re.get_all_tours()
+    tour_re.book_tour(tours[0])
+    info = tour_re.admin_dashboard()
+    assert info['num_booked_tours'] == 1
+
