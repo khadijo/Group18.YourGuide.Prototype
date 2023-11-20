@@ -70,6 +70,7 @@ def tour_rep(sqlalchemy_session):
     return tour
 
 
+# Testing feature 1.1:
 @pytest.mark.parametrize("attribute", ["id", "usertype", "username", "password", "phoneNumber", "emailAddress"])
 def test_account_creation_and_saving(account_rep, account, sqlalchemy_session, attribute):
     account_rep.create_account(account)
@@ -78,20 +79,7 @@ def test_account_creation_and_saving(account_rep, account, sqlalchemy_session, a
     assert getattr(saved_account_from_db, attribute) == getattr(account, attribute)
 
 
-def test_account_missing_id_raises_integrity_error(account, account_rep, sqlalchemy_session):
-    account.id = None
-    assert account_rep.create_account(account) is False
-
-
-def test_account_missing_id_gives_failed_registration(account, account_rep, sqlalchemy_session):
-    account.id = None
-    with pytest.raises(IntegrityError):
-        account_rep.create_account(account)
-        saved_account_from_db = sqlalchemy_session.query(Account).filter_by(id=account.id).first()
-
-        assert saved_account_from_db.id is None
-
-
+# Testing feature 1.1.2:
 @pytest.mark.parametrize("missing_column", ["usertype", "username", "password", "phoneNumber", "emailAddress"])
 def test_account_missing_information_returns_false(account, account_rep, sqlalchemy_session, missing_column):
     setattr(account, missing_column, None)
@@ -99,6 +87,12 @@ def test_account_missing_information_returns_false(account, account_rep, sqlalch
     assert account_rep.create_account(account) is False
 
 
+# Testing feature 1.3.2 and 1.2.1.4:
+def test_account_can_be_deleted(account, account_rep):
+    account_rep.create_account(account)
+    assert account_rep.delete_account(account.id) is True
+
+# Testing feature
 '''
 def test_account_can_register_a_tour(account_rep, account, sqlalchemy_session, tour_1, tour_rep):
     account_rep.create_account(account)

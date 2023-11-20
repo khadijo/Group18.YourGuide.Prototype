@@ -1,3 +1,4 @@
+import uuid
 from sqlite3 import IntegrityError
 
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
@@ -10,8 +11,11 @@ class AccountRepository(JSONRepository):
         self.session = session
         self.tour_repo = TourRepository(session)
 
+    def get_one_specific_account(self, user_id):
+        return self.session.query(Account).filter_by(id=user_id).first()
+
     def delete_account(self, user_id):
-        account_to_delete = self.session.query(Account).filter_by(id=user_id).first()
+        account_to_delete = self.get_one_specific_account(user_id)
 
         if account_to_delete:
             self.session.delete(account_to_delete)
@@ -22,7 +26,8 @@ class AccountRepository(JSONRepository):
 
     def create_account(self, user):
         try:
-            if any(value is None for value in [user.usertype, user.username, user.password, user.phoneNumber, user.emailAddress]):
+            if any(value is None for value in
+                   [user.usertype, user.username, user.password, user.phoneNumber, user.emailAddress]):
                 return False
             else:
                 account = Account(id=user.id,
@@ -35,14 +40,12 @@ class AccountRepository(JSONRepository):
                 self.session.add(account)
                 self.session.commit()
                 return True
-
         except IntegrityError:
             self.session.rollback()
             return False
 
-
-    def update_account(self, email, new_username, new_telephone_number, new_email):
-        user = self.session.query(Account).filter_by(emailAddress=email).first()
+    def update_account(self, user_id, new_username, new_telephone_number, new_email):
+        user = self.get_one_specific_account(user_id)
         user.username = new_username
         user.phoneNumber = new_telephone_number
         user.emailAddress = new_email
@@ -89,8 +92,6 @@ class AccountRepository(JSONRepository):
         else:
             print("Tour or user is not found.")
 
-
     def account_logged_in(self, status=False):
         logged_in = status
         return logged_in
-
