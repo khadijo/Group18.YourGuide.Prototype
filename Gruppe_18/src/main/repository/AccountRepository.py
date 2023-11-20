@@ -1,4 +1,3 @@
-import uuid
 from sqlite3 import IntegrityError
 
 from Gruppe_18.src.main.repository.JSONRepository import JSONRepository
@@ -23,6 +22,13 @@ class AccountRepository(JSONRepository):
             return True
 
         return False
+
+    def upgrade_usertype_to_guide(self, user_id):
+        user = self.session.query(Account).filter_by(id=user_id).first()
+        user.usertype = "guide"
+        self.session.add(user)
+        self.session.commit()
+        return True
 
     def create_account(self, user):
         try:
@@ -52,6 +58,7 @@ class AccountRepository(JSONRepository):
         self.session.add(user)
         self.session.commit()
         return True
+
 
     def account_register_to_tour(self, tour_id, user_id):
         existing_registration = self.session.query(tour_account_association).filter_by(
@@ -92,6 +99,9 @@ class AccountRepository(JSONRepository):
         else:
             print("Tour or user is not found.")
 
+
+
     def account_logged_in(self, status=False):
         logged_in = status
         return logged_in
+
