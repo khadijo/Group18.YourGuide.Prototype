@@ -11,7 +11,14 @@ class AccountRepository(JSONRepository):
         self.tour_repo = TourRepository(session)
 
     def get_one_specific_account(self, user_id):
-        return self.session.query(Account).filter_by(id=user_id).first()
+        user = self.session.query(Account).filter_by(id=user_id).first()
+        if user:
+            return user
+        else:
+            return False
+
+    def get_all_users(self):
+        return sel
 
     def delete_account(self, user_id):
         account_to_delete = self.get_one_specific_account(user_id)
@@ -24,7 +31,7 @@ class AccountRepository(JSONRepository):
         return False
 
     def upgrade_usertype_to_guide(self, user_id):
-        user = self.session.query(Account).filter_by(id=user_id).first()
+        user = self.get_one_specific_account(user_id)
         user.usertype = "guide"
         self.session.add(user)
         self.session.commit()
@@ -85,8 +92,8 @@ class AccountRepository(JSONRepository):
                 print("Tur eller bruker ble ikke funnet.")
 
     def account_cancel_tour(self, tour_id, user_id):
-        tour = self.session.query(Tour).filter_by(id=tour_id).first()
-        user = self.session.query(Account).filter_by(id=user_id).first()
+        tour = self.tour_repo.get_specific_tour(tour_id)
+        user = self.get_one_specific_account(user_id)
 
         if tour is not None and user is not None:
             stmt = tour_account_association.delete().where(

@@ -69,6 +69,18 @@ def tour_rep(sqlalchemy_session):
     return tour
 
 
+def test_can_get_user_based_on_id(account, account_rep):
+    account_rep.create_account(account)
+    account_from_db = account_rep.get_one_specific_account(account.id)
+    verify(account_from_db, options=approval_options)
+
+
+def test_can_not_get_user_that_does_not_exist_based_on_id(account, account_rep):
+    account_id_does_not_exist = str(uuid.uuid4())
+    account.id = account_id_does_not_exist
+    assert account_rep.get_one_specific_account(account.id) is False
+
+
 # Testing feature 1.1:
 @pytest.mark.parametrize("attribute", ["id", "usertype", "username", "password", "phoneNumber", "emailAddress"])
 def test_account_creation_and_saving(account_rep, account, sqlalchemy_session, attribute):
@@ -101,7 +113,7 @@ def test_account_can_update_their_information(account, account_rep):
     account_rep.update_account(account.id, new_username, new_phoneNumber, new_emailAddress)
     updated_account = account_rep.get_one_specific_account(account.id)
 
-    verify(repr(updated_account), options=approval_options)
+    verify(updated_account, options=approval_options)
 
 
 # Testing feature 1.3.1.1:
@@ -130,3 +142,4 @@ def test_account_can_register_a_tour(account_rep, account, sqlalchemy_session, t
         account_id=account_from_db.id
     ).first()
     assert registration_row is not None
+
