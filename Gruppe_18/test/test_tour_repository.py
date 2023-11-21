@@ -116,7 +116,7 @@ def sqlalchemy_session(tour_re, acc_rep, tour, tour_2, tour_3, guide, user, admi
 
 approval_options = Options().with_scrubber(scrub_all_guids)
 
-#
+
 def test_if_tour_is_created_saved_and_retrived(tour_re, sqlalchemy_session):
     saved_data = tour_re.get_all_tours()
 

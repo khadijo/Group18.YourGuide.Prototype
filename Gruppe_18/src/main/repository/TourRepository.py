@@ -137,9 +137,7 @@ class TourRepository(JSONRepository):
 
         num_booked_tours = self.session.query(func.sum(Tour.booked)).scalar()
 
-        num_guides = self.session.query(func.count(Account.id)).join(
-            guide_tour_association, Account.id == guide_tour_association.c.guide_id
-        ).filter(guide_tour_association.c.guide_id.isnot(None)).scalar()
+        num_guides = self.session.query(func.count(Account.id)).filter(Account.usertype == "guide").scalar()
 
         num_admin = self.session.query(func.count(Account.id)).filter(Account.usertype == "admin").scalar()
 
