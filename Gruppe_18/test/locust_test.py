@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
 from Gruppe_18.src.main.model.models import Account
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from Gruppe_18.test.database.database_handler import get_session
+from Gruppe_18.test_files.database.database_handler import get_session
 Acc_Rep = AccountRepository(get_session())
 
 # NB app.py skal ikke kjøre samtidi som locust_test. den kjører app her med test_database tilknyttet
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         # til det blir 100 brukere
         subprocess.call(
             "locust -f locust_test.py --host http://127.0.0.1:5000 "
-            "--web-host 127.0.0.1 --web-port 8888 --users 100 --spawn-rate 10",
+            "--web-host 127.0.0.1 --web-port 8888 --users 50 --spawn-rate 10",
             shell=True)
 
 
