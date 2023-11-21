@@ -69,12 +69,14 @@ def tour_rep(sqlalchemy_session):
     return tour
 
 
+# Testing feature 1.15
 def test_can_get_user_based_on_id(account, account_rep):
     account_rep.create_account(account)
     account_from_db = account_rep.get_one_specific_account(account.id)
     verify(account_from_db, options=approval_options)
 
 
+# Testing feature 1.15
 def test_can_not_get_user_that_does_not_exist_based_on_id(account, account_rep):
     account_rep.create_account(account)
     account_id_does_not_exist = str(uuid.uuid4())
@@ -144,3 +146,4 @@ def test_account_can_register_a_tour(account_rep, account, sqlalchemy_session, t
     ).first()
     assert registration_row is not None
 
+# Testing
