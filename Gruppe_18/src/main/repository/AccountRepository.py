@@ -18,7 +18,7 @@ class AccountRepository(JSONRepository):
             return False
 
     def get_all_users(self):
-        return sel
+        pass
 
     def delete_account(self, user_id):
         account_to_delete = self.get_one_specific_account(user_id)
@@ -107,8 +107,4 @@ class AccountRepository(JSONRepository):
             print("Tour or user is not found.")
 
 
-
-    def account_logged_in(self, status=False):
-        logged_in = status
-        return logged_in
 

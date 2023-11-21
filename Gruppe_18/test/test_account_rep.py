@@ -76,6 +76,7 @@ def test_can_get_user_based_on_id(account, account_rep):
 
 
 def test_can_not_get_user_that_does_not_exist_based_on_id(account, account_rep):
+    account_rep.create_account(account)
     account_id_does_not_exist = str(uuid.uuid4())
     account.id = account_id_does_not_exist
     assert account_rep.get_one_specific_account(account.id) is False
