@@ -11,19 +11,27 @@ from approvaltests import verify, Options
 
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from Gruppe_18.test.database.database_handler import get_session
 import datetime
 from Gruppe_18.src.main.model.models import Tour
 
-approved_files_directory = os.path.join(os.path.dirname(__file__), "approved_files")
 
-@pytest.fixture
-def tour_re():
-    return TourRepository(get_session())
 
 @pytest.fixture()
-def acc_rep():
-    return AccountRepository(get_session())
+def get_session():
+    engine = create_engine("sqlite:///Test.db", echo=True)
+
+    Session = sessionmaker(bind=engine)
+
+    return Session()
+
+@pytest.fixture
+def tour_re(get_session):
+    return TourRepository(get_session)
+
+
+@pytest.fixture()
+def acc_rep(get_session):
+    return AccountRepository(get_session)
 
 
 @pytest.fixture()
@@ -246,7 +254,7 @@ def test_if_guide_tour_relationship_gets_deleted_after_tour_get_deleted(tour_re,
     assert tour_re.guide_delete_tour(tour_1_id, user_id) == True
 
 
-def test_if_guide_tour_relationshio_of_none_existing_tour_is_not_possible(tour_re, sqlalchemy_session):
+def test_if_guide_tour_relationship_of_none_existing_tour_and_guid_is_not_possible(tour_re, sqlalchemy_session):
     assert tour_re.guide_delete_tour("id", "id") == None
 
 
