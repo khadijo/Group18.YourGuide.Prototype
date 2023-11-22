@@ -102,6 +102,8 @@ session.commit()
 
 '''
 
+session.query(Account).delete()
+
 
 
 

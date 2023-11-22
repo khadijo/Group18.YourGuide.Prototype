@@ -78,7 +78,6 @@ class TourRepository(JSONRepository):
         return tour
 
     def guide_register_to_tour(self, tour_id, user_id):
-        print(f"Tour ID: {tour_id}, Guide ID: {user_id}")
         existing_registration = self.session.query(guide_tour_association).filter_by(
             tour_id=tour_id,
             guide_id=user_id
@@ -89,8 +88,6 @@ class TourRepository(JSONRepository):
         else:
             tour = self.session.query(Tour).filter_by(id=tour_id).first()
             guide = self.session.query(Account).filter_by(id=user_id).first()
-            print(f"Tour: {tour}")
-            print(f"Guide: {guide}")
 
             if tour is not None and guide is not None:
                 tour_guide_assoc_obj = guide_tour_association.insert().values(
