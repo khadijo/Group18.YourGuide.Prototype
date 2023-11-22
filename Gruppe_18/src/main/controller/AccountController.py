@@ -107,3 +107,7 @@ class AccountController:
             self.account_repository.upgrade_usertype_to_guide(user_to_upgrade)
             self.session.commit()
             return redirect(url_for('home'))
+
+    def get_all_users(self):
+        users = self.account_repository.get_all_users()
+        return render_template('homepage_admin.html', users=users, show_all_users=True)

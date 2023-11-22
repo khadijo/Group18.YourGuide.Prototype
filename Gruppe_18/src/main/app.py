@@ -100,8 +100,7 @@ def hide_tours():
 
 @app.route('/show_all_users', methods=['GET'])
 def show_all_users():
-    users = session.query(Account).all()
-    return render_template('homepage_admin.html', users=users, show_all_users=True)
+    return account_controller.get_all_users()
 
 
 @app.route('/hide_all_users', methods=['GET'])
