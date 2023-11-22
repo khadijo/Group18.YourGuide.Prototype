@@ -14,7 +14,7 @@ from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from flask_login import login_user, LoginManager
+from flask_login import login_user, LoginManager, logout_user
 
 
 @pytest.fixture()
@@ -91,6 +91,14 @@ def app():
     db.init_app(app)
     login_manager = LoginManager(app)
 
+    @app.route('/login', methods=['GET', 'POST'])
+    def login():
+        return None
+
+    @app.route('/new_tour', methods=['POST', 'GET'])
+    def new_tour():
+        return None
+
     return app
 
 
@@ -139,14 +147,46 @@ def test_if_logget_in_user_can_see_booked_tours(sqlalchemy_session, app, tour_c,
         assert tour_c.get_user_tours() == render_template('user_tours.html', user_tours=user_tours, user=user_comparison)
 
 
-def test_if_not_logged_in_user_gets_returned_to_login_page_when_trying_to_see_booked_tours(app, sqlalchemy_session, tour_c):
+def test_if_not_logged_in_user_gets_returned_to_login_page_when_trying_to_see_booked_tours(app, sqlalchemy_session, tour_c, user):
     with app.test_request_context():
-        assert tour_c.get_user_tours() == redirect(url_for('login'))
+        login_user(user)
+        logout_user()
+        result = tour_c.get_user_tours()
+        assert result.status_code == 302
+        assert result.headers['location'] == '/login'
 
 
-def test_if_guid_gets_sent_to_right_page_after_making_new_tour():
+def test_if_guide_gets_sent_to_right_template_when_wanting_to_create_tour(sqlalchemy_session, app, tour_c, guide):
+    with app.test_request_context():
+        login_user(guide)
+        assert tour_c.make_new_tour() == render_template('new_tour.html')
+
+
+def test_if_guide_gets_sent_to_right_template_after_filling_out_tour_creating_form_correctly(sqlalchemy_session, app, tour_c, guide, tour, tour_rep):
+    with app.test_request_context(method='POST', data={
+        'title': 'Welcome to Dubai',
+        'date': '2020, 10, 15',
+        'destination': 'Dubai',
+        'duration': '4',
+        'cost': 255,
+        'max_travelers': 15,
+        'language': 'English',
+        'pictureURL': 'https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg',
+    }):
+        login_user(guide)
+        assert tour_c.make_new_tour() == render_template('homepage_guide.html', tours=tour_rep.get_all_tours())
+
+
+def test_if_guide_can_see_posted_tours_in_the_right_template(sqlalchemy_session, tour_c, app, guide, tour_rep):
     pass
 
-def test_if_guid_gets_sent_to_the_right_page_after_not_filling_out_all_tour_info():
+def test_if_not_logged_in_user_gets_sent_to_login_when_wanting_too_see_posted_tours():
     pass
 
+
+def test_if_guide_gets_sent_to_right_template_after_deleting_posted_tour():
+    pass
+
+
+def test_if_not_logged_in_user_gets_sent_to_login_after_wanting_to_deleted_tour():
+    pass

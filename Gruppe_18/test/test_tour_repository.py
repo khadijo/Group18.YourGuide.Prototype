@@ -44,7 +44,7 @@ def tour():
         15,"English",
         "https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg")
 
-
+# cancellation. return False
 @pytest.fixture
 def tour_2():
     return Tour(
@@ -145,12 +145,22 @@ def test_if_booking_to_fully_booked_tour_is_not_possible(tour_re, sqlalchemy_ses
     assert tour_re.book_tour(tour) == False
 
 
+def test_if_booking_to_none_existing_tour_is_not_possible(tour_re, sqlalchemy_session, tour_4):
+    assert tour_re.book_tour(tour_4) == False
+
+
 # 1.11.2
 def test_if_booked_goes_down_by_one_after_tour_cancelletion(tour_re, sqlalchemy_session):
     tours = tour_re.get_all_tours()
     tour = tours[0]
+    tour_re.book_tour(tour)
+    assert tour.booked == 1
     tour_re.cancel_booked_tour(tour)
-    assert tour.booked == -1
+    assert tour.booked == 0
+
+
+def test_if_cancellation_on_none_existing_tour_is_not_possible(tour_re, sqlalchemy_session, tour_4):
+    assert tour_re.cancel_booked_tour(tour_4) == False
 
 
 # 1.3.1.3
@@ -161,12 +171,20 @@ def test_if_description_for_a_tour_is_correctly_returnet(tour_re, sqlalchemy_ses
                                                     "hours, and is offered in English"
 
 
+def test_if_getting_description_from_a_non_existing_tour_is_not_possible(tour_re, sqlalchemy_session):
+    assert tour_re.get_tour_description("not_existing_id") == "Tour not found"
+
+
 def test_if_tour_can_be_deleted_from_database(tour_re, sqlalchemy_session):
     data = tour_re.get_all_tours()
     assert len(data) == 3
     tour_re.delete_tour(data[0].id)
     saved_data = tour_re.get_all_tours()
     assert len(saved_data) == 2
+
+
+def test_if_deleting_none_existing_tour_is_not_possible(tour_re, sqlalchemy_session):
+    assert tour_re.delete_tour("not_existing_id") == False
 
 
 def test_if_filtering_based_on_nothing_returns_all_tours(sqlalchemy_session, tour_re):
@@ -179,7 +197,7 @@ def test_if_filtering_based_on_only_destination_is_as_expected(tour_re, sqlalche
     filter_tour = tour_re.filter_combinations("Dubai", "", "", "")
     verify(filter_tour, options=approval_options)
 
-#
+
 def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "500", "3000", "")
     verify(filter_tour, options=approval_options)

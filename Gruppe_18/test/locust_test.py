@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
 from Gruppe_18.src.main.model.models import Account
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from Gruppe_18.test_files.database.database_handler import get_session
+from Gruppe_18.test.database.database_handler import get_session
 Acc_Rep = AccountRepository(get_session())
 
 # NB app.py skal ikke kjøre samtidi som locust_test. den kjører app her med test_database tilknyttet
@@ -73,7 +73,7 @@ class MyUser(HttpUser):
 
     @task
     def access_register_to_tour(self):
-        response_login = self.client.post("/login", data={'id': str(uuid.uuid4()), 'username': 'user', 'password': 'user'})
+        response_login = self.client.post("/login", data={'username': 'user', 'password': 'user'})
         if response_login.status_code == 200:
             response = self.client.get("/home")
             tour_id = response.html.find('input[name="tour_id"]', first=True).attrs.get('value')

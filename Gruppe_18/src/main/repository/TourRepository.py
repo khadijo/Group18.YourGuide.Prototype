@@ -18,17 +18,17 @@ class TourRepository(JSONRepository):
                 self.session.commit()
                 return True
             return False
+        return False
 
     def cancel_booked_tour(self, tour):
         tour = self.session.query(Tour).filter_by(id=tour.id).first()
         if tour is not None:
             booked = int(tour.booked)
-            max_travelers = int(tour.max_travelers)
-            if not booked >= max_travelers:
+            if not booked == 0:
                 tour.booked = booked - 1
                 self.session.commit()
                 return True
-            return False
+        return False
 
     def get_tour_description(self, tour_id):
         tour = self.session.query(Tour).filter_by(id=tour_id).first()
