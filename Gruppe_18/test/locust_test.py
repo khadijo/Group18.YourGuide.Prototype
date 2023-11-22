@@ -71,6 +71,13 @@ class MyUser(HttpUser):
     def access_tours_registeret(self):
         response = self.client.get("/user_tours")
 
+    @task
+    def access_register_to_tour(self):
+        response_login = self.client.post("/login", data={'id': str(uuid.uuid4()), 'username': 'user', 'password': 'user'})
+        if response_login.status_code == 200:
+            response = self.client.get("/home")
+            tour_id = response.html.find('input[name="tour_id"]', first=True).attrs.get('value')
+            self.client.post("/register_for_tour", data={'tour_id': tour_id})
 
 
 
