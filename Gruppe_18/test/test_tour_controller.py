@@ -217,12 +217,12 @@ def test_if_guide_gets_sent_to_right_template_after_deleting_posted_tour(sqlalch
         tour_id = tour_rep.get_all_tours()[0].id
 
         request_data = {
-            'tour_id': tour_id,
+            'tour_id': tour_id
         }
 
         request_data.update(request.form)
         # Make the request with the updated data
-        with app.test_client() as client:
+        with app.test_client():
             assert tour_c.deleting_tour() == render_template('deleted_tour.html', tour=[])
 
 

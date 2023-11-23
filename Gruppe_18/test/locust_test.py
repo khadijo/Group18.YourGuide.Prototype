@@ -1,4 +1,5 @@
 import os
+import random
 import subprocess
 import uuid
 
@@ -7,10 +8,10 @@ from locust import HttpUser, task, between
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
-from Gruppe_18.src.main.model.models import Account
+from Gruppe_18.src.main.model.models import Account, tour_account_association
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
-from Gruppe_18.test.database.database_handler import get_session
-Acc_Rep = AccountRepository(get_session())
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
+
 
 # NB app.py skal ikke kjøre samtidi som locust_test. den kjører app her med test_database tilknyttet
 guide = Account(str(uuid.uuid4()), "guide", "guide", "guide", "12345678","guide@gmial.com")
@@ -22,6 +23,9 @@ database_name = os.path.join(module_path, "Test.db")
 engine = create_engine(f"sqlite:///{database_name}", echo=True, connect_args={'check_same_thread': False}, pool_pre_ping=True)
 
 session = sessionmaker(bind=engine)()
+
+Acc_Rep = AccountRepository(session)
+tour_rep = TourRepository(session)
 
 class MyUser(HttpUser):
     wait_time = between(1, 5)  # Brukerene venter 1-5 sekunder før de sender neste request
@@ -73,11 +77,36 @@ class MyUser(HttpUser):
 
     @task
     def access_register_to_tour(self):
-        response_login = self.client.post("/login", data={'username': 'user', 'password': 'user'})
-        if response_login.status_code == 200:
-            response = self.client.get("/home")
-            tour_id = response.html.find('input[name="tour_id"]', first=True).attrs.get('value')
-            self.client.post("/register_for_tour", data={'tour_id': tour_id})
+        all_accounts = session.query(Account).all()
+        if all_accounts:
+            account = random.choice(all_accounts)
+            if account.usertype != 'admin':
+                response_login = self.client.post("/login", data={'username': account.username, 'password': account.password})
+                if response_login.status_code == 200:
+                    tours = tour_rep.get_all_tours()
+                    if tours:
+                        tour = random.choice(tours)
+                        tour_id = tour.id
+                        request_data = {
+                            'tour_id': tour_id
+                        }
+                        registration = self.client.post('/register_for_tour', data=request_data)
+
+    @task
+    def access_cancel_tour(self):
+        registrations = session.query(tour_account_association).all()
+        if registrations:
+            registration = random.choice(registrations)
+            registerd_account = session.query(Account).filter_by(id=registration.account_id).first()
+            response_login = self.client.post("/login",
+                                              data={'username': registerd_account.username, 'password': registerd_account.password})
+            if response_login.status_code == 200:
+                tour = tour_rep.get_spesific_tour(registration.tour_id)
+                tour_id = tour.id
+                request_data = {
+                    'tour_id': tour_id
+                }
+                cancel = self.client.post('/cancel_tour', data=request_data)
 
 
 
