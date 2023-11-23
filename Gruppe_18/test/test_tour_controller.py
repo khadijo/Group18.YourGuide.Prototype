@@ -3,7 +3,7 @@ import os
 import uuid
 
 import pytest
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -178,15 +178,58 @@ def test_if_guide_gets_sent_to_right_template_after_filling_out_tour_creating_fo
 
 
 def test_if_guide_can_see_posted_tours_in_the_right_template(sqlalchemy_session, tour_c, app, guide, tour_rep):
-    pass
+    with app.test_request_context(method='POST', data={
+        'title': 'Welcome to Dubai',
+        'date': '2020, 10, 15',
+        'destination': 'Dubai',
+        'duration': '4',
+        'cost': 255,
+        'max_travelers': 15,
+        'language': 'English',
+        'pictureURL': 'https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg',
+    }):
+        login_user(guide)
+        assert tour_c.make_new_tour() == render_template('homepage_guide.html', tours=tour_rep.get_all_tours())
 
-def test_if_not_logged_in_user_gets_sent_to_login_when_wanting_too_see_posted_tours():
-    pass
+
+def test_if_not_logged_in_user_gets_sent_to_login_when_wanting_too_see_posted_tours(app, sqlalchemy_session, tour_c, guide):
+    with app.test_request_context():
+        login_user(guide)
+        logout_user()
+        result = tour_c.show_guide_tour()
+        assert result.status_code == 302
+        assert result.headers['location'] == '/login'
 
 
-def test_if_guide_gets_sent_to_right_template_after_deleting_posted_tour():
-    pass
+def test_if_guide_gets_sent_to_right_template_after_deleting_posted_tour(sqlalchemy_session, tour_c, app, guide, tour_rep):
+    with app.test_request_context(method='POST', data={
+        'title': 'Welcome to Dubai',
+        'date': '2020, 10, 15',
+        'destination': 'Dubai',
+        'duration': '4',
+        'cost': 255,
+        'max_travelers': 15,
+        'language': 'English',
+        'pictureURL': 'https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg',
+    }):
+        login_user(guide)
+        tour_c.make_new_tour()
+        tour_id = tour_rep.get_all_tours()[0].id
+
+        request_data = {
+            'tour_id': tour_id,
+        }
+
+        request_data.update(request.form)
+        # Make the request with the updated data
+        with app.test_client() as client:
+            assert tour_c.deleting_tour() == render_template('deleted_tour.html', tour=[])
 
 
-def test_if_not_logged_in_user_gets_sent_to_login_after_wanting_to_deleted_tour():
-    pass
+def test_if_not_logged_in_user_gets_sent_to_login_after_wanting_to_deleted_tour(app, sqlalchemy_session, tour_c, guide):
+    with app.test_request_context():
+        login_user(guide)
+        logout_user()
+        result = tour_c.deleting_tour()
+        assert result.status_code == 302
+        assert result.headers['location'] == '/login'
