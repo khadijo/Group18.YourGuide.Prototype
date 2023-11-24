@@ -57,6 +57,8 @@ class MyUser(HttpUser):
 
             response_search = self.client.get("/search?q=dubai")
 
+            respons_profile = self.client.get("/profile")
+
     @task
     def access_guider(self):
         response_login = self.client.post("/login", data={'username': 'guide', 'password': 'guide'})
@@ -78,19 +80,18 @@ class MyUser(HttpUser):
     @task
     def access_register_to_tour(self):
         all_accounts = session.query(Account).all()
-        if all_accounts:
-            account = random.choice(all_accounts)
-            if account.usertype != 'admin':
-                response_login = self.client.post("/login", data={'username': account.username, 'password': account.password})
-                if response_login.status_code == 200:
-                    tours = tour_rep.get_all_tours()
-                    if tours:
-                        tour = random.choice(tours)
-                        tour_id = tour.id
-                        request_data = {
-                            'tour_id': tour_id
-                        }
-                        registration = self.client.post('/register_for_tour', data=request_data)
+        account = random.choice(all_accounts)
+        if account.usertype != 'admin':
+            response_login = self.client.post("/login", data={'username': account.username, 'password': account.password})
+            if response_login.status_code == 200:
+                tours = tour_rep.get_all_tours()
+                if tours:
+                    tour = random.choice(tours)
+                    tour_id = tour.id
+                    request_data = {
+                        'tour_id': tour_id
+                    }
+                    registration = self.client.post('/register_for_tour', data=request_data)
 
     @task
     def access_cancel_tour(self):
@@ -107,8 +108,6 @@ class MyUser(HttpUser):
                     'tour_id': tour_id
                 }
                 cancel = self.client.post('/cancel_tour', data=request_data)
-
-
 
 
 if __name__ == "__main__":
@@ -132,16 +131,16 @@ if __name__ == "__main__":
 
 
     finally:
-        os.system("taskkill /F /IM locust")
         os.environ["locust_test"] = "False"
 
         # tømmer database
         session.close()
         db.metadata.drop_all(engine)
 
+        powershell_command = (
+            "Get-Process -Id (Get-NetTCPConnection -LocalPort 8888).OwningProcess | Stop-Process -Force"
+        )
+        subprocess.run(["powershell.exe", "-Command", powershell_command], shell=True)
 
-# skrive dette i terminalen hvis processene ikke blir terminert på en port fordi den ikke har
-# blitt avsluttet ordentlig:
-# Get-Process -Id (Get-NetTCPConnection -LocalPort 8888).OwningProcess | Stop-Process -Force
 
 
