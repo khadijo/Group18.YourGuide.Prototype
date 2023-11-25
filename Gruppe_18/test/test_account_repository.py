@@ -253,3 +253,9 @@ def test_user_cannot_cancel_unregistered_tour(account_1, account_rep, sqlalchemy
     tour_2_from_db = tour_rep.get_specific_tour(tour_2.id)
     account_rep.account_register_to_tour(tour_1_from_db.id, account_from_db.id)
     assert account_rep.account_cancel_tour(tour_2_from_db.id, account_from_db.id) is False
+
+
+def test_user_can_be_identified_by_username(account_1, account_rep, sqlalchemy_session):
+    account_rep.create_account(account_1)
+    account_from_db = account_rep.get_user_by_username(account_1.username)
+    verify(account_from_db, options=approval_options)
