@@ -39,7 +39,7 @@ class TourRepository(JSONRepository):
         else:
             return "Tour not found"
 
-    def get_spesific_tour(self, id):
+    def get_specific_tour(self, id):
         return self.session.query(Tour).filter_by(id=id).first()
     
     def get_all_tours(self):

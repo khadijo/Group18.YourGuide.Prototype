@@ -2,8 +2,6 @@ import os
 
 import sqlalchemy
 from flask_login import LoginManager, login_required, logout_user, current_user
-from flask_sqlalchemy import SQLAlchemy
-
 from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.database.app_config import app
@@ -144,12 +142,13 @@ def show_all_users():
     with sessions() as session:
         users = session.query(Account).all()
         return render_template('homepage_admin.html', users=users, show_all_users=True)
+    return account_controller.admin_get_all_users()
 
 
 
 @app.route('/hide_all_users', methods=['GET'])
 def hide_all_users():
-    return render_template('homepage_admin.html', show_all_users=False)
+    return account_controller.admin_hide_all_user()
 
 
 @app.route('/delete_account', methods=['POST'])
@@ -173,8 +172,7 @@ def hide_dashboard():
 @app.route('/profile')
 @login_required
 def profile():
-    user_data = load_user(current_user.get_id())
-    return render_template('profile.html', user_data=user_data)
+    return account_controller.show_profile()
 
 
 @app.route('/delete_user', methods=['POST'])
@@ -183,7 +181,6 @@ def delete_user():
     return account_controller.delete_my_account()
 
 
-# Update user info
 @app.route('/update_user_info', methods=['POST'])
 def update_user_info():
     account_controller = account_c()
