@@ -1,7 +1,6 @@
 import uuid
 from datetime import datetime
 from flask import render_template, request, flash, redirect, url_for
-from sqlite3 import IntegrityError
 from flask_login import current_user
 from Gruppe_18.src.main.model.models import Tour, tour_account_association, Account, guide_tour_association
 
@@ -28,12 +27,8 @@ class TourController():
             max_price = request.form['max_price']
             min_price = request.form['min_price']
             language = request.form['language']
-            try:
-                filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
-                return self.homepage_based_on_usertype(tours=filter_tours)
-            except IntegrityError:
-                flash('there was a mistake', 'danger')
-                return self.homepage_based_on_usertype()
+            filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
+            return self.homepage_based_on_usertype(tours=filter_tours)
 
     def search_tour(self):
         q = request.args.get("q")

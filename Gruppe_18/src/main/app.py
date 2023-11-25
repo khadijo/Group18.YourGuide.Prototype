@@ -24,30 +24,29 @@ print(is_testing)
 
 db_path = test_database if is_testing else "YourGuide.db"
 
+
 def sessions():
     return get_session(db_path)
-'''
-account_rep = AccountRepository(session)
-tour_rep = TourRepository(session)
-account_controller = AccountController(account_rep, session)
-tour_controller = TourController(tour_rep, session)
-'''
+
+
 app.secret_key = 'gruppe_18'
+
 
 def account_c():
     sessions = get_session(db_path)
     repository = AccountRepository(sessions)
     return AccountController(repository, sessions)
 
+
 def tour_c():
     sessions = get_session(db_path)
     repository = TourRepository(sessions)
     return TourController(repository, sessions)
 
+
 def tour_repo():
     sessions = get_session(db_path)
     return TourRepository(sessions)
-
 
 
 @login_manager.user_loader
