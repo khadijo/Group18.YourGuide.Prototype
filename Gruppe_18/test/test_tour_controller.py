@@ -233,3 +233,37 @@ def test_if_not_logged_in_user_gets_sent_to_login_after_wanting_to_deleted_tour(
         result = tour_c.deleting_tour()
         assert result.status_code == 302
         assert result.headers['location'] == '/login'
+
+
+def test_if_admin_gets_sent_to_the_right_page_with_right_info_when_wanting_to_see_all_tours(app, sqlalchemy_session, tour_c, tour, tour_rep, admin):
+    tour_rep.create_tour(tour)
+    tour = tour_rep.get_all_tours()
+    with app.test_request_context():
+        login_user(admin)
+        assert tour_c.show_all_tours() == render_template('homepage_admin.html', tours=tour, show_all_tours=True)
+
+
+def test_if_admin_gets_sent_to_the_right_page_when_wanting_to_see_hide_all_tours(app, sqlalchemy_session, tour_c, admin):
+    with app.test_request_context():
+        login_user(admin)
+        assert tour_c.hide_all_tours() == render_template('homepage_admin.html', show_all_tours=False)
+
+
+def test_if_admin_gets_sent_to_right_page_with_right_info_when_opening_dashboard(app, sqlalchemy_session, tour_c, admin):
+    dictionary = {
+            'num_users': 0,
+            'num_tours': 0,
+            'num_booked_tours': None,
+            'num_guides': 0,
+            'num_admin': 0,
+            'num_regular_users': 0
+        }
+    with app.test_request_context():
+        login_user(admin)
+        assert tour_c.show_dashboard() == render_template('homepage_admin.html', **dictionary, show_dashboard=True)
+
+
+def test_if_admin_gets_sent_to_right_page_wen_hiding_dashboard(app, sqlalchemy_session, tour_c, admin):
+    with app.test_request_context():
+        login_user(admin)
+        assert tour_c.hide_dashboard() == render_template('homepage_admin.html', show_dashboard=False)

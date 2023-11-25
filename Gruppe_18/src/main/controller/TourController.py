@@ -107,7 +107,7 @@ class TourController():
             return redirect(url_for('login'))
 
     def show_all_tours(self):
-        tours = self.tour_repository.get_all_tours
+        tours = self.tour_repository.get_all_tours()
         return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
 
     def hide_all_tours(self):

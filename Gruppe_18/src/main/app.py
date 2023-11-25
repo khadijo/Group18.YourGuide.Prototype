@@ -131,13 +131,13 @@ def delete_tour():
 @app.route('/show_all_tours', methods=['GET'])
 def show_tours():
     tour_controller = tour_c()
-    tour_controller.show_all_tours()
+    return tour_controller.show_all_tours()
 
 #
 @app.route('/hide_tours', methods=['GET'])
 def hide_tours():
     tour_controller = tour_c()
-    tour_controller.hide_all_tours()
+    return tour_controller.hide_all_tours()
 
 
 @app.route('/show_all_users', methods=['GET'])
