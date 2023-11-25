@@ -1,0 +1,99 @@
+@startuml
+class  Tour{
+    + id: String
+    + title: String
+    + date: DateTime
+    + destination: String
+    + duration: int
+    + cost: int
+    + max_travelers: int
+    + language: String
+    + pictureURL: String
+    + booked: int
+    + participants: Set<Account>
+    + owners: Set<Account>
+    + get_id(self)
+    + __repr__(): String
+}
+
+class TourRepository {
+    + session: Session
+    + book_tour(tour: Tour): Boolean
+    + cancel_booked_tour(tour: Tour): Boolean
+    + get_tour_description(tour_id: String): String
+    + get_spesific_tour(tour_id: String): Tour
+    + get_all_tours(): List[Tour]
+    + filter_combinations(destination: String, minPrice: int, maxPrice: int, language: String): List[Tour]
+    + search_tour(search: String): List[Tour]
+    + create_tour(tour: Tour): Tour
+    + guide_register_to_tour(tourId: String, userId: String): void
+    + delete_tour(tour_id: String): Boolean
+    + guide_delete_tour(tour_id: String, userId: String): Boolean
+    + admin_dashboard(): Map<String, Object>
+}
+
+class TourController{
+    + tour_repository: TourRepository
+    + session: Session
+    + homepage_based_on_usertype(tours: List<Tour>): <<return>> String
+    + filter_app(): <<return>> String
+    + search_tour(): <<return>> String
+    + get_user_tours(): <<return>> String
+    + make_new_tour(): <<return>> String
+    + show_guide_tour: <<return>> String
+    + deleting_tour: <<return>> String
+
+
+}
+
+class tour_account_association {
+    + account_id: String
+    + tour_id: String
+}
+
+class guide_tour_association {
+    + account_id: String
+    + guide_tour_id: String
+}
+
+class Account{
+    + id: String
+    + usertype: String
+    + username: String
+    + password: String
+    + phoneNumber: String
+    + emailAddress: String
+    + tours: Set<Tour>
+    + guide_tours: Set<Tour>
+    + def get_id()
+    + __repr__(): String
+}
+
+class AccountRepostiroy{
+    + session: Session
+    + tour_repo: TourRepository
+    + get_specific_account_by_id(): Account
+    + delete_account(user_id: String): Boolean
+    + upgrade_usertype_to_guide(user_id: String): Boolean
+    + create_account(user: Account): Boolean
+    + update_account(email: String, new_username: String, new_telephone_number: String, new_email: String): Boolean
+    + account_register_to_tour(tour_id: String, user_id: String): Boolean
+    + account_cancel_tour(tour_id: String, user_id: String)
+    + account_logged_in(status: Boolean): Boolean
+}
+
+class AccountController{
+    + account_repositor: AccountRepostiroy
+    + session: Session
+    + account_login(): <<return>> String
+    + account_registration(): <<return>> String
+    + tour_registration(): <<return>> String
+    + account_cancel_tour(): <<return>> String
+    + deleting_account(): <<return>> String
+    + delete_my_account(): <<return>> String
+    + update_user_information(): <<return>> String
+    + update_usertype(): <<return>> String
+
+}
+
+@enduml

@@ -22,7 +22,7 @@ class TourController():
         else:
             return render_template('homepage.html', tours=tours)
 
-    def filter_app(self):
+    def filter_tour(self):
         if request.method == 'POST':
             destination = request.form['destination']
             max_price = request.form['max_price']
