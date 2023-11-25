@@ -18,20 +18,20 @@ class TourRepository(JSONRepository):
                 self.session.commit()
                 return True
             return False
+        return False
 
     def cancel_booked_tour(self, tour):
         tour = self.session.query(Tour).filter_by(id=tour.id).first()
         if tour is not None:
             booked = int(tour.booked)
-            max_travelers = int(tour.max_travelers)
-            if not booked >= max_travelers:
+            if not booked == 0:
                 tour.booked = booked - 1
                 self.session.commit()
                 return True
-            return False
+        return False
 
     def get_tour_description(self, tour_id):
-        tour = self.session.query(Tour).filter_by(tour_id=tour_id).first()
+        tour = self.session.query(Tour).filter_by(id=tour_id).first()
 
         if tour:
             description = f"This tour will take you to {tour.destination} for {tour.duration} hours, and is offered in {tour.language}"
@@ -60,6 +60,9 @@ class TourRepository(JSONRepository):
             query = query.filter_by(language=language)
         return query.all()
 
+    def search_tour(self, q):
+        return self.session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title).all()
+
     def create_tour(self, tour):
         tour = Tour(id=tour.id,
                     title=tour.title,
@@ -75,7 +78,6 @@ class TourRepository(JSONRepository):
         return tour
 
     def guide_register_to_tour(self, tour_id, user_id):
-        print(f"Tour ID: {tour_id}, Guide ID: {user_id}")
         existing_registration = self.session.query(guide_tour_association).filter_by(
             tour_id=tour_id,
             guide_id=user_id
@@ -86,8 +88,6 @@ class TourRepository(JSONRepository):
         else:
             tour = self.session.query(Tour).filter_by(id=tour_id).first()
             guide = self.session.query(Account).filter_by(id=user_id).first()
-            print(f"Tour: {tour}")
-            print(f"Guide: {guide}")
 
             if tour is not None and guide is not None:
                 tour_guide_assoc_obj = guide_tour_association.insert().values(
@@ -122,6 +122,7 @@ class TourRepository(JSONRepository):
             self.delete_tour(tour.id)
             self.session.execute(stmt)
             self.session.commit()
+            return True
         else:
             print("Tour or user is not found.")
 
@@ -133,9 +134,7 @@ class TourRepository(JSONRepository):
 
         num_booked_tours = self.session.query(func.sum(Tour.booked)).scalar()
 
-        num_guides = self.session.query(func.count(Account.id)).join(
-            guide_tour_association, Account.id == guide_tour_association.c.guide_id
-        ).filter(guide_tour_association.c.guide_id.isnot(None)).scalar()
+        num_guides = self.session.query(func.count(Account.id)).filter(Account.usertype == "guide").scalar()
 
         num_admin = self.session.query(func.count(Account.id)).filter(Account.usertype == "admin").scalar()
 

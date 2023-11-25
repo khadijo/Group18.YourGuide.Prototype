@@ -1,7 +1,6 @@
 import uuid
 from datetime import datetime
 from flask import render_template, request, flash, redirect, url_for
-from sqlite3 import IntegrityError
 from flask_login import current_user
 from Gruppe_18.src.main.model.models import Tour, tour_account_association, Account, guide_tour_association
 
@@ -13,7 +12,7 @@ class TourController():
 
     def homepage_based_on_usertype(self, tours=None):
         if tours is None:
-            tours = self.session.query(Tour).all()
+            tours = self.tour_repository.get_all_tours()
         if current_user.usertype == "admin":
             data = self.tour_repository.admin_dashboard()
             return render_template('homepage_admin.html', **data)
@@ -28,25 +27,15 @@ class TourController():
             max_price = request.form['max_price']
             min_price = request.form['min_price']
             language = request.form['language']
-            try:
-                filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
-                return self.homepage_based_on_usertype(tours=filter_tours)
-            except IntegrityError:
-                flash('there was a mistake', 'danger')
-                return self.homepage_based_on_usertype()
+            filter_tours = self.tour_repository.filter_combinations(destination, min_price, max_price, language)
+            return self.homepage_based_on_usertype(tours=filter_tours)
 
     def search_tour(self):
         q = request.args.get("q")
-        # q is short for query
-        print(str(q))
-        qs = str(q)
         if q:
-            results = self.session.query(Tour).filter(Tour.title.ilike(f"%{q}%")).order_by(Tour.title)
-            # on the above code, please order the result
-            print(str(q))
-            print(results)
+            results = self.tour_repository.search_tour(q)
         else:
-            results = []
+            results = self.tour_repository.get_all_tours()
         return self.homepage_based_on_usertype(tours=results)
 
     def get_user_tours(self):
@@ -80,7 +69,7 @@ class TourController():
             self.tour_repository.create_tour(tour)
             guide_id = current_user.id
             self.tour_repository.guide_register_to_tour(tour.id, guide_id)
-            tours = self.session.query(Tour).all()
+            tours = self.tour_repository.get_all_tours()
             return render_template('homepage_guide.html', tours=tours)
 
         return render_template('new_tour.html')
@@ -103,7 +92,7 @@ class TourController():
         if current_user.is_authenticated:
             tour_id = request.form.get('tour_id')
             user_id = current_user.id
-            tour = self.session.query(Tour).filter_by(id=tour_id).first()
+            tour = self.tour_repository.get_spesific_tour(tour_id)
             if tour:
                 self.tour_repository.guide_delete_tour(tour_id, user_id)
                 self.session.commit()
@@ -112,3 +101,17 @@ class TourController():
             flash('You must be logged in to delete a tour.', 'danger')
             return redirect(url_for('login'))
 
+    def show_all_tours(self):
+        tours = self.tour_repository.get_all_tours()
+        return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
+
+    def hide_all_tours(self):
+        return render_template('homepage_admin.html', show_all_tours=False)
+
+    def show_dashboard(self):
+        data = self.tour_repository.admin_dashboard()
+        return render_template('homepage_admin.html', **data, show_dashboard=True)
+
+
+    def hide_dashboard(self):
+        return render_template('homepage_admin.html', show_dashboard=False)
