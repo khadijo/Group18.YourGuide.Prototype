@@ -100,12 +100,12 @@ def hide_tours():
 
 @app.route('/show_all_users', methods=['GET'])
 def show_all_users():
-    return account_controller.get_all_users()
+    return account_controller.admin_get_all_users()
 
 
 @app.route('/hide_all_users', methods=['GET'])
 def hide_all_users():
-    return render_template('homepage_admin.html', show_all_users=False)
+    return account_controller.admin_hide_all_user()
 
 
 @app.route('/delete_account', methods=['POST'])
@@ -127,8 +127,7 @@ def hide_dashboard():
 @app.route('/profile')
 @login_required
 def profile():
-    user_data = load_user(current_user.get_id())
-    return render_template('profile.html', user_data=user_data)
+    return account_controller.show_profile()
 
 
 @app.route('/home/filter', methods=['GET', 'POST'])
