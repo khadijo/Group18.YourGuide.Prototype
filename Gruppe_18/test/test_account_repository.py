@@ -115,7 +115,7 @@ def test_can_get_one_specific_user_based_on_id(account_1, account_rep):
     verify(account_from_db, options=approval_options)
 
 
-# Testing feature 1.15
+# Testing feature 1.15 and 1.1.5
 def test_can_not_get_one_specific_user_that_does_not_exist_based_on_id(account_1, account_rep):
     account_rep.create_account(account_1)
     account_id_does_not_exist = str(uuid.uuid4())
@@ -123,6 +123,7 @@ def test_can_not_get_one_specific_user_that_does_not_exist_based_on_id(account_1
     assert account_rep.get_one_specific_account(account_1.id) is False
 
 
+# Testing feature 1.15 and 1.1.5
 def test_if_get_all_users_returns_all_existing_accounts(account_1, account_2, account_3, account_rep):
     account_rep.create_account(account_1)
     account_rep.create_account(account_2)
@@ -131,6 +132,7 @@ def test_if_get_all_users_returns_all_existing_accounts(account_1, account_2, ac
     verify(all_users, options=approval_options)
 
 
+# Testing feature 1.15 and 1.1.5
 def test_if_there_is_none_users_get_all_users_returns_false(account_rep):
     assert account_rep.get_all_users() is False
 
@@ -152,6 +154,7 @@ def test_account_missing_information_returns_false(account_1, account_rep, sqlal
     assert account_rep.create_account(account_1) is False
 
 
+# Testing feature 1.15
 def test_creating_two_accounts_with_the_same_id_returns_integrity_error(account_1, account_rep):
     account_rep.create_account(account_1)
 
@@ -166,6 +169,7 @@ def test_user_can_be_deleted(account_1, account_rep):
     assert account_rep.delete_account(account_from_db.id) is True
 
 
+# Testing 1.18
 def test_user_cannot_be_deleted_if_user_does_not_exist(account_1, account_rep):
     account_rep.create_account(account_1)
     account_id_does_not_exist = str(uuid.uuid4())
@@ -213,6 +217,7 @@ def test_user_can_register_to_a_tour(account_rep, account_1, sqlalchemy_session,
     assert registration_row is not None
 
 
+# Testing feature 1.8.6
 def test_user_cannot_register_to_already_registered_tour(account_1, account_rep, sqlalchemy_session, tour_1, tour_rep):
     account_rep.create_account(account_1)
     tour_rep.create_tour(tour_1)
@@ -222,6 +227,7 @@ def test_user_cannot_register_to_already_registered_tour(account_1, account_rep,
     assert account_rep.account_register_to_tour(tour_from_db.id, account_from_db.id) is False
 
 
+# Testing feature 1.8.7
 def test_user_cannot_register_to_tour_if_tourId_or_userId_does_not_exist(account_1, account_rep, tour_1, tour_rep,
                                                                          sqlalchemy_session):
     account_rep.create_account(account_1)
@@ -244,6 +250,7 @@ def test_user_can_cancel_a_tour_after_registration(account_rep, account_1, sqlal
     assert account_rep.account_cancel_tour(tour_from_db.id, account_from_db.id) is True
 
 
+# Testing feature 1.17
 def test_user_cannot_cancel_unregistered_tour(account_1, account_rep, sqlalchemy_session, tour_1, tour_2, tour_rep):
     account_rep.create_account(account_1)
     tour_rep.create_tour(tour_1)
@@ -255,6 +262,7 @@ def test_user_cannot_cancel_unregistered_tour(account_1, account_rep, sqlalchemy
     assert account_rep.account_cancel_tour(tour_2_from_db.id, account_from_db.id) is False
 
 
+# Testing feature 1.1.7
 def test_user_can_be_identified_by_username(account_1, account_rep, sqlalchemy_session):
     account_rep.create_account(account_1)
     account_from_db = account_rep.get_user_by_username(account_1.username)
