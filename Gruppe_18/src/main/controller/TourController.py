@@ -92,7 +92,7 @@ class TourController():
         if current_user.is_authenticated:
             tour_id = request.form.get('tour_id')
             user_id = current_user.id
-            tour = self.tour_repository.get_spesific_tour(tour_id)
+            tour = self.tour_repository.get_specific_tour(tour_id)
             if tour:
                 self.tour_repository.guide_delete_tour(tour_id, user_id)
                 self.session.commit()
