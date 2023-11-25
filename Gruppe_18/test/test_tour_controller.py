@@ -276,6 +276,13 @@ def test_if_admin_gets_sent_to_right_page_wen_hiding_dashboard(app, sqlalchemy_s
         assert tour_c.hide_dashboard() == render_template('homepage_admin.html', show_dashboard=False)
 
 
-#show guide tour, guide tour html
-# deleting tour rendering template
-# filter app og search tour
+def test_if_user_gets_sent_to_right_page_with_right_content_after_filtering_tours(user, app, sqlalchemy_session, tour_c):
+    with app.test_request_context(method='POST', data={'destination': '', 'max_price': '', 'min_price': '', 'language': ''}):
+        login_user(user)
+        assert tour_c.filter_app() == render_template('homepage.html', tours=[])
+
+
+def test_if_user_gets_sent_to_right_page_with_right_content_after_searching_tours(user, app, sqlalchemy_session, tour_c):
+    with app.test_request_context(method='POST', data={'q': ''}):
+        login_user(user)
+        assert tour_c.search_tour() == render_template('homepage.html', tours=[])
