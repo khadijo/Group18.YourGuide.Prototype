@@ -123,7 +123,7 @@ def test_if_admin_gets_the_right_homepage(tour_c, admin, sqlalchemy_session, app
 
 def test_if_homepages_contains_all_available_tours(tour_c, user, sqlalchemy_session, app, tour_rep, tour):
     tour_rep.create_tour(tour)
-    tours = [tour_rep.get_spesific_tour('1')]
+    tours = [tour_rep.get_specific_tour('1')]
     with app.test_request_context():
         login_user(user, remember=True)
         assert tour_c.homepage_based_on_usertype() == render_template('homepage.html', tours=tours)
@@ -131,7 +131,7 @@ def test_if_homepages_contains_all_available_tours(tour_c, user, sqlalchemy_sess
 
 def test_if_homepage_can_contain_spesific_tours(sqlalchemy_session, app, tour, user, tour_c, tour_rep):
     tour_rep.create_tour(tour)
-    tours = [tour_rep.get_spesific_tour('1')]
+    tours = [tour_rep.get_specific_tour('1')]
     with app.test_request_context():
         login_user(user, remember=True)
         assert tour_c.homepage_based_on_usertype() == render_template('homepage.html', tours=tours)
@@ -141,7 +141,7 @@ def test_if_logget_in_user_can_see_booked_tours(sqlalchemy_session, app, tour_c,
     tour_rep.create_tour(tour)
     acc_rep.create_account(user)
     acc_rep.account_register_to_tour(tour.id, user.id)
-    user_tours = [tour_rep.get_spesific_tour('1')]
+    user_tours = [tour_rep.get_specific_tour('1')]
     user_comparison = sqlalchemy_session.query(Account).filter_by(id=user.id).first()
     with app.test_request_context():
         login_user(user, remember=True)
@@ -274,3 +274,8 @@ def test_if_admin_gets_sent_to_right_page_wen_hiding_dashboard(app, sqlalchemy_s
     with app.test_request_context():
         login_user(admin)
         assert tour_c.hide_dashboard() == render_template('homepage_admin.html', show_dashboard=False)
+
+
+#show guide tour, guide tour html
+# deleting tour rendering template
+# filter app og search tour
