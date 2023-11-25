@@ -10,7 +10,7 @@ from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from flask_login import login_user, LoginManager, logout_user
 import pytest
-from main.repository.TourRepository import TourRepository
+from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 
 @pytest.fixture()
