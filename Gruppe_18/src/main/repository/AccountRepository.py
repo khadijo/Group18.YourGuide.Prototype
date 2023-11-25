@@ -10,6 +10,10 @@ class AccountRepository(JSONRepository):
         self.session = session
         self.tour_repo = TourRepository(session)
 
+    def get_user_by_username(self, username):
+        user = self.session.query(Account).filter_by(username=username).first()
+        return user
+
     def get_one_specific_account(self, user_id):
         user = self.session.query(Account).filter_by(id=user_id).first()
         if user:
@@ -73,13 +77,18 @@ class AccountRepository(JSONRepository):
         self.session.commit()
         return True
 
-    def account_register_to_tour(self, tour_id, user_id):
+    def is_account_registered_to_tour(self, tour_id, user_id):
         existing_registration = self.session.query(tour_account_association).filter_by(
             tour_id=tour_id,
             account_id=user_id
         ).first()
-
         if existing_registration:
+            return True
+        else:
+            return False
+
+    def account_register_to_tour(self, tour_id, user_id):
+        if self.is_account_registered_to_tour(tour_id, user_id):
             print("You are already registered for that tour.")
             return False
         else:

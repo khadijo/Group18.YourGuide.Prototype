@@ -9,17 +9,12 @@ class AccountController:
         self.account_repository = account_repository
         self.session = session
 
-    def get_specific_account_by_id(self):
-        user_id = current_user.id
-        user = self.session.query(Account).filter_by(id=user_id).first()
-        return user
-
     def account_login(self):
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
 
-            user = self.session.query(Account).filter_by(username=username).first()
+            user = self.account_repository.get_user_by_username(username)
 
             if user and user.password == password:
                 login_user(user, remember=True)
@@ -108,6 +103,13 @@ class AccountController:
             self.session.commit()
             return redirect(url_for('home'))
 
-    def get_all_users(self):
+    def admin_get_all_users(self):
         users = self.account_repository.get_all_users()
         return render_template('homepage_admin.html', users=users, show_all_users=True)
+
+    def admin_hide_all_user(self):
+        return render_template('homepage_admin.html', show_all_users=False)
+
+    def show_profile(self):
+        user_data = self.account_repository.get_one_specific_account(current_user.get_id())
+        return render_template('profile.html', user_data=user_data)

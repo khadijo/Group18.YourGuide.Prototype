@@ -56,6 +56,15 @@
             background-color: #0056b3;
         }
     </style>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <div class="flash-message">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
 </head>
 <body>
     <div class="container">
