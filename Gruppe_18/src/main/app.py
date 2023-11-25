@@ -42,11 +42,6 @@ def tour_c():
     return TourController(repository, sessions)
 
 
-def tour_repo():
-    sessions = get_session(db_path)
-    return TourRepository(sessions)
-
-
 @login_manager.user_loader
 def load_user(user_id):
     with sessions() as session:
@@ -139,15 +134,14 @@ def hide_tours():
 
 @app.route('/show_all_users', methods=['GET'])
 def show_all_users():
-    with sessions() as session:
-        users = session.query(Account).all()
-        return render_template('homepage_admin.html', users=users, show_all_users=True)
+    account_controller = account_c()
     return account_controller.admin_get_all_users()
 
 
 
 @app.route('/hide_all_users', methods=['GET'])
 def hide_all_users():
+    account_controller = account_c()
     return account_controller.admin_hide_all_user()
 
 
@@ -172,6 +166,7 @@ def hide_dashboard():
 @app.route('/profile')
 @login_required
 def profile():
+    account_controller = account_c()
     return account_controller.show_profile()
 
 
