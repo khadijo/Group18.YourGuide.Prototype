@@ -127,17 +127,17 @@ def delete_tour():
     tour_controller = tour_c()
     return tour_controller.deleting_tour()
 
-
+#
 @app.route('/show_all_tours', methods=['GET'])
 def show_tours():
-    with sessions() as session:
-        tours = session.query(Tour).all()
-        return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
+    tour_controller = tour_c()
+    tour_controller.show_all_tours()
 
-
+#
 @app.route('/hide_tours', methods=['GET'])
 def hide_tours():
-    return render_template('homepage_admin.html', show_all_tours=False)
+    tour_controller = tour_c()
+    tour_controller.hide_all_tours()
 
 
 @app.route('/show_all_users', methods=['GET'])
@@ -158,17 +158,19 @@ def delete_account():
     account_controller = account_c()
     return account_controller.deleting_account()
 
-
+#
 @app.route('/show_dashboard', methods=['GET'])
 def show_dashboard():
-    tour_rep = tour_repo()
-    data = tour_rep.admin_dashboard()
-    return render_template('homepage_admin.html', **data, show_dashboard=True)
+    tour_controller = tour_c()
+    return tour_controller.show_dashboard()
 
 
+
+#
 @app.route('/hide_dashboard', methods=['GET'])
 def hide_dashboard():
-    return render_template('homepage_admin.html', show_dashboard=False)
+    tour_controller = tour_c()
+    return tour_controller.hide_dashboard()
 
 
 @app.route('/profile')

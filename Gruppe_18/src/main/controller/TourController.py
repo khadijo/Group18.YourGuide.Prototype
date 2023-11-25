@@ -106,3 +106,17 @@ class TourController():
             flash('You must be logged in to delete a tour.', 'danger')
             return redirect(url_for('login'))
 
+    def show_all_tours(self):
+        tours = self.tour_repository.get_all_tours
+        return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
+
+    def hide_all_tours(self):
+        return render_template('homepage_admin.html', show_all_tours=False)
+
+    def show_dashboard(self):
+        data = self.tour_repository.admin_dashboard()
+        return render_template('homepage_admin.html', **data, show_dashboard=True)
+
+
+    def hide_dashboard(self):
+        return render_template('homepage_admin.html', show_dashboard=False)
