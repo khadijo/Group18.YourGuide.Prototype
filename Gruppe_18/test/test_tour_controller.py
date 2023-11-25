@@ -2,6 +2,7 @@ import datetime
 import os
 import uuid
 
+import flask
 import pytest
 from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
@@ -154,6 +155,8 @@ def test_if_not_logged_in_user_gets_returned_to_login_page_when_trying_to_see_bo
         result = tour_c.get_user_tours()
         assert result.status_code == 302
         assert result.headers['location'] == '/login'
+        messages = list(flask.get_flashed_messages())
+        assert 'You must be logged in to see your registered tours.' in messages
 
 
 def test_if_guide_gets_sent_to_right_template_when_wanting_to_create_tour(sqlalchemy_session, app, tour_c, guide):
@@ -199,6 +202,8 @@ def test_if_not_logged_in_user_gets_sent_to_login_when_wanting_too_see_posted_to
         result = tour_c.show_guide_tour()
         assert result.status_code == 302
         assert result.headers['location'] == '/login'
+        messages = list(flask.get_flashed_messages())
+        assert 'You must be logged in to see your registered tours.' in messages
 
 
 def test_if_guide_gets_sent_to_right_template_after_deleting_posted_tour(sqlalchemy_session, tour_c, app, guide, tour_rep):
@@ -233,6 +238,8 @@ def test_if_not_logged_in_user_gets_sent_to_login_after_wanting_to_deleted_tour(
         result = tour_c.deleting_tour()
         assert result.status_code == 302
         assert result.headers['location'] == '/login'
+        messages = list(flask.get_flashed_messages())
+        assert 'You must be logged in to delete a tour.' in messages
 
 
 def test_if_admin_gets_sent_to_the_right_page_with_right_info_when_wanting_to_see_all_tours(app, sqlalchemy_session, tour_c, tour, tour_rep, admin):
