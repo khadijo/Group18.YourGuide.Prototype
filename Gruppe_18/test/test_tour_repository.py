@@ -227,7 +227,7 @@ def test_if_getting_spesific_tour_is_possible(tour_re, sqlalchemy_session):
     all_tours = tour_re.get_all_tours()
     tour_1 = all_tours[0]
     tour_1_id = tour_1.id
-    assert tour_1 == tour_re.get_spesific_tour(tour_1_id)
+    assert tour_1 == tour_re.get_specific_tour(tour_1_id)
 
 
 #
