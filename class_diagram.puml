@@ -73,7 +73,7 @@ class Account{
     + __repr__(): String
 }
 
-class AccountRepostiroy{
+class AccountRepository{
     + session: Session
     + tour_repo: TourRepository
     + get_user_by_username(username: String): Account
@@ -89,7 +89,7 @@ class AccountRepostiroy{
 }
 
 class AccountController{
-    + account_repositor: AccountRepostiroy
+    + account_repositor: AccountRepository
     + session: Session
     + account_login(): <<return>> String
     + account_registration(): <<return>> String
@@ -103,5 +103,19 @@ class AccountController{
     + admin_hide_all_users(): <<return>> String
     + show_profile(): <<return>> String
 }
+
+Tour --> tour_account_association
+tour_account_association --> Account
+
+Tour -> guide_tour_association
+guide_tour_association --> Account
+
+TourRepository ..> Tour
+TourController --> TourRepository
+
+AccountRepository ..> Account
+AccountController --> AccountRepository
+
+AccountRepository --> TourRepository
 
 @enduml
