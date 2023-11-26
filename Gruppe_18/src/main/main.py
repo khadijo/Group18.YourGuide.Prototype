@@ -71,17 +71,20 @@ Oslo = Tour(str(uuid.uuid4()),
     "https://th.bing.com/th/id/R.204fc958e56b888bc534eaeeb0d20e56?rik=%2fW47vQ1hMRsekA&pid=ImgRaw&r=0"
 )
 
-tour_repository.create_tour(Dubai)
-tour_repository.create_tour(Lofoten)
-tour_repository.create_tour(Hawaii)
-tour_repository.create_tour(Oslo)
-
-
 
 account_rep.create_account(a)
 account_rep.create_account(b)
 account_rep.create_account(g)
 
+'''
+account_rep.create_account(a)
+account_rep.create_account(b)
+account_rep.create_account(g)
+
+tour_repository.create_tour(Dubai)
+tour_repository.create_tour(Lofoten)
+tour_repository.create_tour(Hawaii)
+tour_repository.create_tour(Oslo)
 
 #result = tour_repository.book_tour(new_tour)
 #result1 = tour_repository.book_tour(new_tour)
@@ -102,6 +105,6 @@ session.commit()
 
 
 
-
+'''
 
 

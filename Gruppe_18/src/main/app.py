@@ -1,6 +1,4 @@
 import os
-
-import sqlalchemy
 from flask_login import LoginManager, login_required, logout_user, current_user
 from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour
