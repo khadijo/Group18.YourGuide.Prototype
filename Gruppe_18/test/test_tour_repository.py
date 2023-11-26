@@ -208,7 +208,7 @@ def test_if_filtering_based_on_only_destination_is_as_expected(tour_re, sqlalche
     verify(filter_tour, options=approval_options)
 
 
-# testing feature 1.8.3.2 and # testing feature 1.8.3.3
+# testing feature 1.8.3.2 and 1.8.3.3
 def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "500", "3000", "")
     verify(filter_tour, options=approval_options)
