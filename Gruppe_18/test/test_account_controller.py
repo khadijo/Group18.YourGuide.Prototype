@@ -130,6 +130,7 @@ def test_user_cannot_register_if_one_field_is_missing_data(app, user, account_co
         assert result == render_template('User_register.html')
         assert account_repository.get_user_by_username('') is None
 
+
 # Testing feature 1.1.6
 def test_if_user_can_login_with_saved_account_after_registration(app, user, account_controller, account_repository):
     account_repository.create_account(user)
