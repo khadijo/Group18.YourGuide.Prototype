@@ -238,6 +238,7 @@ def test_if_filtering_based_on_destination_price_and_language_is_as_expected(tou
     verify(filter_tour, options=approval_options)
 
 
+# testing feature nonfunctional 1.21
 def test_if_getting_spesific_tour_is_possible(tour_re, sqlalchemy_session):
     all_tours = tour_re.get_all_tours()
     tour_1 = all_tours[0]
