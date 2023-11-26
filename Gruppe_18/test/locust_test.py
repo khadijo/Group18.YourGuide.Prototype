@@ -14,56 +14,57 @@ from Gruppe_18.src.main.repository.TourRepository import TourRepository
 
 
 # NB app.py skal ikke kjøre samtidi som locust_test. den kjører app her med test_database tilknyttet
-guide = Account(str(uuid.uuid4()), "guide", "guide", "guide", "12345678","guide@gmial.com")
-admin = Account(str(uuid.uuid4()), "admin", "admin", "admin", "12345678","guide@gmial.com")
-user = Account(str(uuid.uuid4()), "user", "user", "user", "12345678","guide@gmial.com")
+guide = Account(str(uuid.uuid4()), "guide", "guide", "guide", "12345678", "guide@gmial.com")
+admin = Account(str(uuid.uuid4()), "admin", "admin", "admin", "12345678", "guide@gmial.com")
+user = Account(str(uuid.uuid4()), "user", "user", "user", "12345678", "guide@gmial.com")
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 database_name = os.path.join(module_path, "Test.db")
-engine = create_engine(f"sqlite:///{database_name}", echo=True, connect_args={'check_same_thread': False}, pool_pre_ping=True)
+engine = create_engine(f"sqlite:///{database_name}",
+                       echo=True, connect_args={'check_same_thread': False}, pool_pre_ping=True)
 
 session = sessionmaker(bind=engine)()
 
 Acc_Rep = AccountRepository(session)
 tour_rep = TourRepository(session)
 
+
 class MyUser(HttpUser):
-    wait_time = between(1, 5)  # Brukerene venter 1-5 sekunder før de sender neste request
-    host = "http://127.0.0.1:5000" #applikasjonen vår
-    #sender brukere til disse sidene, og utfører requests:
+    wait_time = between(1, 5)
+    host = "http://127.0.0.1:5000"
 
     @task
     def access_start(self):
-        response = self.client.get("/")
+        self.client.get("/")
+
     @task
     def access_user_registration(self):
-            register = self.client.post("/account_reg",
-                                        data={'username': str(uuid.uuid4()),
-                                              'password': str(uuid.uuid4()),
-                                              'phoneNumber': str(uuid.uuid4()),
-                                              'emailAddress': str(uuid.uuid4())})
+        self.client.post("/account_reg", data={'username': str(uuid.uuid4()),
+                                               'password': str(uuid.uuid4()),
+                                               'phoneNumber': str(uuid.uuid4()),
+                                               'emailAddress': str(uuid.uuid4())})
+
     @task
     def access_user_login(self):
         response_login = self.client.post("/login", data={'username': 'user', 'password': 'user'})
 
         if response_login.status_code == 200:
-            respons_home = self.client.get("/home")
+            self.client.get("/home")
 
-            response_filter = self.client.post("/home/filter",
-                                               data={'destination': 'some_destination',
-                                                     'max_price': 'some_max_price',
-                                                     'min_price': 'some_min_price',
-                                                     'language': 'some_language'})
+            self.client.post("/home/filter", data={'destination': 'some_destination',
+                                                   'max_price': 'some_max_price',
+                                                   'min_price': 'some_min_price',
+                                                   'language': 'some_language'})
 
-            response_search = self.client.get("/search?q=dubai")
+            self.client.get("/search?q=dubai")
 
-            respons_profile = self.client.get("/profile")
+            self.client.get("/profile")
 
     @task
     def access_guider(self):
         response_login = self.client.post("/login", data={'username': 'guide', 'password': 'guide'})
         if response_login.status_code == 200:
-            create_tour = self.client.post('/new_tour', data={
+            self.client.post('/new_tour', data={
                 'title': "Welcome to tour!",
                 'date': "2023, 11, 17",
                 'destination': "country, city",
@@ -72,17 +73,19 @@ class MyUser(HttpUser):
                 'max_travelers': 5,
                 'language': "English",
                 'pictureURL': "http://example.com/image.jpg"})
-            check_published_tours = self.client.get("/guide_tours")
+            self.client.get("/guide_tours")
+
     @task
     def access_tours_registeret(self):
-        response = self.client.get("/user_tours")
+        self.client.get("/user_tours")
 
     @task
     def access_register_to_tour(self):
         all_accounts = session.query(Account).all()
         account = random.choice(all_accounts)
         if account.usertype != 'admin':
-            response_login = self.client.post("/login", data={'username': account.username, 'password': account.password})
+            response_login = self.client.post("/login", data={'username': account.username,
+                                                              'password': account.password})
             if response_login.status_code == 200:
                 tours = tour_rep.get_all_tours()
                 if tours:
@@ -91,7 +94,7 @@ class MyUser(HttpUser):
                     request_data = {
                         'tour_id': tour_id
                     }
-                    registration = self.client.post('/register_for_tour', data=request_data)
+                    self.client.post('/register_for_tour', data=request_data)
 
     @task
     def access_cancel_tour(self):
@@ -100,14 +103,15 @@ class MyUser(HttpUser):
             registration = random.choice(registrations)
             registerd_account = session.query(Account).filter_by(id=registration.account_id).first()
             response_login = self.client.post("/login",
-                                              data={'username': registerd_account.username, 'password': registerd_account.password})
+                                              data={'username': registerd_account.username,
+                                                    'password': registerd_account.password})
             if response_login.status_code == 200:
-                tour = tour_rep.get_spesific_tour(registration.tour_id)
+                tour = tour_rep.get_specific_tour(registration.tour_id)
                 tour_id = tour.id
                 request_data = {
                     'tour_id': tour_id
                 }
-                cancel = self.client.post('/cancel_tour', data=request_data)
+                self.client.post('/cancel_tour', data=request_data)
 
 
 if __name__ == "__main__":
@@ -129,11 +133,9 @@ if __name__ == "__main__":
             "--web-host 127.0.0.1 --web-port 8888 --users 50 --spawn-rate 10",
             shell=True)
 
-
     finally:
         os.environ["locust_test"] = "False"
 
-        # tømmer database
         session.close()
         db.metadata.drop_all(engine)
 
@@ -141,6 +143,3 @@ if __name__ == "__main__":
             "Get-Process -Id (Get-NetTCPConnection -LocalPort 8888).OwningProcess | Stop-Process -Force"
         )
         subprocess.run(["powershell.exe", "-Command", powershell_command], shell=True)
-
-
-
