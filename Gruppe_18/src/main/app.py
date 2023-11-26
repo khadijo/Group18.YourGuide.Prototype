@@ -191,7 +191,7 @@ def upgrade_usertype():
 @app.route('/home/filter', methods=['GET','POST'])
 def filter_tour():
     tour_controller = tour_c()
-    return tour_controller.filter_tour()
+    return tour_controller.filter_app()
 
 
 if __name__ == '__main__':
