@@ -293,6 +293,15 @@ def test_if_user_gets_sent_to_right_page_with_right_content_after_filtering_tour
 
 # testing feature 1.8.4
 def test_if_user_gets_sent_to_right_page_with_right_content_after_searching_tours(user, app, sqlalchemy_session, tour_c):
-    with app.test_request_context(method='POST', data={'q': ''}):
+    with app.test_request_context(method='POST', data={'q': 'noe'}):
         login_user(user)
         assert tour_c.search_tour() == render_template('homepage.html', tours=[])
+
+
+# testing feature 1.8.5
+def test_if_user_searching_for_nothing_gets_right_content_in_the_page(user, app, sqlalchemy_session, tour_c, tour_rep, tour):
+    with app.test_request_context(method='POST', data={'q': ''}):
+        login_user(user)
+        tour_rep.create_tour(tour)
+        all_tours = tour_rep.get_specific_tour(tour.id)
+        assert tour_c.search_tour() == render_template('homepage.html', tours=[all_tours])
