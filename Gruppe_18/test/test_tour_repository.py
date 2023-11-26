@@ -168,7 +168,7 @@ def test_if_cancellation_on_none_existing_tour_is_not_possible(tour_re, sqlalche
     assert tour_re.cancel_booked_tour(tour_4) == False
 
 
-# testing feature 1.7.1.1
+# testing feature 1.7.1.8
 def test_if_description_for_a_tour_is_correctly_returnet(tour_re, sqlalchemy_session):
     data = tour_re.get_all_tours()
     tour = data[0]
@@ -195,44 +195,44 @@ def test_if_deleting_none_existing_tour_is_not_possible(tour_re, sqlalchemy_sess
     assert tour_re.delete_tour("not_existing_id") == False
 
 
-# testing feature 1.8.5
+# testing feature 1.8.6
 def test_if_filtering_based_on_nothing_returns_all_tours(sqlalchemy_session, tour_re):
     filter_tour = tour_re.filter_combinations('', '', '', '')
 
     verify(filter_tour, options=approval_options)
 
 
-# testing feature 1.8.3.1
+# testing feature 1.8.2.1
 def test_if_filtering_based_on_only_destination_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("Dubai", "", "", "")
     verify(filter_tour, options=approval_options)
 
 
-# testing feature 1.8.3.2 and 1.8.3.3
+# testing feature 1.8.2.2 and 1.8.2.3
 def test_if_filtering_based_on_only_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "500", "3000", "")
     verify(filter_tour, options=approval_options)
 
 
-# testing feature 1.8.3.3
+# testing feature 1.8.2.3
 def test_if_filtering_only_on_max_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "", "3000", "")
     verify(filter_tour, options=approval_options)
 
 
-# testing feature 1.8.3.2
+# testing feature 1.8.2.2
 def test_if_filtering_only_on_min_price_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "500", "", "")
     verify(filter_tour, options=approval_options)
 
 
-# testing feature 1.8.3.4
+# testing feature 1.8.2.4
 def test_if_filtering_based_on_only_language_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("", "", "", "English")
     verify(filter_tour, options=approval_options)
 
 
-# testing feature 1.8.4
+# testing feature 1.8.3
 def test_if_filtering_based_on_destination_price_and_language_is_as_expected(tour_re, sqlalchemy_session):
     filter_tour = tour_re.filter_combinations("Dubai", "0", "600", "English")
     verify(filter_tour, options=approval_options)
@@ -246,7 +246,7 @@ def test_if_getting_spesific_tour_is_possible(tour_re, sqlalchemy_session):
     assert tour_1 == tour_re.get_specific_tour(tour_1_id)
 
 
-# testing feature 1.8.5.1
+# testing feature 1.8.4.1
 def test_if_searching_tours_by_title_gives_is_as_expected(tour_re, sqlalchemy_session):
     searched_tour = tour_re.search_tour("dubai")
     verify(searched_tour, options=approval_options)
@@ -297,37 +297,37 @@ def test_if_deleting_relation_between_none_existing_tour_and_owner_is_not_possib
     assert tour_re.guide_delete_tour("id", "id") == None
 
 
-# testing feature 1.18.10.1
+# testing feature 1.3.8
 def test_if_admin_gets_correct_number_of_total_users(tour_re, sqlalchemy_session):
     info = tour_re.admin_dashboard()
     assert info['num_users'] == 3
 
 
-# testing feature 1.18.10.2
+# testing feature 1.3.8
 def test_if_admin_gets_correct_number_of_tours(tour_re, sqlalchemy_session):
     info = tour_re.admin_dashboard()
     assert info['num_tours'] == 3
 
 
-# testing feature 1.18.10.4
+# testing feature 1.3.8
 def test_if_admin_gets_correct_number_of_guides(tour_re, sqlalchemy_session):
     info = tour_re.admin_dashboard()
     assert info['num_guides'] == 1
 
 
-# testing feature 1.18.10.5
+# testing feature 1.3.8
 def test_if_admin_gets_correct_number_of_regular_users(tour_re, sqlalchemy_session):
     info = tour_re.admin_dashboard()
     assert info['num_regular_users'] == 1
 
 
-# testing feature 1.18.10.6
+# testing feature 1.3.8
 def test_if_admin_gets_correct_number_of_admins(tour_re, sqlalchemy_session):
     info = tour_re.admin_dashboard()
     assert info['num_admin'] == 1
 
 
-# testing feature 1.18.10.3
+# testing feature 1.3.8
 def test_if_admin_can_see_number_of_bookings(tour_re, sqlalchemy_session):
     tours = tour_re.get_all_tours()
     tour_re.book_tour(tours[0])
