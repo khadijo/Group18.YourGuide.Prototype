@@ -1,16 +1,14 @@
 import datetime
 import os
-import uuid
 
 import flask
 import pytest
-from flask import Flask, render_template, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
 
-from Gruppe_18.src.main.app import load_user
 from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
@@ -103,24 +101,28 @@ def app():
     return app
 
 
+# testing feature 1.1.8
 def test_if_user_gets_the_right_homepage(tour_c, user, sqlalchemy_session, app):
     with app.test_request_context():
         login_user(user, remember=True)
         assert tour_c.homepage_based_on_usertype() == render_template('homepage.html', tours=[])
 
 
+# testing feature 1.1.8
 def test_if_guide_gets_the_right_homepage(tour_c, guide, sqlalchemy_session, app):
     with app.test_request_context():
         login_user(guide, remember=True)
         assert tour_c.homepage_based_on_usertype() == render_template('homepage_guide.html', tours=[])
 
 
+# testing feature 1.1.8
 def test_if_admin_gets_the_right_homepage(tour_c, admin, sqlalchemy_session, app):
     with app.test_request_context():
         login_user(admin, remember=True)
         assert tour_c.homepage_based_on_usertype() == render_template('homepage_admin.html', tours=[])
 
 
+# testing feature 1.7
 def test_if_homepages_contains_all_available_tours(tour_c, user, sqlalchemy_session, app, tour_rep, tour):
     tour_rep.create_tour(tour)
     tours = [tour_rep.get_specific_tour('1')]
@@ -129,14 +131,7 @@ def test_if_homepages_contains_all_available_tours(tour_c, user, sqlalchemy_sess
         assert tour_c.homepage_based_on_usertype() == render_template('homepage.html', tours=tours)
 
 
-def test_if_homepage_can_contain_spesific_tours(sqlalchemy_session, app, tour, user, tour_c, tour_rep):
-    tour_rep.create_tour(tour)
-    tours = [tour_rep.get_specific_tour('1')]
-    with app.test_request_context():
-        login_user(user, remember=True)
-        assert tour_c.homepage_based_on_usertype() == render_template('homepage.html', tours=tours)
-
-
+# testing feature 1.6.5
 def test_if_logget_in_user_can_see_booked_tours(sqlalchemy_session, app, tour_c, tour, user, tour_rep, acc_rep):
     tour_rep.create_tour(tour)
     acc_rep.create_account(user)
@@ -148,6 +143,7 @@ def test_if_logget_in_user_can_see_booked_tours(sqlalchemy_session, app, tour_c,
         assert tour_c.get_user_tours() == render_template('user_tours.html', user_tours=user_tours, user=user_comparison)
 
 
+# testing feature nonfunctional 1.26.1
 def test_if_not_logged_in_user_gets_returned_to_login_page_when_trying_to_see_booked_tours(app, sqlalchemy_session, tour_c, user):
     with app.test_request_context():
         login_user(user)
@@ -159,12 +155,14 @@ def test_if_not_logged_in_user_gets_returned_to_login_page_when_trying_to_see_bo
         assert 'You must be logged in to see your registered tours.' in messages
 
 
+# testing feature 1.4.1
 def test_if_guide_gets_sent_to_right_template_when_wanting_to_create_tour(sqlalchemy_session, app, tour_c, guide):
     with app.test_request_context():
         login_user(guide)
         assert tour_c.make_new_tour() == render_template('new_tour.html')
 
 
+# testing feature 1.4.2
 def test_if_guide_gets_sent_to_right_template_after_filling_out_tour_creating_form_correctly(sqlalchemy_session, app, tour_c, guide, tour, tour_rep):
     with app.test_request_context(method='POST', data={
         'title': 'Welcome to Dubai',
@@ -180,6 +178,7 @@ def test_if_guide_gets_sent_to_right_template_after_filling_out_tour_creating_fo
         assert tour_c.make_new_tour() == render_template('homepage_guide.html', tours=tour_rep.get_all_tours())
 
 
+# testing feature 1.5.6
 def test_if_guide_can_see_posted_tours_in_the_right_template(sqlalchemy_session, tour_c, app, guide, tour_rep):
     with app.test_request_context(method='POST', data={
         'title': 'Welcome to Dubai',
@@ -195,6 +194,7 @@ def test_if_guide_can_see_posted_tours_in_the_right_template(sqlalchemy_session,
         assert tour_c.make_new_tour() == render_template('homepage_guide.html', tours=tour_rep.get_all_tours())
 
 
+# testing feature nonfunctional 1.26.1
 def test_if_not_logged_in_user_gets_sent_to_login_when_wanting_too_see_posted_tours(app, sqlalchemy_session, tour_c, guide):
     with app.test_request_context():
         login_user(guide)
@@ -206,6 +206,7 @@ def test_if_not_logged_in_user_gets_sent_to_login_when_wanting_too_see_posted_to
         assert 'You must be logged in to see your registered tours.' in messages
 
 
+# testing feature 1.5.5.1
 def test_if_guide_gets_sent_to_right_template_after_deleting_posted_tour(sqlalchemy_session, tour_c, app, guide, tour_rep):
     with app.test_request_context(method='POST', data={
         'title': 'Welcome to Dubai',
@@ -231,6 +232,7 @@ def test_if_guide_gets_sent_to_right_template_after_deleting_posted_tour(sqlalch
             assert tour_c.deleting_tour() == render_template('deleted_tour.html', tour=[])
 
 
+# testing feature nonfunctional 1.26.1
 def test_if_not_logged_in_user_gets_sent_to_login_after_wanting_to_deleted_tour(app, sqlalchemy_session, tour_c, guide):
     with app.test_request_context():
         login_user(guide)
@@ -242,6 +244,7 @@ def test_if_not_logged_in_user_gets_sent_to_login_after_wanting_to_deleted_tour(
         assert 'You must be logged in to delete a tour.' in messages
 
 
+# testing 1.3.6
 def test_if_admin_gets_sent_to_the_right_page_with_right_info_when_wanting_to_see_all_tours(app, sqlalchemy_session, tour_c, tour, tour_rep, admin):
     tour_rep.create_tour(tour)
     tour = tour_rep.get_all_tours()
@@ -250,12 +253,14 @@ def test_if_admin_gets_sent_to_the_right_page_with_right_info_when_wanting_to_se
         assert tour_c.show_all_tours() == render_template('homepage_admin.html', tours=tour, show_all_tours=True)
 
 
+# testing feature 1.3.7
 def test_if_admin_gets_sent_to_the_right_page_when_wanting_to_see_hide_all_tours(app, sqlalchemy_session, tour_c, admin):
     with app.test_request_context():
         login_user(admin)
         assert tour_c.hide_all_tours() == render_template('homepage_admin.html', show_all_tours=False)
 
 
+# testing feature 1.1.8 and 1.3.8
 def test_if_admin_gets_sent_to_right_page_with_right_info_when_opening_dashboard(app, sqlalchemy_session, tour_c, admin):
     dictionary = {
             'num_users': 0,
@@ -270,12 +275,31 @@ def test_if_admin_gets_sent_to_right_page_with_right_info_when_opening_dashboard
         assert tour_c.show_dashboard() == render_template('homepage_admin.html', **dictionary, show_dashboard=True)
 
 
+# testing feature 1.3.9
 def test_if_admin_gets_sent_to_right_page_wen_hiding_dashboard(app, sqlalchemy_session, tour_c, admin):
     with app.test_request_context():
         login_user(admin)
         assert tour_c.hide_dashboard() == render_template('homepage_admin.html', show_dashboard=False)
 
 
-#show guide tour, guide tour html
-# deleting tour rendering template
-# filter app og search tour
+# testing feature 1.8.5
+def test_if_user_gets_sent_to_right_page_with_right_content_after_filtering_tours(user, app, sqlalchemy_session, tour_c):
+    with app.test_request_context(method='POST', data={'destination': '', 'max_price': '', 'min_price': '', 'language': ''}):
+        login_user(user)
+        assert tour_c.filter_app() == render_template('homepage.html', tours=[])
+
+
+# testing feature 1.8.5
+def test_if_user_gets_sent_to_right_page_with_right_content_after_searching_tours(user, app, sqlalchemy_session, tour_c):
+    with app.test_request_context(method='POST', data={'q': 'noe'}):
+        login_user(user)
+        assert tour_c.search_tour() == render_template('homepage.html', tours=[])
+
+
+# testing feature 1.8.5
+def test_if_user_searching_for_nothing_gets_right_content_in_the_page(user, app, sqlalchemy_session, tour_c, tour_rep, tour):
+    with app.test_request_context(method='POST', data={'q': ''}):
+        login_user(user)
+        tour_rep.create_tour(tour)
+        all_tours = tour_rep.get_specific_tour(tour.id)
+        assert tour_c.search_tour() == render_template('homepage.html', tours=[all_tours])
