@@ -11,7 +11,7 @@ from Gruppe_18.src.main.model.models import db
 from Gruppe_18.src.main.model.models import Account, tour_account_association
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
-# testing nonfunctional feature 1.32, but with less users since this is only a prototype
+# testing nonfunctional feature 1.33, but with less users since this is only a prototype
 # with the api's that we expect would get the most requests at once.
 
 
