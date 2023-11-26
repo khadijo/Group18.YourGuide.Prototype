@@ -125,7 +125,7 @@ def sqlalchemy_session(tour_re, acc_rep, tour, tour_2, tour_3, guide, user, admi
 approval_options = Options().with_scrubber(scrub_all_guids)
 
 
-# testing feature nonfunctional 1.19 and 1.20
+# testing feature nonfunctional 1.7 and 1.20
 def test_if_tour_is_created_saved_and_retrived(tour_re, sqlalchemy_session):
     saved_data = tour_re.get_all_tours()
 
@@ -168,7 +168,7 @@ def test_if_cancellation_on_none_existing_tour_is_not_possible(tour_re, sqlalche
     assert tour_re.cancel_booked_tour(tour_4) == False
 
 
-# testing feature 1.19.1.3
+# testing feature 1.7.1.1
 def test_if_description_for_a_tour_is_correctly_returnet(tour_re, sqlalchemy_session):
     data = tour_re.get_all_tours()
     tour = data[0]

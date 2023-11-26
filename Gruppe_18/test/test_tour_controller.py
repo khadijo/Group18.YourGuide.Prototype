@@ -124,7 +124,7 @@ def test_if_admin_gets_the_right_homepage(tour_c, admin, sqlalchemy_session, app
         assert tour_c.homepage_based_on_usertype() == render_template('homepage_admin.html', tours=[])
 
 
-# testing feature 1.18.1 and 1.19
+# testing feature 1.18.1 and 1.7
 def test_if_homepages_contains_all_available_tours(tour_c, user, sqlalchemy_session, app, tour_rep, tour):
     tour_rep.create_tour(tour)
     tours = [tour_rep.get_specific_tour('1')]
