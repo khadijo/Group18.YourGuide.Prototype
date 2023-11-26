@@ -103,7 +103,7 @@ def tour():
                 "https://www.hdwallpaper.nu/wp-content/uploads/2015/05/colosseum-1436103.jpg")
 
 
-# Testing feature 1.1.1, 1.1.2, 1.1.3 and 1.1.5
+# Testing feature 1.1.1, 1.1.2, 1.1.3 and nonfunctional feature 1.31
 def test_if_user_can_register_if_all_required_fields_is_filled(app, user, account_controller, account_repository):
     with app.test_request_context(method='POST', data={
         'username': 'valid_username',
@@ -144,7 +144,7 @@ def test_if_user_can_login_with_saved_account_after_registration(app, user, acco
         assert result.headers['location'] == '/home'
 
 
-# Testing feature 1.1.6 and 1.1.5
+# Testing feature 1.1.5 and nonfunctional feature 1.31
 def test_if_user_cannot_login_without_completed_registration_or_saved_account(app, user, account_controller,
                                                                               account_repository):
     with app.test_request_context(method='POST', data={
@@ -159,7 +159,7 @@ def test_if_user_cannot_login_without_completed_registration_or_saved_account(ap
         assert 'Wrong username or password' in messages
 
 
-# Testing feature 1.8.1.
+# Testing feature 1.9.1.
 def test_if_user_can_register_a_tour(app, user, tour, account_controller, account_repository, tour_repository):
     account_repository.create_account(user)
     tour_repository.create_tour(tour)
@@ -175,8 +175,8 @@ def test_if_user_can_register_a_tour(app, user, tour, account_controller, accoun
         assert account_repository.is_account_registered_to_tour(tour.id, user.id) is True
 
 
-#
-def test_tour_registration_with_unauthenticated_user_sends_user_back_home_with_flash_message(app, user,
+# Testing nonfunctional feature 1.26.1
+def test_tour_registration_with_unauthenticated_user_sends_user_to_login_with_flash_message(app, user,
                                                                                              account_controller
                                                                                              , tour):
     with app.test_request_context(method='POST', data={'tour_id': f'{tour.id}'}):
@@ -185,13 +185,13 @@ def test_tour_registration_with_unauthenticated_user_sends_user_back_home_with_f
         result = account_controller.tour_registration()
 
         assert result.status_code == 302
-        assert result.headers['location'] == '/home'
+        assert result.headers['location'] == '/login'
 
         messages = list(flask.get_flashed_messages())
         assert 'You must be logged in to register for a tour' in messages
 
 
-# Testing feature 1.11.1, 1.11.2 and 1.11.2.1
+# Testing feature 1.12.1, 1.12.2 and 1.12.2.1
 def test_user_can_cancel_a_tour_registration(app, user, tour, account_controller, account_repository
                                              , tour_repository):
     account_repository.create_account(user)
@@ -208,8 +208,8 @@ def test_user_can_cancel_a_tour_registration(app, user, tour, account_controller
         assert account_repository.is_account_registered_to_tour(tour.id, user.id) is False
 
 
-def test_unauthenticated_user_try_to_cancel_a_tour_gets_sent_to_login_with_flash_message(app, user, tour,
-                                                                                         account_controller):
+# Testing nonfunctional feature 1.26.1
+def test_unauthenticated_user_try_to_cancel_a_tour_gets_sent_to_login_with_flash_message(app, user, tour,                                                                                    account_controller):
     with app.test_request_context(method='POST', data={'tour_id': f'{tour.id}',
                                                        'user_id': f'{user.id}'}):
         login_user(user)
@@ -244,8 +244,9 @@ def test_authenticated_admin_can_delete_users(app, user, admin, account_controll
         assert account_repository.get_one_specific_account(user.id) is False
 
 
+# Testing nonfunctional 1.26.1
 def test_unauthenticated_admin_cannot_delete_users_and_gets_sent_to_login_and_gets_flashed_message(app, user, admin,
-                                                                                                   account_controller):
+                                                                                               account_controller):
     with app.test_request_context(method='POST', data={'user_id': f'{user.id}'}):
         login_user(admin)
         logout_user()
@@ -284,6 +285,7 @@ def test_authenticated_admin_can_update_user_usertype_to_guide(app, admin, user,
         assert user_from_db.usertype == 'guide'
 
 
+# Testing feature 1.3.5
 def test_authenticated_admin_can_view_all_users(app, admin, user, guide, account_controller, account_repository):
     account_repository.create_account(admin)
     account_repository.create_account(user)
@@ -296,6 +298,7 @@ def test_authenticated_admin_can_view_all_users(app, admin, user, guide, account
         assert users is not None
 
 
+# Testing feature 1.3.7
 def test_authenticated_admin_can_hide_all_users(app, admin, account_controller, account_repository):
     with app.test_request_context():
         login_user(admin, remember=True)
@@ -303,6 +306,7 @@ def test_authenticated_admin_can_hide_all_users(app, admin, account_controller, 
         assert result == render_template('homepage_admin.html', show_all_users=False)
 
 
+# Testing feature 1.2 and nonfunctional feature 1.31
 def test_authenticated_user_can_view_their_profile_with_their_correct_user_information(app, user,
                                                                                        account_controller,
                                                                                        account_repository):

@@ -48,7 +48,7 @@ class AccountController:
             return redirect(url_for('user_tours'))
         else:
             flash('You must be logged in to register for a tour', 'danger')
-            return redirect(url_for('home'))
+            return redirect(url_for('login'))
 
     def account_cancel_tour(self):
         if current_user.is_authenticated:
