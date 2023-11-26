@@ -146,11 +146,21 @@
         }
 
         .button-placement{
-            margin-top: 63;
+            margin-top: 62;
             position: absolute;
             margin-left: 500;
         }
     </style>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+        <div class="flash-message">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 <!DOCTYPE html>
 <html lang="en">
 <head>

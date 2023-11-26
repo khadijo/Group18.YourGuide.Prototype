@@ -7,7 +7,7 @@ from Gruppe_18.src.main.repository.TourRepository import TourRepository
 from Gruppe_18.src.main.repository.AccountRepository import AccountRepository
 
 session = get_session("YourGuide.db")
-'''
+
 account_rep = AccountRepository(session)
 tour_repository = TourRepository(session)
 a = Account(str(uuid.uuid4()),
@@ -100,9 +100,7 @@ account_rep.account_register_to_tour("3bc8b319-400a-4b72-ba08-f82bdda82a24", "22
 account_rep.account_register_to_tour("50856c60-208a-4316-8025-1c8ba5ff47e4", "2258e3d1-edc2-4740-9757-b5ee64721904")
 session.commit()
 
-'''
 
-session.query(Account).delete()
 
 
 

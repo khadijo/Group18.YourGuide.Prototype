@@ -2,8 +2,6 @@ import os
 
 import sqlalchemy
 from flask_login import LoginManager, login_required, logout_user, current_user
-from flask_sqlalchemy import SQLAlchemy
-
 from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.database.app_config import app
@@ -24,30 +22,24 @@ print(is_testing)
 
 db_path = test_database if is_testing else "YourGuide.db"
 
+
 def sessions():
     return get_session(db_path)
-'''
-account_rep = AccountRepository(session)
-tour_rep = TourRepository(session)
-account_controller = AccountController(account_rep, session)
-tour_controller = TourController(tour_rep, session)
-'''
+
+
 app.secret_key = 'gruppe_18'
+
 
 def account_c():
     sessions = get_session(db_path)
     repository = AccountRepository(sessions)
     return AccountController(repository, sessions)
 
+
 def tour_c():
     sessions = get_session(db_path)
     repository = TourRepository(sessions)
     return TourController(repository, sessions)
-
-def tour_repo():
-    sessions = get_session(db_path)
-    return TourRepository(sessions)
-
 
 
 @login_manager.user_loader
@@ -130,27 +122,27 @@ def delete_tour():
 #
 @app.route('/show_all_tours', methods=['GET'])
 def show_tours():
-    with sessions() as session:
-        tours = session.query(Tour).all()
-        return render_template('homepage_admin.html', tours=tours, show_all_tours=True)
+    tour_controller = tour_c()
+    return tour_controller.show_all_tours()
 
 #
 @app.route('/hide_tours', methods=['GET'])
 def hide_tours():
-    return render_template('homepage_admin.html', show_all_tours=False)
+    tour_controller = tour_c()
+    return tour_controller.hide_all_tours()
 
 
 @app.route('/show_all_users', methods=['GET'])
 def show_all_users():
-    with sessions() as session:
-        users = session.query(Account).all()
-        return render_template('homepage_admin.html', users=users, show_all_users=True)
+    account_controller = account_c()
+    return account_controller.admin_get_all_users()
 
 
 
 @app.route('/hide_all_users', methods=['GET'])
 def hide_all_users():
-    return render_template('homepage_admin.html', show_all_users=False)
+    account_controller = account_c()
+    return account_controller.admin_hide_all_user()
 
 
 @app.route('/delete_account', methods=['POST'])
@@ -161,21 +153,21 @@ def delete_account():
 #
 @app.route('/show_dashboard', methods=['GET'])
 def show_dashboard():
-    tour_rep = tour_repo()
-    data = tour_rep.admin_dashboard()
-    return render_template('homepage_admin.html', **data, show_dashboard=True)
+    tour_controller = tour_c()
+    return tour_controller.show_dashboard()
 
 
 @app.route('/hide_dashboard', methods=['GET'])
 def hide_dashboard():
-    return render_template('homepage_admin.html', show_dashboard=False)
+    tour_controller = tour_c()
+    return tour_controller.hide_dashboard()
 
 
 @app.route('/profile')
 @login_required
 def profile():
-    user_data = load_user(current_user.get_id())
-    return render_template('profile.html', user_data=user_data)
+    account_controller = account_c()
+    return account_controller.show_profile()
 
 
 @app.route('/delete_user', methods=['POST'])
@@ -184,7 +176,6 @@ def delete_user():
     return account_controller.delete_my_account()
 
 
-# Update user info
 @app.route('/update_user_info', methods=['POST'])
 def update_user_info():
     account_controller = account_c()
