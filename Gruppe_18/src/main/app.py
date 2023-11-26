@@ -119,13 +119,13 @@ def delete_tour():
     tour_controller = tour_c()
     return tour_controller.deleting_tour()
 
-
+#
 @app.route('/show_all_tours', methods=['GET'])
 def show_tours():
     tour_controller = tour_c()
     return tour_controller.show_all_tours()
 
-
+#
 @app.route('/hide_tours', methods=['GET'])
 def hide_tours():
     tour_controller = tour_c()
@@ -150,7 +150,7 @@ def delete_account():
     account_controller = account_c()
     return account_controller.deleting_account()
 
-
+#
 @app.route('/show_dashboard', methods=['GET'])
 def show_dashboard():
     tour_controller = tour_c()
