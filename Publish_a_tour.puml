@@ -1,0 +1,66 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User as user
+participant  Frontend as frontend
+participant Backend as backend
+database Database as database
+actor Admin as admin
+participant emailservice as email
+
+user -> frontend : user clicks on "publish a tour"
+alt internet connection
+    alt user has verified account
+        frontend -> backend : Get fill out form
+        activate database
+        backend -> database : Give me this form "publish a tour"
+        database -> backend: Hands the form
+        deactivate database
+        backend -> frontend: Here is the form
+        frontend -> user: For publishing a tour you need to fill out this form
+        user -> frontend: Fill out the form
+        frontend -> backend: Check if the input is correct
+        alt correct input
+            backend -> frontend: information so far is correct format and datatype
+            frontend -> user: indicates to user that the input is good so far
+            opt user click on "Done"
+                user -> frontend: user clicks on "Done"
+                frontend -> backend: Check if all the required input are filled inn
+                backend -> frontend: Every input field is filled in and has correct format
+                frontend -> backend: Save this form
+                backend -> database: Save this form as draft with tag
+                activate database
+                database -> backend: Saved
+                deactivate database
+                backend -> admin: Verify the tour post
+                admin -> backend: Form is received, wait for status
+                backend -> frontend: The format is saved, user has to wait for verification
+                frontend -> user: Thanks for filling out, wait for verification process, you can leave the website, we will inform via epost
+                else wrong input
+                backend -> frontend: information on this input is wrong format or datatype
+                frontend -> user: you did not provide correct information on this input field
+                end
+                end
+        else user clicks on "cancel"
+            user -> frontend: user clicks on "Cancel"
+            frontend -> user: Your form has been cancelled
+
+
+           else user does not have verified account
+        frontend -> user : Your account is not verified, please verify you account first in order to publish a tour
+    end
+else failed internet connection
+    frontend -> user: connection error
+end
+
+admin -> backend: The tour post is verified and published
+activate database
+backend -> database: update this form file with this tag as final post
+database -> backend: updated made for this tag
+deactivate database
+backend -> email: inform the user that their post is published
+activate email
+email -> user: Epost that provides information
+deactivate email
+
+@enduml
