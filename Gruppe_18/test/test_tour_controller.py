@@ -1,16 +1,14 @@
 import datetime
 import os
-import uuid
 
 import flask
 import pytest
-from flask import Flask, render_template, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Gruppe_18.src.main.model.models import db
 
-from Gruppe_18.src.main.app import load_user
 from Gruppe_18.src.main.controller.TourController import TourController
 from Gruppe_18.src.main.model.models import Account, Tour
 from Gruppe_18.src.main.repository.TourRepository import TourRepository
