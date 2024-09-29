@@ -1,0 +1,169 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #001f3f;
+    color: #ff8c00;
+    padding: 10px 20px;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+        background-color: #001f3f;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+}
+
+
+h2 {
+    font-size: 24px;
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1;
+    white-space: pre-line;
+}
+
+button {
+    background-color: #fff;
+    color: #000000;
+    border: white solid 1px;
+    padding: 5px;
+    font-family: bold, sans-serif;
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+    padding: 8px 20px;
+}
+
+input {
+    border-radius: 23px;
+}
+
+button:hover {
+    background-color: #0056b3;
+    cursor: pointer;
+    color: white;
+}
+
+#searchbutton {
+    background-color: #001f3f;
+    border: none;
+    color: white;
+}
+#searchfilter {
+    background-color: #001f3f;
+    border: none;
+}
+
+#search-input {
+    padding: 10px;
+    width: 25rem;
+    border: none;
+}
+.searchElements {
+    display: flex;
+}
+
+.tour_elements {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    align-content: space-between;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    width: 100vh;
+}
+
+.left-section h2 {
+    margin-bottom: 10px;
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+    width: 29vh;
+    height: 15vh;
+    justify-content: center;
+}
+
+.filter-menu {
+    display: none;
+    background-color: #FFFFFF;
+    border: none;
+    opacity: 70%;
+    color: black;
+    padding: 5px;
+    margin-top: 10px;
+    flex-direction: row;
+}
+
+.filter-menu input {
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-menu ul li {
+    list-style-type: none;
+}
+
+
+
+.hidden-menu {
+    display: none;
+    width: 20vh;
+    position: absolute;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.dropdown-menu:hover .hidden-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.top-left {
+    display: flex;
+    flex-direction: row;
+}
+
+#index-style {
+    background-image: url("../homepage.jpeg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
