@@ -6,43 +6,64 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/general_style.css') }}">
 </head>
 <body>
-    <header class="header">
+       <header class="header">
         <div class="left-section">
             <h1 class="yourtour">Your Guide</h1>
-            <form action="/search" method="get" class="search-bar">
-                <input type="text" name="q" placeholder="Search">
-                <button type="submit">Search</button>
+                <div class="searchElements">
+                    <form action="/search" method="get" class="search-bar">
+                        <input type="text" name="q" placeholder="Search" id="search-input">
+                         <button type="submit" id="searchbutton">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor"
+                         class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                        </button>
+                    </form>
+                    <button class="filter-button button-placement" id="searchbutton">
+           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+  <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+</svg>
+                </button>
+                </div>
+             <form action="/home/filter" method="post">
+        <div class="filter-menu">
+            <ul>
+                <li>Destination <input type="text" id="destination-input" name="destination"></li>
+                <li>Price Range<input type="number" id="min-price-input" name="min_price" placeholder="Min"> - <input type="number" id="max-price-input" name="max_price" placeholder="Max"></li>
+                <li>Language <input type="text" id="language-input" name="language"></li>
+            </ul>
+            <button type="submit" value="Filter" id="filter-submit">Filter</button>
+        </div>
+    </form>
             </form>
              <form action="/new_tour" method="get">
                 <button type="submit">New Tour</button>
             </form>
         </div>
-        <button class="filter-button button-placement">filter menu</button>
+
         <div class="right-section">
             <nav class="dropdown-menu">
+                <div class="icon-click">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi" viewBox="0 0 16 16">
                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
                 </svg>
+                    </div>
                 <div class="hidden-menu">
+                    <a href="front_page.html">Home</a>
                     <a href="/profile">Profile</a>
                     <a href="/user_tours" class="your-tours-button">My tours</a>
-                    <a href="/guide_tours" class="your-tours-button">Published tours</a>
                 </div>
             </nav>
+
         </div>
+
     </header>
-    <form action="/home/filter" method="post">
-        <div class="filter-menu">
-            <ul>
-                <li>Destination: <input type="text" id="destination-input" name="destination"></li>
-                <li>Price Range: <input type="number" id="min-price-input" name="min_price" placeholder="Min"> - <input type="number" id="max-price-input" name="max_price" placeholder="Max"></li>
-                <li>Language: <input type="text" id="language-input" name="language"></li>
-            </ul>
-            <input type="submit" value="Filter">
-        </div>
-    </form>
-    <h1>Welcome, choose your adventure or give others many adventures</h1>
+
+
+
     <main>
+    <h2>Choose your adventure or give others many adventures</h2>
+    <div class="tour_elements">
         {% for tour in tours %}
         <div class="tour">
             <h2>{{ tour.title }}</h2>
@@ -63,6 +84,7 @@
             </form>
         </div>
         {% endfor %}
+    </div>
     </main>
     <footer>
         <p>&copy; Copyright Gruppe 18</p>

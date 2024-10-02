@@ -11,30 +11,30 @@
 </header>
 
 <main class="container">
+     <h1>Account Information </h1>
 
     <div class="profile-icon-name-email">
         <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-        <span>{{ user_data.username }}</span>
-        <span>{{ user_data.emailAddress }}</span>
     </div>
-    <h2>Info </h2>
-    <div >
+
+    <div class="value-elements">
         <form class="data-user" action="/update_user_info" method="post">
         <label class="style-for-label">Username</label>
-        <input type="text" name="username" value="{{ user_data.username }}">
+        <input type="text" name="username" value="{{ user_data.username }}" id="hidden-input">
 
         <label class="style-for-label">Mobile Number</label>
-        <input type="text" name="phoneNumber" value="{{ user_data.phoneNumber }}" required>
+        <input type="text" name="phoneNumber" value="{{ user_data.phoneNumber }}" required id="hidden-input">
 
         <label class="style-for-label">Email ID</label>
-        <input type="text" name="email" value="{{ user_data.emailAddress }}" required>
+        <input type="text" name="email" value="{{ user_data.emailAddress }}" required id="hidden-input">
 
-        <button type="submit" class="btn">Update info</button>
-        <button type="button" class="btn" id="cancel-edit">Cancel</button>
+        <button type="submit" class="btn"> Update info </button>
         </form>
-        <form class="delete account" action="/delete_user" method="post">
-        <button type="submit" class="btn">Delete account</button>
+
+         <form class="delete account" action="/delete_user" method="post">
+        <button type="submit" class="btn"> Delete account </button>
         </form>
+
     </div>
 </main>
 <footer>

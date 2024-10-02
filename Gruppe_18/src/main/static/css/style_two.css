@@ -68,3 +68,18 @@ button:hover {
     background-color: #0056b3;
     color: white;
 }
+
+#hidden-input {
+    border: none;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn {
+    width: 50%;
+    margin-top: 10px;
+    justify-self: center;
+    margin-left: 20%;
+}

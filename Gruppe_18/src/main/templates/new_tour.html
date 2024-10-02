@@ -6,17 +6,34 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style_two.css') }}">
 </head>
 <body>
+ <div class="container">
 <form method="POST" action="{{url_for('new_tour')}}">
-    <input type="text" name="title" placeholder="title" required>
-    <input type="text" name="date" placeholder="yy, mm, dd" required>
-    <input type="text" name="destination" placeholder="destination" required>
-    <input type="text" name="duration" placeholder="duration" required>
-    <input type="text" name="cost" placeholder="cost" required>
-    <input type="text" name="max_travelers" placeholder="max travlers" required>
-    <input type="text" name="language" placeholder="language" required>
-    <input type="text" name="pictureURL" placeholder="pictureURL" required>
-    <input type="submit" value="Post">
-</form>
+    <label>Title</label>
+    <input type="text" name="title" required>
 
+    <label>Date</label>
+    <input type="text" name="date" placeholder="yy, mm, dd" required>
+
+    <label>Destination</label>
+    <input type="text" name="destination" required>
+
+    <label>Duration</label>
+    <input type="text" name="duration" required>
+
+    <label>Cost</label>
+    <input type="text" name="cost" required>
+
+    <label>Max travelers</label>
+    <input type="text" name="max_travelers" required>
+
+    <label>Langyage</label>
+    <input type="text" name="language" required>
+
+    <label>Picture in url</label>
+    <input type="text" name="pictureURL" required>
+
+    <button type="submit" value="Post">Post</button>
+</form>
+ </div>
 </body>
 </html>
